@@ -1,3 +1,4 @@
+import { usePlayer } from "@/hooks/usePlayer";
 import { roomService } from "@/lib/firebase/roomService";
 import { Room } from "@/types/room";
 import { DndContext, DragEndEvent, closestCenter } from "@dnd-kit/core";
@@ -12,6 +13,7 @@ type TeamManagerProps = {
 
 export default function TeamManager({ room }: TeamManagerProps) {
   const [isUpdating, setIsUpdating] = useState(false);
+  const { playerId, isHost } = usePlayer(room.id);
 
   const handleCreateTeam = async () => {
     try {
@@ -69,13 +71,15 @@ export default function TeamManager({ room }: TeamManagerProps) {
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold">Équipes</h2>
-          <button
-            onClick={handleCreateTeam}
-            disabled={isUpdating}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
-          >
-            Nouvelle équipe
-          </button>
+          {isHost && (
+            <button
+              onClick={handleCreateTeam}
+              disabled={isUpdating}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+            >
+              Nouvelle équipe
+            </button>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
