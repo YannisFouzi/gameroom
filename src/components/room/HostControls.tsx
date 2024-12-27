@@ -1,5 +1,6 @@
 import { roomService } from "@/lib/firebase/roomService";
 import { GameType, Room, RoomStatus } from "@/types/room";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type HostControlsProps = {
@@ -8,6 +9,7 @@ type HostControlsProps = {
 
 export default function HostControls({ room }: HostControlsProps) {
   const [isUpdating, setIsUpdating] = useState(false);
+  const router = useRouter();
 
   const handleGameModeChange = async (mode: "team" | "individual") => {
     try {
@@ -34,9 +36,9 @@ export default function HostControls({ room }: HostControlsProps) {
   const handleStartGame = async () => {
     try {
       setIsUpdating(true);
-      await roomService.updateRoomStatus(room.id, "playing" as RoomStatus);
+      router.push(`/room/${room.id}/select-game`);
     } catch (error) {
-      console.error("Erreur lors du démarrage de la partie:", error);
+      console.error("Erreur:", error);
     } finally {
       setIsUpdating(false);
     }
