@@ -1,4 +1,5 @@
 import { roomService } from "@/lib/firebase/roomService";
+import { generateUUID } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -9,7 +10,7 @@ export default function CreateRoom() {
   const handleCreateRoom = async () => {
     try {
       setIsLoading(true);
-      const hostId = crypto.randomUUID();
+      const hostId = generateUUID();
       const roomId = await roomService.createRoom(hostId);
 
       // Stocker l'ID de l'hôte avec un préfixe différent

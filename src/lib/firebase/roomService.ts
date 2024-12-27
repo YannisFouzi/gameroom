@@ -1,3 +1,4 @@
+import { generateUUID } from "@/lib/utils";
 import { GameType, Room, Team } from "@/types/room";
 import {
   collection,
@@ -37,7 +38,7 @@ export const roomService = {
   async addPlayer(roomId: string, player: { name: string; avatar: string }) {
     const db = getDb();
     const playerData = {
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       name: player.name,
       avatar: player.avatar,
       score: 0,
