@@ -1,11 +1,5 @@
 import { useDroppable } from "@dnd-kit/core";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-// Fonction utilitaire locale si l'import ne fonctionne pas
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+import { motion } from "framer-motion";
 
 type TeamContainerProps = {
   id: string;
@@ -18,14 +12,28 @@ export function TeamContainer({
   id,
   title,
   children,
-  className,
+  className = "",
 }: TeamContainerProps) {
-  const { setNodeRef } = useDroppable({ id });
+  const { setNodeRef, isOver } = useDroppable({ id });
 
   return (
-    <div ref={setNodeRef} className={cn("border rounded-lg p-4", className)}>
+    <motion.div
+      ref={setNodeRef}
+      className={`border rounded-lg p-4 transition-colors ${className} ${
+        isOver ? "bg-blue-50 border-blue-500" : ""
+      }`}
+      initial={false}
+      animate={{
+        borderColor: isOver ? "#3B82F6" : "#E5E7EB",
+        backgroundColor: isOver
+          ? "#EFF6FF"
+          : className.includes("bg-")
+          ? ""
+          : "#FFFFFF",
+      }}
+    >
       <h3 className="font-medium mb-4">{title}</h3>
       <div className="space-y-2">{children}</div>
-    </div>
+    </motion.div>
   );
 }

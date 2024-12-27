@@ -149,7 +149,17 @@ export const roomService = {
       );
     });
 
-    // Ajouter le joueur à la nouvelle équipe
+    // Si teamId est "unassigned", on retire juste le joueur de son équipe
+    if (teamId === "unassigned") {
+      await updateDoc(roomRef, {
+        teams,
+        [`players.${playerId}.teamId`]: null,
+        updatedAt: serverTimestamp(),
+      });
+      return;
+    }
+
+    // Sinon, on ajoute le joueur à la nouvelle équipe
     teams[teamId].players.push(playerId);
 
     await updateDoc(roomRef, {
