@@ -7,13 +7,22 @@ import TeamManager from "@/components/room/TeamManager";
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
 import { usePresence } from "@/hooks/usePresence";
-import { useParams } from "next/navigation";
+import { RoomStatus } from "@/types/room";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 function RoomContent() {
   const { roomId } = useParams();
   const { room, loading, error } = useRoom();
   const { playerId, isHost } = usePlayer(roomId as string);
+  const router = useRouter();
   usePresence(roomId as string);
+
+  useEffect(() => {
+    if (room?.status === ("selecting" as RoomStatus)) {
+      router.push(`/room/${room.id}/select-game`);
+    }
+  }, [room?.status, room?.id, router]);
 
   if (loading) {
     return (

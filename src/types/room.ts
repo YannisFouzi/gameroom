@@ -2,7 +2,7 @@ import { Timestamp } from "firebase/firestore";
 
 export type GameType = "undercover" | "millionaire" | "other";
 
-export type RoomStatus = "waiting" | "playing" | "finished";
+export type RoomStatus = "waiting" | "selecting" | "playing" | "finished";
 
 export type Player = {
   id: string;

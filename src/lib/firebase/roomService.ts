@@ -1,5 +1,5 @@
 import { generateUUID } from "@/lib/utils";
-import { GameType, Room, Team } from "@/types/room";
+import { GameType, Room, RoomStatus, Team } from "@/types/room";
 import {
   collection,
   deleteDoc,
@@ -109,10 +109,7 @@ export const roomService = {
     });
   },
 
-  async updateRoomStatus(
-    roomId: string,
-    status: "waiting" | "playing" | "finished"
-  ) {
+  async updateRoomStatus(roomId: string, status: RoomStatus) {
     const db = getDb();
     await updateDoc(doc(db, "rooms", roomId), {
       status,
