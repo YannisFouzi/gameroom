@@ -36,28 +36,8 @@ function RoomContent() {
   return (
     <div className="container mx-auto p-4">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Colonne de gauche: Informations de la room et contrôles */}
+        {/* Colonne de gauche: Contrôles et QR Code */}
         <div className="space-y-6">
-          <div className="bg-background p-6 rounded-lg border">
-            <h1 className="text-2xl font-bold mb-4">Room {roomId}</h1>
-            <div className="space-y-2">
-              <p>
-                Statut:{" "}
-                <span className="font-medium capitalize">{room.status}</span>
-              </p>
-              <p>
-                Type de jeu:{" "}
-                <span className="font-medium capitalize">{room.gameType}</span>
-              </p>
-              <p>
-                Mode:{" "}
-                <span className="font-medium capitalize">
-                  {room.settings.gameMode}
-                </span>
-              </p>
-            </div>
-          </div>
-
           {isHost && <HostControls room={room} />}
           <RoomQRCode roomId={roomId as string} />
         </div>
