@@ -17,6 +17,7 @@ export default function AvatarSelector({
   return (
     <div className="relative">
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
         className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-blue-500 hover:border-blue-600 transition-colors"
       >
@@ -35,6 +36,7 @@ export default function AvatarSelector({
           {DEFAULT_AVATARS.map((avatar) => (
             <button
               key={avatar}
+              type="button"
               onClick={() => {
                 onSelect(avatar);
                 setIsOpen(false);
