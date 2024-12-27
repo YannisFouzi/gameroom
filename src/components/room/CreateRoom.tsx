@@ -9,11 +9,11 @@ export default function CreateRoom() {
   const handleCreateRoom = async () => {
     try {
       setIsLoading(true);
-      const hostId = crypto.randomUUID(); // Générer un ID unique pour l'hôte
+      const hostId = crypto.randomUUID();
       const roomId = await roomService.createRoom(hostId);
 
-      // Stocker l'ID de l'hôte
-      localStorage.setItem(`player_${roomId}`, hostId);
+      // Stocker l'ID de l'hôte avec un préfixe différent
+      localStorage.setItem(`host_${roomId}`, hostId);
 
       router.push(`/room/${roomId}`);
     } catch (error) {

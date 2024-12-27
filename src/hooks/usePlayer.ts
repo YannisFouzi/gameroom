@@ -8,13 +8,24 @@ export function usePlayer(roomId: string) {
   useEffect(() => {
     const checkPlayerStatus = async () => {
       try {
+        // Vérifier d'abord si c'est l'hôte
+        const hostId = localStorage.getItem(`host_${roomId}`);
+        if (hostId) {
+          setIsHost(true);
+          return;
+        }
+
+        // Sinon vérifier si c'est un joueur
         const storedPlayerId = localStorage.getItem(`player_${roomId}`);
         if (storedPlayerId) {
           setPlayerId(storedPlayerId);
 
-          // Vérifie si le joueur est l'hôte
+          // Vérifier si le joueur existe toujours dans la room
           const room = await roomService.getRoom(roomId);
-          setIsHost(room.hostId === storedPlayerId);
+          if (!room.players[storedPlayerId]) {
+            localStorage.removeItem(`player_${roomId}`);
+            setPlayerId(null);
+          }
         }
       } catch (error) {
         console.error("Erreur lors de la vérification du statut:", error);
@@ -26,6 +37,7 @@ export function usePlayer(roomId: string) {
 
   const clearPlayer = () => {
     localStorage.removeItem(`player_${roomId}`);
+    localStorage.removeItem(`host_${roomId}`);
     setPlayerId(null);
     setIsHost(false);
   };
