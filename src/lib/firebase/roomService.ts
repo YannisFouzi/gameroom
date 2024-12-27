@@ -122,7 +122,7 @@ export const roomService = {
 
   async createTeam(roomId: string, team: Omit<Team, "id">) {
     const db = getDb();
-    const teamId = crypto.randomUUID();
+    const teamId = generateUUID();
     await updateDoc(doc(db, "rooms", roomId), {
       [`teams.${teamId}`]: { id: teamId, ...team },
       updatedAt: serverTimestamp(),
