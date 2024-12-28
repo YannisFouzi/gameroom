@@ -78,7 +78,6 @@ function MemorizationPhase({
         <div className="max-w-md mx-auto text-center">
           <h2 className="text-2xl font-bold mb-4">Mémorisation en cours</h2>
           <p className="text-xl">Regardez l'écran principal</p>
-          <div className="mt-4 text-4xl font-bold">{timeLeft}s</div>
         </div>
       </div>
     );
@@ -119,12 +118,31 @@ function GuessingPhase({
   onSubmit: (guess: string) => void;
 }) {
   const [guess, setGuess] = useState("");
+  const [feedback, setFeedback] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (guess.trim()) {
-      onSubmit(guess);
-      setGuess("");
+      try {
+        const isCorrect = await onSubmit(guess);
+        setFeedback({
+          type: isCorrect ? "success" : "error",
+          message: isCorrect
+            ? "Bonne réponse ! Continuez !"
+            : "Mauvaise réponse... Votre équipe est éliminée.",
+        });
+        setGuess("");
+
+        // Effacer le feedback après 3 secondes
+        setTimeout(() => {
+          setFeedback(null);
+        }, 3000);
+      } catch (error) {
+        console.error("Erreur lors de la soumission:", error);
+      }
     }
   };
 
@@ -132,21 +150,34 @@ function GuessingPhase({
     <div className="max-w-md mx-auto p-4">
       <h2 className="text-xl font-bold mb-4">Phase de devinettes</h2>
       {isCurrentTeam ? (
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            value={guess}
-            onChange={(e) => setGuess(e.target.value)}
-            className="w-full p-3 border rounded-lg"
-            placeholder="Nom de la célébrité"
-          />
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
-          >
-            Valider
-          </button>
-        </form>
+        <>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="text"
+              value={guess}
+              onChange={(e) => setGuess(e.target.value)}
+              className="w-full p-3 border rounded-lg"
+              placeholder="Nom de la célébrité"
+            />
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+            >
+              Valider
+            </button>
+          </form>
+          {feedback && (
+            <div
+              className={`mt-4 p-4 rounded-lg text-center ${
+                feedback.type === "success"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-700"
+              }`}
+            >
+              {feedback.message}
+            </div>
+          )}
+        </>
       ) : (
         <p className="text-center">
           En attente de la réponse de l'équipe active...
@@ -158,8 +189,10 @@ function GuessingPhase({
 
 function ResultsPhase({
   celebrities,
+  teams,
 }: {
   celebrities: Record<string, Celebrity>;
+  teams: Record<string, Team>;
 }) {
   return (
     <div className="container mx-auto p-4">
@@ -178,7 +211,7 @@ function ResultsPhase({
                 key={`found-${id}`}
                 className="text-sm text-center text-green-600"
               >
-                Trouvé par équipe {celebrity.foundBy}
+                Trouvé par {teams[celebrity.foundBy]?.name || "équipe inconnue"}
               </div>
             )}
           </div>
@@ -200,8 +233,9 @@ function GameContent() {
 
   const handleGuess = async (guess: string) => {
     if (teamId) {
-      await roomService.submitGuess(room.id, teamId, guess);
+      return await roomService.submitGuess(room.id, teamId, guess);
     }
+    return false;
   };
 
   const isCurrentTeam =
@@ -228,7 +262,12 @@ function GameContent() {
       );
 
     case "results":
-      return <ResultsPhase celebrities={room.gameData.celebrities} />;
+      return (
+        <ResultsPhase
+          celebrities={room.gameData.celebrities}
+          teams={room.teams}
+        />
+      );
 
     default:
       return null;
