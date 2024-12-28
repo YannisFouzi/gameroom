@@ -2,7 +2,11 @@ import { useState } from "react";
 import AvatarSelector from "./AvatarSelector";
 
 type TeamFormProps = {
-  onSubmit: (teamData: { members: { name: string }[]; avatar: string }) => void;
+  onSubmit: (teamData: {
+    name: string;
+    members: { name: string }[];
+    avatar: string;
+  }) => void;
   isLoading?: boolean;
 };
 
@@ -10,6 +14,7 @@ export default function TeamForm({
   onSubmit,
   isLoading = false,
 }: TeamFormProps) {
+  const [teamName, setTeamName] = useState("");
   const [members, setMembers] = useState<string[]>([""]);
   const [avatar, setAvatar] = useState("/avatars/avatar1.png");
 
@@ -33,8 +38,9 @@ export default function TeamForm({
       .map((name) => name.trim())
       .filter((name) => name.length > 0);
 
-    if (validMembers.length > 0) {
+    if (validMembers.length > 0 && teamName.trim()) {
       onSubmit({
+        name: teamName.trim(),
         members: validMembers.map((name) => ({ name })),
         avatar,
       });
@@ -48,6 +54,22 @@ export default function TeamForm({
           Avatar d'équipe
         </label>
         <AvatarSelector selectedAvatar={avatar} onSelect={setAvatar} />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-2">
+          Nom de l'équipe
+        </label>
+        <input
+          type="text"
+          value={teamName}
+          onChange={(e) => setTeamName(e.target.value)}
+          className="w-full p-2 border rounded-md"
+          placeholder="Entrez le nom de votre équipe"
+          required
+          minLength={2}
+          maxLength={30}
+        />
       </div>
 
       <div className="space-y-4">
@@ -86,7 +108,9 @@ export default function TeamForm({
 
       <button
         type="submit"
-        disabled={isLoading || members.every((m) => !m.trim())}
+        disabled={
+          isLoading || !teamName.trim() || members.every((m) => !m.trim())
+        }
         className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50"
       >
         {isLoading ? "Connexion..." : "Rejoindre la partie"}

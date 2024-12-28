@@ -31,6 +31,7 @@ export const roomService = {
   async addTeam(
     roomId: string,
     teamData: {
+      name: string;
       members: { name: string }[];
       avatar: string;
     }
@@ -41,10 +42,7 @@ export const roomService = {
 
     const team: Omit<Team, "lastSeen"> & { lastSeen: any } = {
       id: teamId,
-      name:
-        teamData.members.length === 1
-          ? teamData.members[0].name
-          : `Équipe ${teamData.members[0].name}`,
+      name: teamData.name,
       members: teamData.members.map((member) => ({
         name: member.name,
         score: 0,

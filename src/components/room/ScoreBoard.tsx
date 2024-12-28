@@ -65,8 +65,7 @@ export default function ScoreBoard({ room, teamId, isHost }: ScoreBoardProps) {
               <div>
                 <span className="font-medium">{team.name}</span>
                 <p className="text-sm text-gray-600">
-                  {team.members.length} membre
-                  {team.members.length > 1 ? "s" : ""}
+                  {team.members.map((member) => member.name).join(", ")}
                 </p>
               </div>
             </div>

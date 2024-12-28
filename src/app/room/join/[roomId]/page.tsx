@@ -12,6 +12,7 @@ export default function JoinRoomPage() {
   const [error, setError] = useState<string | null>(null);
 
   const handleJoinRoom = async (teamData: {
+    name: string;
     members: { name: string }[];
     avatar: string;
   }) => {
