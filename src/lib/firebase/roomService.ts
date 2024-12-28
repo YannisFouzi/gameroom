@@ -1,9 +1,10 @@
 import { generateUUID } from "@/lib/utils";
-import { GameType, RoomStatus, Team } from "@/types/room";
+import { Room, RoomStatus, Team } from "@/types/room";
 import {
   addDoc,
   collection,
   doc,
+  getDoc,
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
@@ -15,17 +16,25 @@ export const roomService = {
     const roomRef = await addDoc(collection(db, "rooms"), {
       hostId,
       status: "waiting" as RoomStatus,
-      gameType: null,
+      currentGame: 0,
       teams: {},
       settings: {
         maxTeams: 10,
         isPublic: true,
-        gameMode: "individual",
       },
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
     return roomRef.id;
+  },
+
+  async startGame(roomId: string) {
+    const db = getDb();
+    await updateDoc(doc(db, "rooms", roomId), {
+      status: "playing",
+      currentGame: 1,
+      updatedAt: serverTimestamp(),
+    });
   },
 
   async addTeam(
@@ -70,27 +79,20 @@ export const roomService = {
     });
   },
 
-  async updateGameMode(roomId: string, gameMode: "team" | "individual") {
-    const db = getDb();
-    await updateDoc(doc(db, "rooms", roomId), {
-      "settings.gameMode": gameMode,
-      updatedAt: serverTimestamp(),
-    });
-  },
-
-  async updateGameType(roomId: string, gameType: GameType) {
-    const db = getDb();
-    await updateDoc(doc(db, "rooms", roomId), {
-      gameType,
-      updatedAt: serverTimestamp(),
-    });
-  },
-
   async updateRoomStatus(roomId: string, status: RoomStatus) {
     const db = getDb();
     await updateDoc(doc(db, "rooms", roomId), {
       status,
       updatedAt: serverTimestamp(),
     });
+  },
+
+  async getRoom(roomId: string) {
+    const db = getDb();
+    const roomSnap = await getDoc(doc(db, "rooms", roomId));
+    if (!roomSnap.exists()) {
+      throw new Error("Room not found");
+    }
+    return roomSnap.data() as Room;
   },
 };

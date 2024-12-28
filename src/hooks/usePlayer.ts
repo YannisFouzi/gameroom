@@ -2,7 +2,7 @@ import { roomService } from "@/lib/firebase/roomService";
 import { useEffect, useState } from "react";
 
 export function usePlayer(roomId: string) {
-  const [playerId, setPlayerId] = useState<string | null>(null);
+  const [teamId, setTeamId] = useState<string | null>(null);
   const [isHost, setIsHost] = useState(false);
 
   useEffect(() => {
@@ -15,16 +15,17 @@ export function usePlayer(roomId: string) {
           return;
         }
 
-        // Sinon vérifier si c'est un joueur
-        const storedPlayerId = localStorage.getItem(`player_${roomId}`);
-        if (storedPlayerId) {
-          setPlayerId(storedPlayerId);
+        // Sinon vérifier si c'est une équipe
+        const storedTeamId = localStorage.getItem(`team_${roomId}`);
+        if (storedTeamId) {
+          setTeamId(storedTeamId);
 
-          // Vérifier si le joueur existe toujours dans la room
+          // Vérifier si l'équipe existe toujours dans la room
           const room = await roomService.getRoom(roomId);
-          if (!room.players[storedPlayerId]) {
-            localStorage.removeItem(`player_${roomId}`);
-            setPlayerId(null);
+          if (!room.teams[storedTeamId]) {
+            localStorage.removeItem(`team_${roomId}`);
+            localStorage.removeItem(`device_${roomId}`);
+            setTeamId(null);
           }
         }
       } catch (error) {
@@ -36,14 +37,15 @@ export function usePlayer(roomId: string) {
   }, [roomId]);
 
   const clearPlayer = () => {
-    localStorage.removeItem(`player_${roomId}`);
+    localStorage.removeItem(`team_${roomId}`);
+    localStorage.removeItem(`device_${roomId}`);
     localStorage.removeItem(`host_${roomId}`);
-    setPlayerId(null);
+    setTeamId(null);
     setIsHost(false);
   };
 
   return {
-    playerId,
+    teamId,
     isHost,
     clearPlayer,
   };

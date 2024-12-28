@@ -7,20 +7,19 @@ import TeamManager from "@/components/room/TeamManager";
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
 import { usePresence } from "@/hooks/usePresence";
-import { RoomStatus } from "@/types/room";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 function RoomContent() {
   const { roomId } = useParams();
   const { room, loading, error } = useRoom();
-  const { playerId, isHost } = usePlayer(roomId as string);
+  const { teamId, isHost } = usePlayer(roomId as string);
   const router = useRouter();
   usePresence(roomId as string);
 
   useEffect(() => {
-    if (room?.status === ("selecting" as RoomStatus)) {
-      router.push(`/room/${room.id}/select-game`);
+    if (room?.status === "playing") {
+      router.push(`/room/${room.id}/game`);
     }
   }, [room?.status, room?.id, router]);
 
@@ -53,8 +52,8 @@ function RoomContent() {
 
         {/* Colonne centrale: Tableau des scores */}
         <div className="lg:col-span-2">
-          <ScoreBoard room={room} playerId={playerId} isHost={isHost} />
-          {room.settings.gameMode === "team" && <TeamManager room={room} />}
+          <ScoreBoard room={room} teamId={teamId} isHost={isHost} />
+          <TeamManager room={room} />
         </div>
       </div>
     </div>

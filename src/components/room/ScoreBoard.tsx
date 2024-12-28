@@ -4,7 +4,7 @@ import { useState } from "react";
 
 type ScoreBoardProps = {
   room: Room;
-  teamId?: string;
+  teamId: string | null;
   isHost: boolean;
 };
 

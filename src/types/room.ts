@@ -1,8 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 
-export type GameType = "undercover" | "millionaire" | "other";
-
-export type RoomStatus = "waiting" | "selecting" | "playing" | "finished";
+export type RoomStatus = "waiting" | "playing" | "finished";
 
 export type TeamMember = {
   name: string;
@@ -23,13 +21,12 @@ export type Team = {
 export type Room = {
   id: string;
   hostId: string;
-  gameType: GameType | null;
+  currentGame: number;
   status: RoomStatus;
   teams: Record<string, Team>;
   settings: {
     maxTeams: number;
     isPublic: boolean;
-    gameMode: "team" | "individual";
   };
   createdAt: Date;
   updatedAt: Date;

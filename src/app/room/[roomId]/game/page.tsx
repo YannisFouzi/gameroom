@@ -6,18 +6,50 @@ import { useParams } from "next/navigation";
 
 function GameContent() {
   const { room } = useRoom();
-  const { playerId, isHost } = usePlayer(room?.id || "");
+  const { teamId, isHost } = usePlayer(room?.id || "");
 
-  if (!room || !playerId) return null;
+  if (!room) return null;
+
+  const currentTeam = teamId ? room.teams[teamId] : null;
+
+  if (isHost) {
+    return (
+      <div className="container mx-auto p-4">
+        <h1 className="text-4xl font-bold text-center mb-6">
+          JEU {room.currentGame}
+        </h1>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Jeu en cours</h1>
-      <div>
-        {/* Contenu du jeu à implémenter selon le type de jeu */}
-        <p>Type de jeu : {room.gameType}</p>
-        <p>Mode : {room.settings.gameMode}</p>
-      </div>
+      <h1 className="text-3xl font-bold text-center mb-6">
+        JEU {room.currentGame}
+      </h1>
+
+      {currentTeam && (
+        <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-4">{currentTeam.name}</h2>
+          <div className="flex items-center gap-4 mb-4">
+            <img
+              src={currentTeam.avatar}
+              alt={currentTeam.name}
+              className="w-16 h-16 rounded-full"
+            />
+            <div>
+              <p className="text-sm text-gray-600">Membres :</p>
+              <p className="font-medium">
+                {currentTeam.members.map((m) => m.name).join(", ")}
+              </p>
+            </div>
+          </div>
+          <div className="text-center">
+            <p className="text-sm text-gray-600">Score actuel</p>
+            <p className="text-3xl font-bold">{currentTeam.score}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
