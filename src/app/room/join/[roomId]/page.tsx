@@ -1,6 +1,6 @@
 "use client";
 
-import PlayerForm from "@/components/room/PlayerForm";
+import TeamForm from "@/components/room/TeamForm";
 import { roomService } from "@/lib/firebase/roomService";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -11,23 +11,23 @@ export default function JoinRoomPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleJoinRoom = async (playerData: {
-    name: string;
+  const handleJoinRoom = async (teamData: {
+    members: { name: string }[];
     avatar: string;
   }) => {
     try {
       setIsLoading(true);
       setError(null);
 
-      const playerId = await roomService.addPlayer(
+      const { teamId, deviceId } = await roomService.addTeam(
         roomId as string,
-        playerData
+        teamData
       );
 
-      // Stockons l'ID du joueur dans le localStorage pour le retrouver plus tard
-      localStorage.setItem(`player_${roomId}`, playerId);
+      // Stocker l'ID de l'équipe et du device
+      localStorage.setItem(`team_${roomId}`, teamId);
+      localStorage.setItem(`device_${roomId}`, deviceId);
 
-      // Redirigeons vers la page de la room
       router.push(`/room/${roomId}`);
     } catch (err) {
       console.error("Erreur lors de la connexion à la room:", err);
@@ -47,7 +47,7 @@ export default function JoinRoomPage() {
         </div>
       )}
 
-      <PlayerForm onSubmit={handleJoinRoom} isLoading={isLoading} />
+      <TeamForm onSubmit={handleJoinRoom} isLoading={isLoading} />
     </div>
   );
 }

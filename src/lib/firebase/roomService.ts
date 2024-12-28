@@ -1,57 +1,75 @@
 import { generateUUID } from "@/lib/utils";
-import { GameType, Room, RoomStatus, Team } from "@/types/room";
+import { GameType, RoomStatus, Team } from "@/types/room";
 import {
+  addDoc,
   collection,
-  deleteDoc,
   doc,
-  getDoc,
   serverTimestamp,
-  setDoc,
   updateDoc,
 } from "firebase/firestore";
 import { getDb } from "./config";
 
 export const roomService = {
-  async createRoom(hostId: string): Promise<string> {
+  async createRoom(hostId: string) {
     const db = getDb();
-    const roomsRef = collection(db, "rooms");
-    const newRoomRef = doc(roomsRef);
-
-    const newRoom: Omit<Room, "id"> = {
+    const roomRef = await addDoc(collection(db, "rooms"), {
       hostId,
+      status: "waiting" as RoomStatus,
       gameType: null,
-      status: "waiting",
-      players: {},
+      teams: {},
       settings: {
-        gameMode: "individual",
-        maxPlayers: 10,
+        maxTeams: 10,
         isPublic: true,
+        gameMode: "individual",
       },
-      createdAt: serverTimestamp() as unknown as Date,
-      updatedAt: serverTimestamp() as unknown as Date,
-    };
-
-    await setDoc(newRoomRef, newRoom);
-    return newRoomRef.id;
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+    return roomRef.id;
   },
 
-  async addPlayer(roomId: string, player: { name: string; avatar: string }) {
+  async addTeam(
+    roomId: string,
+    teamData: {
+      members: { name: string }[];
+      avatar: string;
+    }
+  ) {
     const db = getDb();
-    const playerData = {
-      id: generateUUID(),
-      name: player.name,
-      avatar: player.avatar,
+    const teamId = generateUUID();
+    const deviceId = generateUUID();
+
+    const team: Omit<Team, "lastSeen"> & { lastSeen: any } = {
+      id: teamId,
+      name:
+        teamData.members.length === 1
+          ? teamData.members[0].name
+          : `Équipe ${teamData.members[0].name}`,
+      members: teamData.members.map((member) => ({
+        name: member.name,
+        score: 0,
+      })),
+      avatar: teamData.avatar,
       score: 0,
       isOnline: true,
       lastSeen: serverTimestamp(),
+      deviceId,
     };
 
     await updateDoc(doc(db, "rooms", roomId), {
-      [`players.${playerData.id}`]: playerData,
+      [`teams.${teamId}`]: team,
       updatedAt: serverTimestamp(),
     });
 
-    return playerData.id;
+    return { teamId, deviceId };
+  },
+
+  async updateTeamScore(roomId: string, teamId: string, score: number) {
+    const db = getDb();
+    await updateDoc(doc(db, "rooms", roomId), {
+      [`teams.${teamId}.score`]: score,
+      updatedAt: serverTimestamp(),
+    });
   },
 
   async updateGameMode(roomId: string, gameMode: "team" | "individual") {
@@ -62,49 +80,10 @@ export const roomService = {
     });
   },
 
-  async deleteRoom(roomId: string) {
-    const db = getDb();
-    await deleteDoc(doc(db, "rooms", roomId));
-  },
-
-  async getRoom(roomId: string) {
-    const db = getDb();
-    const docRef = doc(db, "rooms", roomId);
-    const docSnap = await getDoc(docRef);
-
-    if (!docSnap.exists()) {
-      throw new Error("Room not found");
-    }
-
-    return {
-      id: docSnap.id,
-      ...docSnap.data(),
-    } as Room;
-  },
-
-  async updatePlayerScore(roomId: string, playerId: string, newScore: number) {
+  async updateGameType(roomId: string, gameType: GameType) {
     const db = getDb();
     await updateDoc(doc(db, "rooms", roomId), {
-      [`players.${playerId}.score`]: newScore,
-      updatedAt: serverTimestamp(),
-    });
-  },
-
-  async removePlayer(roomId: string, playerId: string) {
-    const db = getDb();
-    const roomRef = doc(db, "rooms", roomId);
-    const room = await getDoc(roomRef);
-
-    if (!room.exists()) {
-      throw new Error("Room not found");
-    }
-
-    const data = room.data();
-    const players = { ...data.players };
-    delete players[playerId];
-
-    await updateDoc(roomRef, {
-      players,
+      gameType,
       updatedAt: serverTimestamp(),
     });
   },
@@ -113,71 +92,6 @@ export const roomService = {
     const db = getDb();
     await updateDoc(doc(db, "rooms", roomId), {
       status,
-      updatedAt: serverTimestamp(),
-    });
-  },
-
-  async createTeam(roomId: string, team: Omit<Team, "id">) {
-    const db = getDb();
-    const teamId = generateUUID();
-    await updateDoc(doc(db, "rooms", roomId), {
-      [`teams.${teamId}`]: { id: teamId, ...team },
-      updatedAt: serverTimestamp(),
-    });
-    return teamId;
-  },
-
-  async assignPlayerToTeam(roomId: string, playerId: string, teamId: string) {
-    const db = getDb();
-    const roomRef = doc(db, "rooms", roomId);
-    const room = await getDoc(roomRef);
-
-    if (!room.exists()) {
-      throw new Error("Room not found");
-    }
-
-    const data = room.data() as Room;
-    const teams = { ...(data.teams || {}) };
-
-    // Retirer le joueur de son équipe actuelle s'il en a une
-    Object.keys(teams).forEach((tid: string) => {
-      teams[tid].players = teams[tid].players.filter(
-        (pid: string) => pid !== playerId
-      );
-    });
-
-    // Si teamId est "unassigned", on retire juste le joueur de son équipe
-    if (teamId === "unassigned") {
-      await updateDoc(roomRef, {
-        teams,
-        [`players.${playerId}.teamId`]: null,
-        updatedAt: serverTimestamp(),
-      });
-      return;
-    }
-
-    // Sinon, on ajoute le joueur à la nouvelle équipe
-    teams[teamId].players.push(playerId);
-
-    await updateDoc(roomRef, {
-      teams,
-      [`players.${playerId}.teamId`]: teamId,
-      updatedAt: serverTimestamp(),
-    });
-  },
-
-  async updateTeamScore(roomId: string, teamId: string, newScore: number) {
-    const db = getDb();
-    await updateDoc(doc(db, "rooms", roomId), {
-      [`teams.${teamId}.score`]: newScore,
-      updatedAt: serverTimestamp(),
-    });
-  },
-
-  async updateGameType(roomId: string, gameType: GameType) {
-    const db = getDb();
-    await updateDoc(doc(db, "rooms", roomId), {
-      gameType,
       updatedAt: serverTimestamp(),
     });
   },

@@ -1,5 +1,5 @@
 import { roomService } from "@/lib/firebase/roomService";
-import { GameType, Room, RoomStatus } from "@/types/room";
+import { GameType, Room } from "@/types/room";
 import { useState } from "react";
 
 type HostControlsProps = {
@@ -8,6 +8,8 @@ type HostControlsProps = {
 
 export default function HostControls({ room }: HostControlsProps) {
   const [isUpdating, setIsUpdating] = useState(false);
+  const isWaiting = room.status === "waiting";
+  const isPlaying = room.status === "playing";
 
   const handleGameModeChange = async (mode: "team" | "individual") => {
     try {
@@ -35,15 +37,12 @@ export default function HostControls({ room }: HostControlsProps) {
     try {
       setIsUpdating(true);
       await roomService.updateRoomStatus(room.id, "selecting");
-      window.location.href = `/room/${room.id}/select-game`;
     } catch (error) {
-      console.error("Erreur:", error);
+      console.error("Erreur lors du démarrage de la partie:", error);
+    } finally {
       setIsUpdating(false);
     }
   };
-
-  const isPlaying = room.status === ("playing" as RoomStatus);
-  const isWaiting = room.status === ("waiting" as RoomStatus);
 
   return (
     <div className="space-y-6 p-4 border rounded-lg">
@@ -100,7 +99,7 @@ export default function HostControls({ room }: HostControlsProps) {
         {isWaiting && (
           <button
             onClick={handleStartGame}
-            disabled={Object.keys(room.players).length < 2}
+            disabled={Object.keys(room.teams).length < 2}
             className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 disabled:opacity-50"
           >
             Démarrer la partie
