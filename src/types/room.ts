@@ -26,7 +26,13 @@ export type Celebrity = {
   foundBy?: string; // teamId de l'équipe qui l'a trouvée
 };
 
-export type GamePhase = "explanation" | "memorization" | "guessing" | "results";
+export type GamePhase =
+  | "explanation"
+  | "memorization"
+  | "guessing"
+  | "results"
+  | "millionaire-rules"
+  | "millionaire-playing";
 
 export type Room = {
   id: string;
@@ -38,6 +44,8 @@ export type Room = {
     remainingTeams: string[];
     currentTeamIndex: number;
     startTime?: number;
+    startingTeam?: string;
+    winningTeamName?: string;
   };
   status: RoomStatus;
   teams: Record<string, Team>;

@@ -3,7 +3,7 @@
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
 import { roomService } from "@/lib/firebase/roomService";
-import { Celebrity } from "@/types/room";
+import { Celebrity, Team } from "@/types/room";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -115,7 +115,7 @@ function GuessingPhase({
   onSubmit,
 }: {
   isCurrentTeam: boolean;
-  onSubmit: (guess: string) => void;
+  onSubmit: (guess: string) => Promise<boolean>;
 }) {
   const [guess, setGuess] = useState("");
   const [feedback, setFeedback] = useState<{
@@ -136,7 +136,6 @@ function GuessingPhase({
         });
         setGuess("");
 
-        // Effacer le feedback après 3 secondes
         setTimeout(() => {
           setFeedback(null);
         }, 3000);
@@ -190,13 +189,46 @@ function GuessingPhase({
 function ResultsPhase({
   celebrities,
   teams,
+  remainingTeams,
+  isHost,
+  onNextGame,
 }: {
   celebrities: Record<string, Celebrity>;
   teams: Record<string, Team>;
+  remainingTeams: string[];
+  isHost: boolean;
+  onNextGame: () => void;
 }) {
+  const winningTeam = teams[remainingTeams[0]];
+
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-6 text-center">Résultats</h2>
+      <div className="mb-12 text-center">
+        <div className="inline-block bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 p-8 rounded-lg shadow-lg">
+          <h2 className="text-3xl font-bold text-white mb-4">
+            🏆 Équipe Gagnante 🏆
+          </h2>
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <img
+              src={winningTeam.avatar}
+              alt={winningTeam.name}
+              className="w-16 h-16 rounded-full border-4 border-white"
+            />
+            <div>
+              <div className="text-2xl font-bold text-white">
+                {winningTeam.name}
+              </div>
+              <div className="text-sm text-yellow-100">
+                {winningTeam.members.map((member) => member.name).join(", ")}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2 className="text-2xl font-bold mb-6 text-center">
+        Récapitulatif des trouvailles
+      </h2>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {Object.entries(celebrities).map(([id, celebrity]) => (
           <div key={id} className="space-y-2">
@@ -217,6 +249,64 @@ function ResultsPhase({
           </div>
         ))}
       </div>
+
+      {isHost && (
+        <div className="mt-8 text-center">
+          <button
+            onClick={onNextGame}
+            className="bg-blue-600 text-white py-3 px-8 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors"
+          >
+            Passer au jeu suivant : Qui veut gagner des millions
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MillionaireRulesPhase({
+  isHost,
+  startingTeamName,
+  onStart,
+}: {
+  isHost: boolean;
+  startingTeamName: string;
+  onStart: () => void;
+}) {
+  return (
+    <div className="max-w-2xl mx-auto p-6">
+      <h2 className="text-2xl font-bold mb-4">
+        Qui veut gagner des millions - Règles du jeu
+      </h2>
+
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <p className="text-lg font-semibold text-blue-800">
+          L'équipe "{startingTeamName}" commence la partie !
+        </p>
+      </div>
+
+      <div className="space-y-4 mb-6">
+        <p>1. Chaque équipe joue à tour de rôle</p>
+        <p>2. Une question est posée avec 4 réponses possibles</p>
+        <p>3. L'équipe a 30 secondes pour répondre</p>
+        <p>4. Une bonne réponse rapporte des points selon le palier :</p>
+        <ul className="list-disc pl-8">
+          <li>Question 1-5 : 100 points</li>
+          <li>Question 6-10 : 200 points</li>
+          <li>Question 11-15 : 500 points</li>
+        </ul>
+        <p>5. Une mauvaise réponse ne fait pas perdre de points</p>
+        <p>6. Le jeu se termine après 15 questions</p>
+      </div>
+
+      {isHost && (
+        <button
+          onClick={onStart}
+          className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700"
+        >
+          Commencer le jeu
+        </button>
+      )}
     </div>
   );
 }
@@ -228,14 +318,28 @@ function GameContent() {
   if (!room || !room.gameData) return null;
 
   const handleStartMemorization = async () => {
+    if (!room) return;
     await roomService.startMemorizationPhase(room.id);
   };
 
-  const handleGuess = async (guess: string) => {
-    if (teamId) {
+  const handleGuess = async (guess: string): Promise<boolean> => {
+    if (!room || !teamId) return false;
+    try {
       return await roomService.submitGuess(room.id, teamId, guess);
+    } catch (error) {
+      console.error("Erreur lors de la soumission:", error);
+      return false;
     }
-    return false;
+  };
+
+  const handleNextGame = async () => {
+    if (!room) return;
+    await roomService.startNextGame(room.id);
+  };
+
+  const handleStartMillionaire = async () => {
+    if (!room) return;
+    await roomService.startMillionaireGame(room.id);
   };
 
   const isCurrentTeam =
@@ -266,6 +370,19 @@ function GameContent() {
         <ResultsPhase
           celebrities={room.gameData.celebrities}
           teams={room.teams}
+          remainingTeams={room.gameData.remainingTeams}
+          isHost={isHost}
+          onNextGame={handleNextGame}
+        />
+      );
+
+    case "millionaire-rules":
+      if (!room.gameData.startingTeam) return null;
+      return (
+        <MillionaireRulesPhase
+          isHost={isHost}
+          startingTeamName={room.teams[room.gameData.startingTeam].name}
+          onStart={handleStartMillionaire}
         />
       );
 

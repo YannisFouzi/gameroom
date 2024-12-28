@@ -173,4 +173,50 @@ export const roomService = {
     }
     return roomSnap.data() as Room;
   },
+
+  async startNextGame(roomId: string) {
+    const db = getDb();
+    const room = await this.getRoom(roomId);
+
+    // Vérifier que gameData et remainingTeams existent
+    if (!room.gameData?.remainingTeams?.length) {
+      throw new Error("No winning team found");
+    }
+
+    const winningTeamId = room.gameData.remainingTeams[0];
+    const winningTeam = room.teams[winningTeamId];
+
+    if (!winningTeam) {
+      throw new Error("Winning team not found");
+    }
+
+    // Récupérer tous les IDs d'équipes et mettre l'équipe gagnante en premier
+    const allTeamIds = Object.keys(room.teams);
+    const reorderedTeams = [
+      winningTeamId,
+      ...allTeamIds.filter((id) => id !== winningTeamId),
+    ];
+
+    await updateDoc(doc(db, "rooms", roomId), {
+      currentGame: 2,
+      gamePhase: "millionaire-rules",
+      gameData: {
+        currentTeamIndex: 0,
+        remainingTeams: reorderedTeams, // Toutes les équipes sont de retour en jeu
+        startingTeam: winningTeamId,
+        winningTeamName: winningTeam.name,
+        questions: [],
+        currentQuestion: 0,
+      },
+      updatedAt: serverTimestamp(),
+    });
+  },
+
+  async startMillionaireGame(roomId: string) {
+    const db = getDb();
+    await updateDoc(doc(db, "rooms", roomId), {
+      gamePhase: "millionaire-playing",
+      updatedAt: serverTimestamp(),
+    });
+  },
 };
