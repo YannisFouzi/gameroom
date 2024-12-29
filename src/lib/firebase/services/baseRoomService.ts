@@ -8,11 +8,10 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
-import { getDb } from "../config";
+import { db } from "../config";
 
 export const baseRoomService = {
   async createRoom(hostId: string) {
-    const db = getDb();
     const roomRef = await addDoc(collection(db, "rooms"), {
       hostId,
       status: "waiting" as RoomStatus,
@@ -29,7 +28,6 @@ export const baseRoomService = {
   },
 
   async getRoom(roomId: string) {
-    const db = getDb();
     const roomSnap = await getDoc(doc(db, "rooms", roomId));
     if (!roomSnap.exists()) {
       throw new Error("Room not found");
@@ -38,7 +36,6 @@ export const baseRoomService = {
   },
 
   async updateRoomStatus(roomId: string, status: RoomStatus) {
-    const db = getDb();
     await updateDoc(doc(db, "rooms", roomId), {
       status,
       updatedAt: serverTimestamp(),
@@ -53,7 +50,6 @@ export const baseRoomService = {
       avatar: string;
     }
   ) {
-    const db = getDb();
     const teamId = generateUUID();
     const deviceId = generateUUID();
 
@@ -64,6 +60,7 @@ export const baseRoomService = {
         name: member.name,
         score: 0,
       })),
+      players: [],
       avatar: teamData.avatar,
       score: 0,
       isOnline: true,
@@ -80,7 +77,6 @@ export const baseRoomService = {
   },
 
   async updateTeamScore(roomId: string, teamId: string, score: number) {
-    const db = getDb();
     await updateDoc(doc(db, "rooms", roomId), {
       [`teams.${teamId}.score`]: score,
       updatedAt: serverTimestamp(),

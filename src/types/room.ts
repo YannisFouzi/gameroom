@@ -12,6 +12,7 @@ export type Team = {
   id: string;
   name: string;
   members: TeamMember[];
+  players: string[];
   avatar: string;
   score: number;
   isOnline: boolean;
@@ -44,6 +45,12 @@ export type GameData = {
   winningTeamName?: string;
 } & Partial<MillionaireGameData>;
 
+export type Player = {
+  name: string;
+  avatar: string;
+  teamId?: string;
+};
+
 export type Room = {
   id: string;
   hostId: string;
@@ -51,6 +58,7 @@ export type Room = {
   gamePhase?: GamePhase;
   gameData?: GameData;
   status: RoomStatus;
+  players: Record<string, Player>;
   teams: Record<string, Team>;
   settings: {
     maxTeams: number;
@@ -59,3 +67,5 @@ export type Room = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type GameType = "undercover" | "millionaire";

@@ -1,4 +1,4 @@
-import { getDb } from "@/lib/firebase/config";
+import { db } from "@/lib/firebase/config";
 import { Room } from "@/types/room";
 import { doc, onSnapshot } from "firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -25,7 +25,6 @@ export function RoomProvider({
   useEffect(() => {
     if (!roomId) return;
 
-    const db = getDb();
     const unsubscribe = onSnapshot(
       doc(db, "rooms", roomId),
       (doc) => {

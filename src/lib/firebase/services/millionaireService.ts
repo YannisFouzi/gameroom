@@ -6,12 +6,11 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
-import { getDb } from "../config";
+import { db } from "../config";
 import { baseRoomService } from "./baseRoomService";
 
 export const millionaireService = {
   async startMillionaireGame(roomId: string) {
-    const db = getDb();
     const room = await baseRoomService.getRoom(roomId);
 
     if (!room.gameData) return;
@@ -47,7 +46,6 @@ export const millionaireService = {
     roomId: string,
     category: MillionaireCategory
   ) {
-    const db = getDb();
     await updateDoc(doc(db, "rooms", roomId), {
       "gameData.currentCategory": category,
       "gameData.currentQuestionIndex": 0,
@@ -62,7 +60,6 @@ export const millionaireService = {
     currentQuestionIndex: number,
     points: number
   ) {
-    const db = getDb();
     const room = await baseRoomService.getRoom(roomId);
     const currentTeamIndex = room.gameData?.currentTeamIndex || 0;
     const currentTeam = room.gameData?.remainingTeams[currentTeamIndex];
@@ -84,7 +81,6 @@ export const millionaireService = {
   },
 
   async moveToNextQuestion(roomId: string, nextQuestionIndex: number) {
-    const db = getDb();
     await updateDoc(doc(db, "rooms", roomId), {
       "gameData.currentQuestionIndex": nextQuestionIndex,
       "gameData.selectedAnswer": null,
@@ -97,7 +93,6 @@ export const millionaireService = {
   },
 
   async moveToNextTeam(roomId: string, nextTeamIndex: number) {
-    const db = getDb();
     await updateDoc(doc(db, "rooms", roomId), {
       "gameData.currentTeamIndex": nextTeamIndex,
       "gameData.currentCategory": null,
@@ -111,7 +106,6 @@ export const millionaireService = {
   },
 
   async quitWithPoints(roomId: string, points: number) {
-    const db = getDb();
     const room = await baseRoomService.getRoom(roomId);
     const currentTeamIndex = room.gameData?.currentTeamIndex || 0;
     const currentTeam = room.gameData?.remainingTeams[currentTeamIndex];

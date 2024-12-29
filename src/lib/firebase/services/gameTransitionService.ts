@@ -1,11 +1,10 @@
 import { AnswerState } from "@/types/millionaire";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
-import { getDb } from "../config";
+import { db } from "../config";
 import { baseRoomService } from "./baseRoomService";
 
 export const gameTransitionService = {
   async startNextGame(roomId: string) {
-    const db = getDb();
     const room = await baseRoomService.getRoom(roomId);
 
     if (!room.gameData?.remainingTeams?.length) {
@@ -46,7 +45,6 @@ export const gameTransitionService = {
     answerState: AnswerState,
     selectedAnswers: number[] = []
   ) {
-    const db = getDb();
     await updateDoc(doc(db, "rooms", roomId), {
       "gameData.selectedAnswer": selectedAnswer,
       "gameData.answerState": answerState,

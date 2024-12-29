@@ -77,12 +77,13 @@ function SelectGameContent() {
   const router = useRouter();
   const { roomId } = useParams();
   const { room } = useRoom();
-  const { playerId, isHost } = usePlayer(roomId as string);
+  const { teamId, isHost } = usePlayer(roomId as string);
+  const storedPlayerId = localStorage.getItem(`player_${roomId}`);
   const [isLoading, setIsLoading] = useState(false);
 
   // Ajout de logs pour le débogage
   console.log("Room:", room);
-  console.log("PlayerId:", playerId);
+  console.log("PlayerId:", teamId);
   console.log("IsHost:", isHost);
   console.log(
     "Host ID from localStorage:",
@@ -158,7 +159,6 @@ function SelectGameContent() {
   }
 
   // Si ce n'est pas l'hôte et qu'on a un playerId
-  const storedPlayerId = localStorage.getItem(`player_${roomId}`);
   if (storedPlayerId && room.players[storedPlayerId]) {
     return <PlayerView room={room} currentPlayerId={storedPlayerId} />;
   }

@@ -1,3 +1,6 @@
+import { GameType } from "@/types/room";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "./config";
 import {
   baseRoomService,
   gameTransitionService,
@@ -13,4 +16,11 @@ export const roomService = {
   ...millionaireService,
   ...jokerService,
   ...gameTransitionService,
+
+  async updateGameType(roomId: string, gameType: GameType) {
+    const roomRef = doc(db, "rooms", roomId);
+    await updateDoc(roomRef, {
+      gameType: gameType,
+    });
+  },
 };

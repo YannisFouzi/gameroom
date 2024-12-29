@@ -1,6 +1,6 @@
 import { Celebrity } from "@/types/room";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
-import { getDb } from "../config";
+import { db } from "../config";
 import { baseRoomService } from "./baseRoomService";
 
 const CELEBRITIES: Record<string, Celebrity> = {
@@ -20,7 +20,6 @@ const CELEBRITIES: Record<string, Celebrity> = {
 
 export const ratDeStarService = {
   async startGame(roomId: string) {
-    const db = getDb();
     const teamIds = Object.keys((await baseRoomService.getRoom(roomId)).teams);
 
     await updateDoc(doc(db, "rooms", roomId), {
@@ -37,7 +36,6 @@ export const ratDeStarService = {
   },
 
   async startMemorizationPhase(roomId: string) {
-    const db = getDb();
     const now = Date.now();
 
     await updateDoc(doc(db, "rooms", roomId), {
@@ -48,7 +46,6 @@ export const ratDeStarService = {
   },
 
   async startGuessingPhase(roomId: string) {
-    const db = getDb();
     await updateDoc(doc(db, "rooms", roomId), {
       gamePhase: "guessing",
       updatedAt: serverTimestamp(),
@@ -56,7 +53,6 @@ export const ratDeStarService = {
   },
 
   async submitGuess(roomId: string, teamId: string, guess: string) {
-    const db = getDb();
     const room = await baseRoomService.getRoom(roomId);
     const normalizedGuess = guess.toLowerCase().trim();
 
