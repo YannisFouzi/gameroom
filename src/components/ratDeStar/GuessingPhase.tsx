@@ -36,7 +36,7 @@ export function GuessingPhase({ isCurrentTeam, onSubmit }: GuessingPhaseProps) {
 
   return (
     <div className="max-w-md mx-auto p-4">
-      <h2 className="text-xl font-bold mb-4">Phase de devinettes</h2>
+      <h2 className="text-xl font-bold mb-4">Phase de réponse</h2>
       {isCurrentTeam ? (
         <>
           <form onSubmit={handleSubmit} className="space-y-4">
