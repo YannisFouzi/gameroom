@@ -13,11 +13,12 @@ export type MillionaireQuestion = {
   category: MillionaireCategory;
 };
 
-export type JokerType = "phoneCall" | "fiftyFifty";
+export type JokerType = "phoneCall" | "fiftyFifty" | "doubleAnswer";
 
 export type TeamJokers = {
   phoneCall: boolean;
   fiftyFifty: boolean;
+  doubleAnswer: boolean;
 };
 
 export type MillionaireGameData = {

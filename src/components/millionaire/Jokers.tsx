@@ -5,9 +5,11 @@ type JokersProps = {
   jokers: {
     phoneCall: boolean;
     fiftyFifty: boolean;
+    doubleAnswer: boolean;
   };
   onUsePhoneCall: () => void;
   onUseFiftyFifty: () => void;
+  onUseDoubleAnswer: () => void;
   disabled?: boolean;
 };
 
@@ -15,6 +17,7 @@ export default function Jokers({
   jokers,
   onUsePhoneCall,
   onUseFiftyFifty,
+  onUseDoubleAnswer,
   disabled = false,
 }: JokersProps) {
   const [showPhoneCallModal, setShowPhoneCallModal] = useState(false);
@@ -47,6 +50,20 @@ export default function Jokers({
       >
         <span className="text-2xl mb-2">50:50</span>
         <p className="text-sm">Retirer deux mauvaises réponses</p>
+      </motion.button>
+
+      <motion.button
+        whileHover={!disabled && !jokers.doubleAnswer ? { scale: 1.05 } : {}}
+        className={`flex-1 p-4 rounded-lg ${
+          jokers.doubleAnswer
+            ? "bg-gray-100 cursor-not-allowed"
+            : "bg-blue-50 hover:bg-blue-100"
+        }`}
+        onClick={onUseDoubleAnswer}
+        disabled={disabled || jokers.doubleAnswer}
+      >
+        <span className="text-2xl mb-2">2️⃣</span>
+        <p className="text-sm">Double réponse</p>
       </motion.button>
 
       {showPhoneCallModal && (

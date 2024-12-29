@@ -16,9 +16,11 @@ type QuestionDisplayProps = {
   jokers: {
     phoneCall: boolean;
     fiftyFifty: boolean;
+    doubleAnswer: boolean;
   };
   onUsePhoneCall: () => void;
   onUseFiftyFifty: () => void;
+  onUseDoubleAnswer: () => void;
 };
 
 type AnswerState = "selected" | "correct" | "incorrect" | null;
@@ -36,16 +38,25 @@ export default function QuestionDisplay({
   jokers,
   onUsePhoneCall,
   onUseFiftyFifty,
+  onUseDoubleAnswer,
 }: QuestionDisplayProps) {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [answerState, setAnswerState] = useState<AnswerState>(null);
   const [showValidateButton, setShowValidateButton] = useState(false);
   const [hiddenAnswers, setHiddenAnswers] = useState<number[]>([]);
+  const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
+  const [isDoubleAnswerActive, setIsDoubleAnswerActive] = useState(false);
+  const [answerStates, setAnswerStates] = useState<
+    Record<number, "selected" | "correct" | "incorrect" | null>
+  >({});
 
   useEffect(() => {
     setSelectedAnswer(null);
     setAnswerState(null);
     setShowValidateButton(false);
+    setSelectedAnswers([]);
+    setAnswerStates({});
+    setIsDoubleAnswerActive(false);
   }, [questionIndex]);
 
   const handleAnswerClick = (index: number) => {
@@ -55,16 +66,58 @@ export default function QuestionDisplay({
       answerState !== "correct" &&
       answerState !== "incorrect"
     ) {
-      setSelectedAnswer(index);
-      setShowValidateButton(true);
-      setAnswerState("selected");
+      if (isDoubleAnswerActive) {
+        // Gérer la sélection multiple
+        if (selectedAnswers.includes(index)) {
+          // Si la réponse est déjà sélectionnée, on la retire
+          setSelectedAnswers(selectedAnswers.filter((i) => i !== index));
+        } else {
+          // Si on a déjà 2 réponses sélectionnées
+          if (selectedAnswers.length === 2) {
+            // On retire la première réponse (la plus ancienne) et on ajoute la nouvelle
+            setSelectedAnswers([selectedAnswers[1], index]);
+          } else {
+            // Sinon on ajoute simplement la nouvelle réponse
+            setSelectedAnswers([...selectedAnswers, index]);
+          }
+        }
+        setShowValidateButton(selectedAnswers.length > 0);
+      } else {
+        // Comportement normal
+        setSelectedAnswer(index);
+        setShowValidateButton(true);
+        setAnswerState("selected");
+      }
     }
   };
 
   const handleValidate = () => {
-    const isCorrect = selectedAnswer === question.correctAnswer;
-    setAnswerState(isCorrect ? "correct" : "incorrect");
-    setShowValidateButton(false);
+    if (isDoubleAnswerActive) {
+      const hasCorrectAnswer = selectedAnswers.includes(question.correctAnswer);
+
+      // Mettre à jour les états des réponses
+      const newAnswerStates: Record<number, "correct" | "incorrect"> = {};
+      selectedAnswers.forEach((index) => {
+        newAnswerStates[index] =
+          index === question.correctAnswer ? "correct" : "incorrect";
+      });
+      if (!hasCorrectAnswer) {
+        newAnswerStates[question.correctAnswer] = "correct";
+      }
+
+      setAnswerStates(newAnswerStates);
+      setShowValidateButton(false);
+      // Mettre à jour l'état global de la réponse
+      setAnswerState(hasCorrectAnswer ? "correct" : "incorrect");
+      // Appeler onAnswer avec la bonne réponse si elle a été trouvée
+      onAnswer(hasCorrectAnswer ? question.correctAnswer : selectedAnswers[0]);
+    } else {
+      // Comportement normal existant
+      const isCorrect = selectedAnswer === question.correctAnswer;
+      setAnswerState(isCorrect ? "correct" : "incorrect");
+      setShowValidateButton(false);
+      onAnswer(selectedAnswer!);
+    }
   };
 
   const handleQuit = () => {
@@ -73,6 +126,29 @@ export default function QuestionDisplay({
   };
 
   const getAnswerStyle = (index: number) => {
+    // Si le joker Double réponse est actif
+    if (isDoubleAnswerActive) {
+      // Si on a validé la réponse (correct ou incorrect)
+      if (answerState === "correct" || answerState === "incorrect") {
+        if (index === question.correctAnswer) {
+          return "bg-green-100"; // La bonne réponse est toujours en vert
+        }
+        if (selectedAnswers.includes(index)) {
+          return index === question.correctAnswer
+            ? "bg-green-100"
+            : "bg-red-100";
+        }
+        return "bg-gray-50"; // Autres réponses en gris
+      }
+
+      // Avant validation
+      if (selectedAnswers.includes(index)) {
+        return "bg-orange-100"; // Réponse sélectionnée en orange
+      }
+      return "bg-blue-50 hover:bg-blue-100"; // Réponse non sélectionnée en bleu
+    }
+
+    // Comportement normal (sans Double réponse)
     if (answerState === "selected" && index === selectedAnswer) {
       return "bg-orange-100";
     }
@@ -101,6 +177,13 @@ export default function QuestionDisplay({
 
   return (
     <div className="max-w-2xl mx-auto p-6">
+      {isDoubleAnswerActive && (
+        <div className="mb-4 text-center text-sm text-gray-600">
+          Sélectionnez jusqu'à 2 réponses ({2 - selectedAnswers.length} restante
+          {2 - selectedAnswers.length > 1 ? "s" : ""})
+        </div>
+      )}
+
       <Jokers
         jokers={jokers}
         onUsePhoneCall={onUsePhoneCall}
@@ -113,6 +196,10 @@ export default function QuestionDisplay({
           const shuffled = wrongAnswers.sort(() => Math.random() - 0.5);
           setHiddenAnswers(shuffled.slice(0, 2));
           onUseFiftyFifty();
+        }}
+        onUseDoubleAnswer={() => {
+          setIsDoubleAnswerActive(true);
+          onUseDoubleAnswer();
         }}
         disabled={!isCurrentTeam || isHost}
       />

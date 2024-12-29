@@ -1,5 +1,5 @@
 import { generateUUID } from "@/lib/utils";
-import { MillionaireCategory } from "@/types/millionaire";
+import { JokerType, MillionaireCategory } from "@/types/millionaire";
 import { Celebrity, Room, RoomStatus, Team } from "@/types/room";
 import {
   addDoc,
@@ -328,11 +328,7 @@ export const roomService = {
     });
   },
 
-  async useJoker(
-    roomId: string,
-    teamId: string,
-    jokerType: "phoneCall" | "fiftyFifty"
-  ) {
+  async useJoker(roomId: string, teamId: string, jokerType: JokerType) {
     const db = getDb();
     await updateDoc(doc(db, "rooms", roomId), {
       [`gameData.jokers.${teamId}.${jokerType}`]: true,

@@ -124,11 +124,16 @@ function MillionaireContent() {
     await roomService.useJoker(room.id, teamId, "fiftyFifty");
   };
 
+  const handleUseDoubleAnswer = async () => {
+    if (!room || !teamId) return;
+    await roomService.useJoker(room.id, teamId, "doubleAnswer");
+  };
+
   // Vérifier si teamId existe et récupérer les jokers
   const currentJokers =
     teamId && gameData.jokers[teamId]
       ? gameData.jokers[teamId]
-      : { phoneCall: false, fiftyFifty: false };
+      : { phoneCall: false, fiftyFifty: false, doubleAnswer: false };
 
   if (!room || !gameData) return <div>Chargement...</div>;
 
@@ -185,6 +190,7 @@ function MillionaireContent() {
               jokers={currentJokers}
               onUsePhoneCall={handleUsePhoneCall}
               onUseFiftyFifty={handleUseFiftyFifty}
+              onUseDoubleAnswer={handleUseDoubleAnswer}
             />
           )}
         </div>
