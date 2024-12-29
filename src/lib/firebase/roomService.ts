@@ -324,6 +324,7 @@ export const roomService = {
       "gameData.selectedAnswer": null,
       "gameData.answerState": null,
       "gameData.selectedAnswers": [],
+      "gameData.hiddenAnswers": [],
       updatedAt: serverTimestamp(),
     });
   },
@@ -336,6 +337,7 @@ export const roomService = {
       "gameData.selectedAnswer": null,
       "gameData.answerState": null,
       "gameData.selectedAnswers": [],
+      "gameData.hiddenAnswers": [],
       updatedAt: serverTimestamp(),
     });
   },
@@ -367,6 +369,14 @@ export const roomService = {
     const db = getDb();
     await updateDoc(doc(db, "rooms", roomId), {
       "gameData.phoneCallModalOpen": isOpen,
+      updatedAt: serverTimestamp(),
+    });
+  },
+
+  async setHiddenAnswers(roomId: string, hiddenAnswers: number[]) {
+    const db = getDb();
+    await updateDoc(doc(db, "rooms", roomId), {
+      "gameData.hiddenAnswers": hiddenAnswers,
       updatedAt: serverTimestamp(),
     });
   },

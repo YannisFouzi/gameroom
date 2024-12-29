@@ -31,6 +31,8 @@ type QuestionDisplayProps = {
   ) => void;
   phoneCallModalOpen: boolean;
   onPhoneCallModalChange: (isOpen: boolean) => void;
+  hiddenAnswers: number[];
+  onSetHiddenAnswers: (answers: number[]) => void;
 };
 
 type AnswerState = "selected" | "correct" | "incorrect" | null;
@@ -55,9 +57,10 @@ export default function QuestionDisplay({
   onUpdateAnswerState,
   phoneCallModalOpen,
   onPhoneCallModalChange,
+  hiddenAnswers,
+  onSetHiddenAnswers,
 }: QuestionDisplayProps) {
   const [showValidateButton, setShowValidateButton] = useState(false);
-  const [hiddenAnswers, setHiddenAnswers] = useState<number[]>([]);
   const [isDoubleAnswerActive, setIsDoubleAnswerActive] = useState(false);
   const [usedJokersForQuestion, setUsedJokersForQuestion] = useState<
     JokerType[]
@@ -65,7 +68,6 @@ export default function QuestionDisplay({
 
   useEffect(() => {
     setShowValidateButton(false);
-    setHiddenAnswers([]);
     setIsDoubleAnswerActive(false);
     setUsedJokersForQuestion([]);
   }, [questionIndex]);
@@ -197,7 +199,7 @@ export default function QuestionDisplay({
       .filter((index) => index !== question.correctAnswer);
 
     const shuffled = wrongAnswers.sort(() => Math.random() - 0.5);
-    setHiddenAnswers(shuffled.slice(0, 2));
+    onSetHiddenAnswers(shuffled.slice(0, 2));
     onUseFiftyFifty();
   };
 
