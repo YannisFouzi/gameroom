@@ -1,10 +1,13 @@
 import { generateUUID } from "@/lib/utils";
+import { MillionaireCategory } from "@/types/millionaire";
 import { Celebrity, Room, RoomStatus, Team } from "@/types/room";
 import {
   addDoc,
+  arrayUnion,
   collection,
   doc,
   getDoc,
+  increment,
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
@@ -214,9 +217,76 @@ export const roomService = {
 
   async startMillionaireGame(roomId: string) {
     const db = getDb();
+    const room = await this.getRoom(roomId);
+
+    if (!room.gameData) return;
+
+    // Initialiser les données du jeu en conservant les données existantes
     await updateDoc(doc(db, "rooms", roomId), {
       gamePhase: "millionaire-playing",
+      "gameData.currentQuestionIndex": 0,
+      "gameData.usedCategories": [],
+      "gameData.scores": {},
+      "gameData.currentCategory": null,
       updatedAt: serverTimestamp(),
     });
+  },
+
+  async selectMillionaireCategory(
+    roomId: string,
+    category: MillionaireCategory
+  ) {
+    const db = getDb();
+    await updateDoc(doc(db, "rooms", roomId), {
+      "gameData.currentCategory": category,
+      "gameData.currentQuestionIndex": 0,
+      "gameData.usedCategories": arrayUnion(category),
+      updatedAt: serverTimestamp(),
+    });
+  },
+
+  async submitMillionaireAnswer(
+    roomId: string,
+    isCorrect: boolean,
+    points: number
+  ) {
+    const db = getDb();
+    const room = await this.getRoom(roomId);
+    const currentTeamIndex = room.gameData?.currentTeamIndex || 0;
+    const currentTeam = room.gameData?.remainingTeams[currentTeamIndex];
+    const currentQuestionIndex = room.gameData?.currentQuestionIndex || 0;
+
+    if (!currentTeam || !room.gameData?.remainingTeams) return;
+
+    if (isCorrect) {
+      // Si c'est la dernière question de la catégorie
+      if (currentQuestionIndex === 14) {
+        // Passer à l'équipe suivante et réinitialiser la catégorie
+        const nextTeamIndex =
+          (currentTeamIndex + 1) % room.gameData.remainingTeams.length;
+        await updateDoc(doc(db, "rooms", roomId), {
+          [`gameData.scores.${currentTeam}`]: increment(points),
+          "gameData.currentTeamIndex": nextTeamIndex,
+          "gameData.currentCategory": null,
+          updatedAt: serverTimestamp(),
+        });
+      } else {
+        // Passer à la question suivante
+        await updateDoc(doc(db, "rooms", roomId), {
+          [`gameData.scores.${currentTeam}`]: increment(points),
+          "gameData.currentQuestionIndex": currentQuestionIndex + 1,
+          updatedAt: serverTimestamp(),
+        });
+      }
+    } else {
+      // Mauvaise réponse : passer à l'équipe suivante
+      const nextTeamIndex =
+        (currentTeamIndex + 1) % room.gameData.remainingTeams.length;
+      await updateDoc(doc(db, "rooms", roomId), {
+        "gameData.currentTeamIndex": nextTeamIndex,
+        "gameData.currentCategory": null,
+        updatedAt: serverTimestamp(),
+      });
+    }
   },
 };

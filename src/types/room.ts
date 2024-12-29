@@ -1,4 +1,5 @@
 import { Timestamp } from "firebase/firestore";
+import { MillionaireGameData } from "./millionaire";
 
 export type RoomStatus = "waiting" | "playing" | "finished";
 
@@ -23,7 +24,7 @@ export type Celebrity = {
   name: string;
   validAnswers: string[];
   imageUrl: string;
-  foundBy?: string; // teamId de l'équipe qui l'a trouvée
+  foundBy?: string;
 };
 
 export type GamePhase =
@@ -34,19 +35,21 @@ export type GamePhase =
   | "millionaire-rules"
   | "millionaire-playing";
 
+export type GameData = {
+  celebrities?: Record<string, Celebrity>;
+  remainingTeams: string[];
+  currentTeamIndex: number;
+  startTime?: number;
+  startingTeam?: string;
+  winningTeamName?: string;
+} & Partial<MillionaireGameData>;
+
 export type Room = {
   id: string;
   hostId: string;
   currentGame: number;
   gamePhase?: GamePhase;
-  gameData?: {
-    celebrities: Record<string, Celebrity>;
-    remainingTeams: string[];
-    currentTeamIndex: number;
-    startTime?: number;
-    startingTeam?: string;
-    winningTeamName?: string;
-  };
+  gameData?: GameData;
   status: RoomStatus;
   teams: Record<string, Team>;
   settings: {

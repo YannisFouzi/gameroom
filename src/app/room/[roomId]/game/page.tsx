@@ -4,7 +4,7 @@ import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
 import { roomService } from "@/lib/firebase/roomService";
 import { Celebrity, Team } from "@/types/room";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function ExplanationPhase({
@@ -312,8 +312,15 @@ function MillionaireRulesPhase({
 }
 
 function GameContent() {
+  const router = useRouter();
   const { room } = useRoom();
   const { teamId, isHost } = usePlayer(room?.id || "");
+
+  useEffect(() => {
+    if (room?.gamePhase === "millionaire-rules") {
+      router.push(`/room/${room.id}/millionaire-rules`);
+    }
+  }, [room?.gamePhase, room?.id, router]);
 
   if (!room || !room.gameData) return null;
 
@@ -352,6 +359,7 @@ function GameContent() {
       );
 
     case "memorization":
+      if (!room.gameData.celebrities) return null;
       return (
         <MemorizationPhase
           celebrities={room.gameData.celebrities}
@@ -366,6 +374,7 @@ function GameContent() {
       );
 
     case "results":
+      if (!room.gameData.celebrities) return null;
       return (
         <ResultsPhase
           celebrities={room.gameData.celebrities}
