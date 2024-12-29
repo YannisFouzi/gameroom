@@ -2,9 +2,8 @@
 
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
-import { roomService } from "@/lib/firebase/roomService";
 import { motion } from "framer-motion";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 type TeamWithScore = {
   teamId: string;
@@ -16,7 +15,6 @@ type TeamWithScore = {
 function MillionaireResultsContent() {
   const { room } = useRoom();
   const { isHost } = usePlayer(room?.id || "");
-  const router = useRouter();
 
   if (!room?.gameData?.scores) return <div>Chargement...</div>;
 
@@ -82,14 +80,12 @@ function MillionaireResultsContent() {
 
       {isHost && (
         <button
-          onClick={async () => {
-            if (!room) return;
-            await roomService.startNextGame(room.id);
-            router.push(`/room/${room.id}/rate-yourself-rules`);
+          onClick={() => {
+            /* Implémenter la suite du jeu ici */
           }}
           className="w-full mt-8 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700"
         >
-          Continuer vers "Tu te mets combien ?"
+          Continuer
         </button>
       )}
     </div>
