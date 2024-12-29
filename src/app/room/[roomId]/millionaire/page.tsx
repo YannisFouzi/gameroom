@@ -1,6 +1,7 @@
 "use client";
 
 import CategorySelector from "@/components/millionaire/CategorySelector";
+import ProgressLadder from "@/components/millionaire/ProgressLadder";
 import QuestionDisplay from "@/components/millionaire/QuestionDisplay";
 import ScoreDisplay from "@/components/millionaire/ScoreDisplay";
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
@@ -107,48 +108,56 @@ function MillionaireContent() {
 
   return (
     <div className="container mx-auto p-4">
-      <ScoreDisplay room={room} currentTeam={currentTeam} />
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="lg:col-span-3">
+          <ScoreDisplay room={room} currentTeam={currentTeam} />
 
-      <div className="mb-6">
-        <h2 className="text-xl font-bold mb-2">
-          Tour de l'équipe : {room.teams[currentTeam]?.name}
-        </h2>
-        {gameData.currentCategory && (
-          <p className="text-gray-600">
-            Question {gameData.currentQuestionIndex + 1}/15 - Catégorie{" "}
-            {gameData.currentCategory}
-          </p>
-        )}
-      </div>
+          <div className="mb-6">
+            <h2 className="text-xl font-bold mb-2">
+              Tour de l'équipe : {room.teams[currentTeam]?.name}
+            </h2>
+            {gameData.currentCategory && (
+              <p className="text-gray-600">
+                Question {gameData.currentQuestionIndex + 1}/15 - Catégorie{" "}
+                {gameData.currentCategory}
+              </p>
+            )}
+          </div>
 
-      {!isHost && !isCurrentTeam ? (
-        <div className="max-w-2xl mx-auto p-6 text-center">
-          <h3 className="text-xl font-semibold mb-4">
-            C'est le tour de l'équipe {room.teams[currentTeam]?.name}
-          </h3>
-          <p className="text-gray-600">Attendez votre tour pour jouer...</p>
+          {!isHost && !isCurrentTeam ? (
+            <div className="max-w-2xl mx-auto p-6 text-center">
+              <h3 className="text-xl font-semibold mb-4">
+                C'est le tour de l'équipe {room.teams[currentTeam]?.name}
+              </h3>
+              <p className="text-gray-600">Attendez votre tour pour jouer...</p>
+            </div>
+          ) : !gameData.currentCategory ? (
+            <CategorySelector
+              usedCategories={gameData.usedCategories}
+              onSelectCategory={handleCategorySelect}
+              isCurrentTeam={isCurrentTeam}
+            />
+          ) : (
+            <QuestionDisplay
+              question={
+                millionaireQuestions[gameData.currentCategory][
+                  gameData.currentQuestionIndex
+                ]
+              }
+              onAnswer={handleAnswer}
+              onNextQuestion={handleNextQuestion}
+              onQuit={handleQuit}
+              isHost={isHost}
+              isCurrentTeam={isCurrentTeam}
+              questionIndex={gameData.currentQuestionIndex}
+            />
+          )}
         </div>
-      ) : !gameData.currentCategory ? (
-        <CategorySelector
-          usedCategories={gameData.usedCategories}
-          onSelectCategory={handleCategorySelect}
-          isCurrentTeam={isCurrentTeam}
-        />
-      ) : (
-        <QuestionDisplay
-          question={
-            millionaireQuestions[gameData.currentCategory][
-              gameData.currentQuestionIndex
-            ]
-          }
-          onAnswer={handleAnswer}
-          onNextQuestion={handleNextQuestion}
-          onQuit={handleQuit}
-          isHost={isHost}
-          isCurrentTeam={isCurrentTeam}
-          questionIndex={gameData.currentQuestionIndex}
-        />
-      )}
+
+        <div className="lg:col-span-1">
+          <ProgressLadder currentQuestion={gameData.currentQuestionIndex} />
+        </div>
+      </div>
     </div>
   );
 }
