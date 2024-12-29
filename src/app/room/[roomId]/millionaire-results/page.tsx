@@ -79,14 +79,23 @@ function MillionaireResultsContent() {
       </div>
 
       {isHost && (
-        <button
-          onClick={() => {
-            /* Implémenter la suite du jeu ici */
-          }}
-          className="w-full mt-8 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700"
-        >
-          Continuer
-        </button>
+        <div className="mt-8 space-y-4">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+            <p className="text-lg text-blue-800">
+              Félicitations à {winner.name} ! Tu as remporté la manche
+              précédente. C'est toi qui commenceras à tourner la roue pour le
+              jeu Tu te mets combien ?
+            </p>
+          </div>
+          <button
+            onClick={() => {
+              /* Implémenter la suite du jeu ici */
+            }}
+            className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Passer au jeu suivant : Tu te mets combien ?
+          </button>
+        </div>
       )}
     </div>
   );

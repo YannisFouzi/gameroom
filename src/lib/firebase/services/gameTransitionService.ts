@@ -7,11 +7,20 @@ export const gameTransitionService = {
   async startNextGame(roomId: string) {
     const room = await baseRoomService.getRoom(roomId);
 
-    if (!room.gameData?.remainingTeams?.length) {
+    if (!room.gameData?.scores) {
+      throw new Error("No scores found");
+    }
+
+    // Trouver l'équipe gagnante (celle avec le plus haut score)
+    const winningTeamEntry = Object.entries(room.gameData.scores).sort(
+      ([, scoreA], [, scoreB]) => scoreB - scoreA
+    )[0];
+
+    if (!winningTeamEntry) {
       throw new Error("No winning team found");
     }
 
-    const winningTeamId = room.gameData.remainingTeams[0];
+    const [winningTeamId] = winningTeamEntry;
     const winningTeam = room.teams[winningTeamId];
 
     if (!winningTeam) {
@@ -25,15 +34,13 @@ export const gameTransitionService = {
     ];
 
     await updateDoc(doc(db, "rooms", roomId), {
-      currentGame: 2,
-      gamePhase: "millionaire-rules",
+      currentGame: 3,
+      gamePhase: "evaluation-rules",
       gameData: {
         currentTeamIndex: 0,
         remainingTeams: reorderedTeams,
         startingTeam: winningTeamId,
         winningTeamName: winningTeam.name,
-        questions: [],
-        currentQuestion: 0,
       },
       updatedAt: serverTimestamp(),
     });
