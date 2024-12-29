@@ -1,6 +1,5 @@
 import { Timestamp } from "firebase/firestore";
 import { MillionaireGameData } from "./millionaire";
-import { RateYourselfGameData } from "./rateYourself";
 
 export type RoomStatus = "waiting" | "playing" | "finished";
 
@@ -34,10 +33,7 @@ export type GamePhase =
   | "guessing"
   | "results"
   | "millionaire-rules"
-  | "millionaire-playing"
-  | "millionaire-results"
-  | "rate-yourself-rules"
-  | "rate-yourself-playing";
+  | "millionaire-playing";
 
 export type GameData = {
   celebrities?: Record<string, Celebrity>;
@@ -46,8 +42,7 @@ export type GameData = {
   startTime?: number;
   startingTeam?: string;
   winningTeamName?: string;
-} & Partial<MillionaireGameData> &
-  Partial<RateYourselfGameData>;
+} & Partial<MillionaireGameData>;
 
 export type Room = {
   id: string;
