@@ -282,7 +282,7 @@ export default function QuestionDisplay({
         </motion.button>
       )}
 
-      {answerState === "correct" && (
+      {answerState === "correct" && !isHost && (
         <div className="space-y-4">
           <motion.button
             initial={{ opacity: 0, y: 20 }}
@@ -303,7 +303,7 @@ export default function QuestionDisplay({
         </div>
       )}
 
-      {answerState === "incorrect" && (
+      {answerState === "incorrect" && !isHost && (
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
