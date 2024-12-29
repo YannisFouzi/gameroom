@@ -163,32 +163,32 @@ export default function QuestionDisplay({
     if (doubleAnswerActive) {
       if (answerState === "correct" || answerState === "incorrect") {
         if (index === question.correctAnswer) {
-          return "bg-green-100 text-black";
+          return "bg-green-500 text-white";
         }
         if (selectedAnswers.includes(index)) {
           return index === question.correctAnswer
-            ? "bg-green-100 text-black"
-            : "bg-red-100 text-black";
+            ? "bg-green-500 text-white"
+            : "bg-red-500 text-white";
         }
         return "bg-gray-50 text-black";
       }
 
       if (selectedAnswers.includes(index)) {
-        return "bg-orange-100 text-black";
+        return "bg-orange-500 text-white";
       }
       return "bg-blue-50 hover:bg-blue-100 text-black";
     }
 
     // Comportement normal
     if (answerState === "selected" && index === selectedAnswer) {
-      return "bg-orange-100 text-black";
+      return "bg-orange-500 text-white";
     }
     if (answerState === "correct" && index === selectedAnswer) {
-      return "bg-green-100 text-black";
+      return "bg-green-500 text-white";
     }
     if (answerState === "incorrect") {
-      if (index === selectedAnswer) return "bg-red-100 text-black";
-      if (index === question.correctAnswer) return "bg-green-100 text-black";
+      if (index === selectedAnswer) return "bg-red-500 text-white";
+      if (index === question.correctAnswer) return "bg-green-500 text-white";
     }
     if (isHost || !isCurrentTeam) return "bg-gray-50 text-black cursor-default";
     return selectedAnswer === null
