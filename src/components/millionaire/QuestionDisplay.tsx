@@ -7,6 +7,8 @@ type QuestionDisplayProps = {
   onAnswer: (answerIndex: number) => void;
   onNextQuestion: () => void;
   onQuit: () => void;
+  onQuitWithPoints: () => void;
+  currentPoints: number;
   isHost: boolean;
   isCurrentTeam: boolean;
   questionIndex: number;
@@ -19,6 +21,8 @@ export default function QuestionDisplay({
   onAnswer,
   onNextQuestion,
   onQuit,
+  onQuitWithPoints,
+  currentPoints,
   isHost,
   isCurrentTeam,
   questionIndex,
@@ -126,14 +130,24 @@ export default function QuestionDisplay({
       )}
 
       {answerState === "correct" && (
-        <motion.button
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          onClick={onNextQuestion}
-          className="w-full bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700"
-        >
-          Question suivante
-        </motion.button>
+        <div className="space-y-4">
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            onClick={onNextQuestion}
+            className="w-full bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700"
+          >
+            Question suivante
+          </motion.button>
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            onClick={onQuitWithPoints}
+            className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700"
+          >
+            Quitter avec {currentPoints} points
+          </motion.button>
+        </div>
       )}
 
       {answerState === "incorrect" && (

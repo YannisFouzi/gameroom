@@ -65,18 +65,16 @@ function MillionaireContent() {
       ];
 
     const isCorrect = answerIndex === currentQuestion.correctAnswer;
-    let points = currentQuestion.points;
-    if (gameData.currentQuestionIndex >= 10) {
-      points *= 2;
-    }
 
-    // Pour une bonne réponse, on soumet immédiatement
-    if (isCorrect) {
-      await roomService.submitMillionaireAnswer(room.id, true, points);
-    } else {
-      // Pour une mauvaise réponse, on attend que le joueur clique sur "Quitter"
-      await roomService.submitMillionaireAnswer(room.id, false, 0);
+    if (!isCorrect) {
+      await roomService.submitMillionaireAnswer(
+        room.id,
+        false,
+        gameData.currentQuestionIndex,
+        0
+      );
     }
+    // La bonne réponse est gérée visuellement d'abord
   };
 
   const handleNextQuestion = async () => {
@@ -102,6 +100,17 @@ function MillionaireContent() {
     const nextTeamIndex =
       (gameData.currentTeamIndex + 1) % gameData.remainingTeams.length;
     await roomService.moveToNextTeam(room.id, nextTeamIndex);
+  };
+
+  const handleQuitWithPoints = async () => {
+    if (!room || !gameData?.currentCategory) return;
+
+    const currentQuestion =
+      millionaireQuestions[gameData.currentCategory][
+        gameData.currentQuestionIndex
+      ];
+
+    await roomService.quitWithPoints(room.id, currentQuestion.points);
   };
 
   if (!room || !gameData) return <div>Chargement...</div>;
@@ -147,6 +156,12 @@ function MillionaireContent() {
               onAnswer={handleAnswer}
               onNextQuestion={handleNextQuestion}
               onQuit={handleQuit}
+              onQuitWithPoints={handleQuitWithPoints}
+              currentPoints={
+                millionaireQuestions[gameData.currentCategory][
+                  gameData.currentQuestionIndex
+                ].points
+              }
               isHost={isHost}
               isCurrentTeam={isCurrentTeam}
               questionIndex={gameData.currentQuestionIndex}

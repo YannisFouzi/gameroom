@@ -245,49 +245,62 @@ export const roomService = {
     });
   },
 
+  calculateSecurePoints(questionIndex: number): number {
+    if (questionIndex < 5) return 0;
+    if (questionIndex < 10) {
+      // Points de la question 5
+      return 5; // À ajuster selon vos besoins
+    }
+    // Points de la question 10
+    return 10; // À ajuster selon vos besoins
+  },
+
   async submitMillionaireAnswer(
     roomId: string,
     isCorrect: boolean,
+    currentQuestionIndex: number,
     points: number
   ) {
     const db = getDb();
     const room = await this.getRoom(roomId);
     const currentTeamIndex = room.gameData?.currentTeamIndex || 0;
     const currentTeam = room.gameData?.remainingTeams[currentTeamIndex];
-    const currentQuestionIndex = room.gameData?.currentQuestionIndex || 0;
 
     if (!currentTeam || !room.gameData?.remainingTeams) return;
 
-    if (isCorrect) {
-      // Si c'est la dernière question de la catégorie
-      if (currentQuestionIndex === 14) {
-        // Passer à l'équipe suivante et réinitialiser la catégorie
-        const nextTeamIndex =
-          (currentTeamIndex + 1) % room.gameData.remainingTeams.length;
-        await updateDoc(doc(db, "rooms", roomId), {
-          [`gameData.scores.${currentTeam}`]: increment(points),
-          "gameData.currentTeamIndex": nextTeamIndex,
-          "gameData.currentCategory": null,
-          updatedAt: serverTimestamp(),
-        });
-      } else {
-        // Passer à la question suivante
-        await updateDoc(doc(db, "rooms", roomId), {
-          [`gameData.scores.${currentTeam}`]: increment(points),
-          "gameData.currentQuestionIndex": currentQuestionIndex + 1,
-          updatedAt: serverTimestamp(),
-        });
-      }
-    } else {
-      // Mauvaise réponse : passer à l'équipe suivante
+    if (!isCorrect) {
+      // En cas de mauvaise réponse, on donne les points du palier sécurisé
+      const securePoints = this.calculateSecurePoints(currentQuestionIndex);
       const nextTeamIndex =
         (currentTeamIndex + 1) % room.gameData.remainingTeams.length;
+
       await updateDoc(doc(db, "rooms", roomId), {
+        [`gameData.scores.${currentTeam}`]: increment(securePoints),
         "gameData.currentTeamIndex": nextTeamIndex,
         "gameData.currentCategory": null,
         updatedAt: serverTimestamp(),
       });
     }
+    // La bonne réponse est gérée ailleurs maintenant
+  },
+
+  async quitWithPoints(roomId: string, points: number) {
+    const db = getDb();
+    const room = await this.getRoom(roomId);
+    const currentTeamIndex = room.gameData?.currentTeamIndex || 0;
+    const currentTeam = room.gameData?.remainingTeams[currentTeamIndex];
+
+    if (!currentTeam || !room.gameData?.remainingTeams) return;
+
+    const nextTeamIndex =
+      (currentTeamIndex + 1) % room.gameData.remainingTeams.length;
+
+    await updateDoc(doc(db, "rooms", roomId), {
+      [`gameData.scores.${currentTeam}`]: increment(points),
+      "gameData.currentTeamIndex": nextTeamIndex,
+      "gameData.currentCategory": null,
+      updatedAt: serverTimestamp(),
+    });
   },
 
   async moveToNextQuestion(roomId: string, nextQuestionIndex: number) {
