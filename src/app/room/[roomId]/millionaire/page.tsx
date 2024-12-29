@@ -140,8 +140,8 @@ function MillionaireContent() {
   return (
     <div className="container mx-auto p-4">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-3">
-          <ScoreDisplay room={room} currentTeam={currentTeam} />
+        <div className={`${isHost ? "lg:col-span-3" : "lg:col-span-4"}`}>
+          {isHost && <ScoreDisplay room={room} currentTeam={currentTeam} />}
 
           <div className="mb-6">
             <h2 className="text-xl font-bold mb-2">
@@ -195,9 +195,11 @@ function MillionaireContent() {
           )}
         </div>
 
-        <div className="lg:col-span-1">
-          <ProgressLadder currentQuestion={gameData.currentQuestionIndex} />
-        </div>
+        {isHost && (
+          <div className="lg:col-span-1">
+            <ProgressLadder currentQuestion={gameData.currentQuestionIndex} />
+          </div>
+        )}
       </div>
     </div>
   );
