@@ -7,31 +7,32 @@ type ProgressLadderProps = {
 type Step = {
   level: number;
   points: number;
-  isPalier: boolean;
+  isSecureLevel: boolean;
+  isVictoryLevel?: boolean;
 };
 
 export default function ProgressLadder({
   currentQuestion,
 }: ProgressLadderProps) {
   const steps: Step[] = [
-    // Palier 3
-    { level: 15, points: 4, isPalier: false },
-    { level: 14, points: 4, isPalier: false },
-    { level: 13, points: 3, isPalier: false },
-    { level: 12, points: 3, isPalier: false },
-    { level: 11, points: 3, isPalier: true },
-    // Palier 2
-    { level: 10, points: 3, isPalier: false },
-    { level: 9, points: 2, isPalier: false },
-    { level: 8, points: 2, isPalier: false },
-    { level: 7, points: 2, isPalier: false },
-    { level: 6, points: 2, isPalier: true },
-    // Palier 1
-    { level: 5, points: 2, isPalier: false },
-    { level: 4, points: 1, isPalier: false },
-    { level: 3, points: 1, isPalier: false },
-    { level: 2, points: 1, isPalier: false },
-    { level: 1, points: 1, isPalier: true },
+    // Palier victoire
+    { level: 15, points: 4, isSecureLevel: false, isVictoryLevel: true },
+    { level: 14, points: 4, isSecureLevel: false },
+    { level: 13, points: 3, isSecureLevel: false },
+    { level: 12, points: 3, isSecureLevel: false },
+    { level: 11, points: 3, isSecureLevel: false },
+    // Palier sécurité 2
+    { level: 10, points: 3, isSecureLevel: true },
+    { level: 9, points: 2, isSecureLevel: false },
+    { level: 8, points: 2, isSecureLevel: false },
+    { level: 7, points: 2, isSecureLevel: false },
+    { level: 6, points: 2, isSecureLevel: false },
+    // Palier sécurité 1
+    { level: 5, points: 2, isSecureLevel: true },
+    { level: 4, points: 1, isSecureLevel: false },
+    { level: 3, points: 1, isSecureLevel: false },
+    { level: 2, points: 1, isSecureLevel: false },
+    { level: 1, points: 1, isSecureLevel: false },
   ];
 
   return (
@@ -39,10 +40,8 @@ export default function ProgressLadder({
       <div className="space-y-2">
         {steps.map((step) => (
           <div key={step.level}>
-            {step.isPalier && (
-              <div className="border-t border-blue-300 my-3 text-sm text-blue-600 pt-2">
-                Palier {Math.ceil(step.level / 5)}
-              </div>
+            {step.isSecureLevel && (
+              <div className="border-t-2 border-orange-300 my-3" />
             )}
             <motion.div
               className={`flex justify-between items-center p-2 rounded ${
@@ -50,6 +49,12 @@ export default function ProgressLadder({
                   ? "bg-blue-100 font-bold"
                   : currentQuestion + 1 > step.level
                   ? "text-gray-400"
+                  : ""
+              } ${
+                step.isVictoryLevel
+                  ? "bg-green-50 border-2 border-green-300 font-bold"
+                  : step.isSecureLevel
+                  ? "bg-orange-50 border border-orange-200"
                   : ""
               }`}
               animate={{
