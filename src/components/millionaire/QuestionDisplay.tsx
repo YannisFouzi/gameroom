@@ -33,6 +33,8 @@ type QuestionDisplayProps = {
   onPhoneCallModalChange: (isOpen: boolean) => void;
   hiddenAnswers: number[];
   onSetHiddenAnswers: (answers: number[]) => void;
+  doubleAnswerActive: boolean;
+  onSetDoubleAnswerActive: (isActive: boolean) => void;
 };
 
 type AnswerState = "selected" | "correct" | "incorrect" | null;
@@ -59,17 +61,18 @@ export default function QuestionDisplay({
   onPhoneCallModalChange,
   hiddenAnswers,
   onSetHiddenAnswers,
+  doubleAnswerActive,
+  onSetDoubleAnswerActive,
 }: QuestionDisplayProps) {
   const [showValidateButton, setShowValidateButton] = useState(false);
-  const [isDoubleAnswerActive, setIsDoubleAnswerActive] = useState(false);
   const [usedJokersForQuestion, setUsedJokersForQuestion] = useState<
     JokerType[]
   >([]);
 
   useEffect(() => {
     setShowValidateButton(false);
-    setIsDoubleAnswerActive(false);
-    setUsedJokersForQuestion([]);
+    onSetHiddenAnswers([]);
+    onSetDoubleAnswerActive(false);
   }, [questionIndex]);
 
   useEffect(() => {
@@ -92,7 +95,7 @@ export default function QuestionDisplay({
       answerState !== "correct" &&
       answerState !== "incorrect"
     ) {
-      if (isDoubleAnswerActive) {
+      if (doubleAnswerActive) {
         // Gérer la sélection multiple
         if (selectedAnswers.includes(index)) {
           // Si la réponse est déjà sélectionnée, on la retire
@@ -120,7 +123,7 @@ export default function QuestionDisplay({
   };
 
   const handleValidate = () => {
-    if (!isDoubleAnswerActive) {
+    if (!doubleAnswerActive) {
       // Logique normale
       const isCorrect = selectedAnswer === question.correctAnswer;
       onUpdateAnswerState(
@@ -140,7 +143,7 @@ export default function QuestionDisplay({
   };
 
   const handleQuit = () => {
-    if (isDoubleAnswerActive) {
+    if (doubleAnswerActive) {
       onAnswer(selectedAnswers[0]);
     } else {
       onAnswer(selectedAnswer!);
@@ -153,11 +156,11 @@ export default function QuestionDisplay({
       index,
       selectedAnswer,
       answerState,
-      isDoubleAnswerActive,
+      doubleAnswerActive,
     });
 
     // Si le joker Double réponse est actif
-    if (isDoubleAnswerActive) {
+    if (doubleAnswerActive) {
       if (answerState === "correct" || answerState === "incorrect") {
         if (index === question.correctAnswer) {
           return "bg-green-100 text-black";
@@ -204,7 +207,7 @@ export default function QuestionDisplay({
   };
 
   const handleUseDoubleAnswer = () => {
-    setIsDoubleAnswerActive(true);
+    onSetDoubleAnswerActive(true);
     onUseDoubleAnswer();
   };
 
@@ -220,7 +223,7 @@ export default function QuestionDisplay({
 
   return (
     <div className="max-w-2xl mx-auto p-6">
-      {isDoubleAnswerActive && (
+      {doubleAnswerActive && (
         <div className="mb-4 text-center text-sm text-gray-600">
           Sélectionnez jusqu'à 2 réponses ({2 - selectedAnswers.length} restante
           {2 - selectedAnswers.length > 1 ? "s" : ""})

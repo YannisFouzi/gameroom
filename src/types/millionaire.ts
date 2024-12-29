@@ -37,4 +37,5 @@ export type MillionaireGameData = {
   selectedAnswers: number[]; // Pour le joker double réponse
   phoneCallModalOpen: boolean; // Nouvel état pour la modal
   hiddenAnswers: number[]; // Ajouter ce champ pour les réponses masquées par le 50:50
+  doubleAnswerActive: boolean;
 };

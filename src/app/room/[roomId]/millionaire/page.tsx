@@ -35,6 +35,7 @@ function MillionaireContent() {
     selectedAnswers: room?.gameData?.selectedAnswers || [],
     phoneCallModalOpen: room?.gameData?.phoneCallModalOpen || false,
     hiddenAnswers: room?.gameData?.hiddenAnswers || [],
+    doubleAnswerActive: room?.gameData?.doubleAnswerActive || false,
   };
 
   const currentTeam = gameData.remainingTeams[gameData.currentTeamIndex];
@@ -159,6 +160,11 @@ function MillionaireContent() {
     await roomService.setHiddenAnswers(room.id, answers);
   };
 
+  const handleSetDoubleAnswerActive = async (isActive: boolean) => {
+    if (!room) return;
+    await roomService.setDoubleAnswerActive(room.id, isActive);
+  };
+
   // Modification ici : on récupère toujours les jokers de l'équipe active
   const currentJokers = gameData.jokers[currentTeam] || {
     phoneCall: false,
@@ -234,6 +240,8 @@ function MillionaireContent() {
               onPhoneCallModalChange={handlePhoneCallModalChange}
               hiddenAnswers={gameData.hiddenAnswers}
               onSetHiddenAnswers={handleSetHiddenAnswers}
+              doubleAnswerActive={gameData.doubleAnswerActive}
+              onSetDoubleAnswerActive={handleSetDoubleAnswerActive}
             />
           )}
         </div>
