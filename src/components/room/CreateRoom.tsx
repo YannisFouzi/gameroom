@@ -1,4 +1,4 @@
-import { roomService } from "@/lib/firebase/roomService";
+import { baseRoomService } from "@/lib/firebase/services";
 import { generateUUID } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -11,7 +11,7 @@ export default function CreateRoom() {
     try {
       setIsLoading(true);
       const hostId = generateUUID();
-      const roomId = await roomService.createRoom(hostId);
+      const roomId = await baseRoomService.createRoom(hostId);
 
       // Stocker l'ID de l'hôte avec un préfixe différent
       localStorage.setItem(`host_${roomId}`, hostId);

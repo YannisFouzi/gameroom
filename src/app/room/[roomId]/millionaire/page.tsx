@@ -7,7 +7,11 @@ import ScoreDisplay from "@/components/millionaire/ScoreDisplay";
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { millionaireQuestions } from "@/data/millionaireQuestions";
 import { usePlayer } from "@/hooks/usePlayer";
-import { roomService } from "@/lib/firebase/roomService";
+import {
+  gameTransitionService,
+  jokerService,
+  millionaireService,
+} from "@/lib/firebase/services";
 import {
   AnswerState,
   MillionaireCategory,
@@ -64,7 +68,7 @@ function MillionaireContent() {
 
   const handleCategorySelect = async (category: MillionaireCategory) => {
     if (!room) return;
-    await roomService.selectMillionaireCategory(room.id, category);
+    await millionaireService.selectMillionaireCategory(room.id, category);
   };
 
   const handleAnswer = async (answerIndex: number) => {
@@ -77,7 +81,7 @@ function MillionaireContent() {
 
     const isCorrect = answerIndex === currentQuestion.correctAnswer;
 
-    await roomService.submitMillionaireAnswer(
+    await millionaireService.submitMillionaireAnswer(
       room.id,
       isCorrect,
       gameData.currentQuestionIndex,
@@ -92,10 +96,10 @@ function MillionaireContent() {
     if (gameData.currentQuestionIndex === 14) {
       const nextTeamIndex =
         (gameData.currentTeamIndex + 1) % gameData.remainingTeams.length;
-      await roomService.moveToNextTeam(room.id, nextTeamIndex);
+      await millionaireService.moveToNextTeam(room.id, nextTeamIndex);
     } else {
       // Sinon on passe à la question suivante
-      await roomService.moveToNextQuestion(
+      await millionaireService.moveToNextQuestion(
         room.id,
         gameData.currentQuestionIndex + 1
       );
@@ -107,7 +111,7 @@ function MillionaireContent() {
     // Passer à l'équipe suivante et réinitialiser la catégorie
     const nextTeamIndex =
       (gameData.currentTeamIndex + 1) % gameData.remainingTeams.length;
-    await roomService.moveToNextTeam(room.id, nextTeamIndex);
+    await millionaireService.moveToNextTeam(room.id, nextTeamIndex);
   };
 
   const handleQuitWithPoints = async () => {
@@ -118,22 +122,22 @@ function MillionaireContent() {
         gameData.currentQuestionIndex
       ];
 
-    await roomService.quitWithPoints(room.id, currentQuestion.points);
+    await millionaireService.quitWithPoints(room.id, currentQuestion.points);
   };
 
   const handleUsePhoneCall = async () => {
     if (!room || !teamId) return;
-    await roomService.useJoker(room.id, teamId, "phoneCall");
+    await jokerService.useJoker(room.id, teamId, "phoneCall");
   };
 
   const handleUseFiftyFifty = async () => {
     if (!room || !teamId) return;
-    await roomService.useJoker(room.id, teamId, "fiftyFifty");
+    await jokerService.useJoker(room.id, teamId, "fiftyFifty");
   };
 
   const handleUseDoubleAnswer = async () => {
     if (!room || !teamId) return;
-    await roomService.useJoker(room.id, teamId, "doubleAnswer");
+    await jokerService.useJoker(room.id, teamId, "doubleAnswer");
   };
 
   const handleUpdateAnswerState = async (
@@ -142,7 +146,7 @@ function MillionaireContent() {
     selectedAnswers: number[] = []
   ) => {
     if (!room) return;
-    await roomService.updateAnswerState(
+    await gameTransitionService.updateAnswerState(
       room.id,
       selectedAnswer?.toString() || null,
       answerState,
@@ -152,17 +156,17 @@ function MillionaireContent() {
 
   const handlePhoneCallModalChange = async (isOpen: boolean) => {
     if (!room) return;
-    await roomService.setPhoneCallModalState(room.id, isOpen);
+    await jokerService.setPhoneCallModalState(room.id, isOpen);
   };
 
   const handleSetHiddenAnswers = async (answers: number[]) => {
     if (!room) return;
-    await roomService.setHiddenAnswers(room.id, answers);
+    await jokerService.setHiddenAnswers(room.id, answers);
   };
 
   const handleSetDoubleAnswerActive = async (isActive: boolean) => {
     if (!room) return;
-    await roomService.setDoubleAnswerActive(room.id, isActive);
+    await jokerService.setDoubleAnswerActive(room.id, isActive);
   };
 
   // Modification ici : on récupère toujours les jokers de l'équipe active
