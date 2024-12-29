@@ -362,4 +362,12 @@ export const roomService = {
       updatedAt: serverTimestamp(),
     });
   },
+
+  async setPhoneCallModalState(roomId: string, isOpen: boolean) {
+    const db = getDb();
+    await updateDoc(doc(db, "rooms", roomId), {
+      "gameData.phoneCallModalOpen": isOpen,
+      updatedAt: serverTimestamp(),
+    });
+  },
 };

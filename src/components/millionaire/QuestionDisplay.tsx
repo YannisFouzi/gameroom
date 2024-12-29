@@ -29,6 +29,8 @@ type QuestionDisplayProps = {
     answerState: "selected" | "correct" | "incorrect" | null,
     selectedAnswers: number[]
   ) => void;
+  phoneCallModalOpen: boolean;
+  onPhoneCallModalChange: (isOpen: boolean) => void;
 };
 
 type AnswerState = "selected" | "correct" | "incorrect" | null;
@@ -51,6 +53,8 @@ export default function QuestionDisplay({
   answerState,
   selectedAnswers,
   onUpdateAnswerState,
+  phoneCallModalOpen,
+  onPhoneCallModalChange,
 }: QuestionDisplayProps) {
   const [showValidateButton, setShowValidateButton] = useState(false);
   const [hiddenAnswers, setHiddenAnswers] = useState<number[]>([]);
@@ -227,6 +231,9 @@ export default function QuestionDisplay({
         onUseFiftyFifty={handleUseFiftyFifty}
         onUseDoubleAnswer={handleUseDoubleAnswer}
         disabled={!isCurrentTeam || isHost}
+        isHost={isHost}
+        phoneCallModalOpen={phoneCallModalOpen}
+        onPhoneCallModalChange={onPhoneCallModalChange}
       />
 
       <div className="mb-6">

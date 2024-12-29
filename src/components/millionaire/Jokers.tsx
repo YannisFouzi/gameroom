@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
 
 type JokersProps = {
   jokers: {
@@ -11,6 +10,9 @@ type JokersProps = {
   onUseFiftyFifty: () => void;
   onUseDoubleAnswer: () => void;
   disabled?: boolean;
+  isHost: boolean;
+  phoneCallModalOpen: boolean;
+  onPhoneCallModalChange: (isOpen: boolean) => void;
 };
 
 export default function Jokers({
@@ -19,12 +21,12 @@ export default function Jokers({
   onUseFiftyFifty,
   onUseDoubleAnswer,
   disabled = false,
+  isHost,
+  phoneCallModalOpen,
+  onPhoneCallModalChange,
 }: JokersProps) {
-  const [showPhoneCallModal, setShowPhoneCallModal] = useState(false);
-
-  const isFiftyFiftyDisabled = disabled || jokers.fiftyFifty;
-
-  const isDoubleAnswerDisabled = disabled || jokers.doubleAnswer;
+  const isFiftyFiftyDisabled = jokers.fiftyFifty;
+  const isDoubleAnswerDisabled = jokers.doubleAnswer;
 
   return (
     <div className="flex gap-4 mb-6">
@@ -32,10 +34,10 @@ export default function Jokers({
         whileHover={!disabled && !jokers.phoneCall ? { scale: 1.05 } : {}}
         className={`flex-1 p-4 rounded-lg ${
           jokers.phoneCall
-            ? "bg-gray-100 cursor-not-allowed text-gray-500"
+            ? "bg-gray-100 cursor-not-allowed text-gray-500 line-through"
             : "bg-blue-50 hover:bg-blue-100 text-black"
         }`}
-        onClick={() => setShowPhoneCallModal(true)}
+        onClick={() => onPhoneCallModalChange(true)}
         disabled={disabled || jokers.phoneCall}
       >
         <span className="text-2xl mb-2">📞</span>
@@ -46,7 +48,7 @@ export default function Jokers({
         whileHover={!disabled && !isFiftyFiftyDisabled ? { scale: 1.05 } : {}}
         className={`flex-1 p-4 rounded-lg ${
           isFiftyFiftyDisabled
-            ? "bg-gray-100 cursor-not-allowed text-gray-500"
+            ? "bg-gray-100 cursor-not-allowed text-gray-500 line-through"
             : "bg-blue-50 hover:bg-blue-100 text-black"
         }`}
         onClick={onUseFiftyFifty}
@@ -60,7 +62,7 @@ export default function Jokers({
         whileHover={!disabled && !isDoubleAnswerDisabled ? { scale: 1.05 } : {}}
         className={`flex-1 p-4 rounded-lg ${
           isDoubleAnswerDisabled
-            ? "bg-gray-100 cursor-not-allowed text-gray-500"
+            ? "bg-gray-100 cursor-not-allowed text-gray-500 line-through"
             : "bg-blue-50 hover:bg-blue-100 text-black"
         }`}
         onClick={onUseDoubleAnswer}
@@ -70,7 +72,7 @@ export default function Jokers({
         <p className="text-sm">Double réponse</p>
       </motion.button>
 
-      {showPhoneCallModal && (
+      {phoneCallModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
@@ -82,15 +84,17 @@ export default function Jokers({
               Vous pouvez maintenant appeler un ami pour vous aider à répondre à
               cette question.
             </p>
-            <button
-              onClick={() => {
-                setShowPhoneCallModal(false);
-                onUsePhoneCall();
-              }}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
-            >
-              OK
-            </button>
+            {!isHost && (
+              <button
+                onClick={() => {
+                  onPhoneCallModalChange(false);
+                  onUsePhoneCall();
+                }}
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
+              >
+                OK
+              </button>
+            )}
           </motion.div>
         </div>
       )}

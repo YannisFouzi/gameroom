@@ -33,6 +33,7 @@ function MillionaireContent() {
     selectedAnswer: room?.gameData?.selectedAnswer || null,
     answerState: room?.gameData?.answerState || null,
     selectedAnswers: room?.gameData?.selectedAnswers || [],
+    phoneCallModalOpen: room?.gameData?.phoneCallModalOpen || false,
   };
 
   const currentTeam = gameData.remainingTeams[gameData.currentTeamIndex];
@@ -147,11 +148,17 @@ function MillionaireContent() {
     );
   };
 
-  // Vérifier si teamId existe et récupérer les jokers
-  const currentJokers =
-    teamId && gameData.jokers[teamId]
-      ? gameData.jokers[teamId]
-      : { phoneCall: false, fiftyFifty: false, doubleAnswer: false };
+  const handlePhoneCallModalChange = async (isOpen: boolean) => {
+    if (!room) return;
+    await roomService.setPhoneCallModalState(room.id, isOpen);
+  };
+
+  // Modification ici : on récupère toujours les jokers de l'équipe active
+  const currentJokers = gameData.jokers[currentTeam] || {
+    phoneCall: false,
+    fiftyFifty: false,
+    doubleAnswer: false,
+  };
 
   if (!room || !gameData) return <div>Chargement...</div>;
 
@@ -217,6 +224,8 @@ function MillionaireContent() {
               answerState={gameData.answerState}
               selectedAnswers={gameData.selectedAnswers}
               onUpdateAnswerState={handleUpdateAnswerState}
+              phoneCallModalOpen={gameData.phoneCallModalOpen || false}
+              onPhoneCallModalChange={handlePhoneCallModalChange}
             />
           )}
         </div>
