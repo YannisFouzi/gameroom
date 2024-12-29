@@ -25,6 +25,7 @@ function MillionaireContent() {
     currentQuestionIndex: room?.gameData?.currentQuestionIndex || 0,
     usedCategories: room?.gameData?.usedCategories || [],
     scores: room?.gameData?.scores || {},
+    jokers: room?.gameData?.jokers || {},
   };
 
   const currentTeam = gameData.remainingTeams[gameData.currentTeamIndex];
@@ -113,6 +114,22 @@ function MillionaireContent() {
     await roomService.quitWithPoints(room.id, currentQuestion.points);
   };
 
+  const handleUsePhoneCall = async () => {
+    if (!room || !teamId) return;
+    await roomService.useJoker(room.id, teamId, "phoneCall");
+  };
+
+  const handleUseFiftyFifty = async () => {
+    if (!room || !teamId) return;
+    await roomService.useJoker(room.id, teamId, "fiftyFifty");
+  };
+
+  // Vérifier si teamId existe et récupérer les jokers
+  const currentJokers =
+    teamId && gameData.jokers[teamId]
+      ? gameData.jokers[teamId]
+      : { phoneCall: false, fiftyFifty: false };
+
   if (!room || !gameData) return <div>Chargement...</div>;
 
   return (
@@ -165,6 +182,9 @@ function MillionaireContent() {
               isHost={isHost}
               isCurrentTeam={isCurrentTeam}
               questionIndex={gameData.currentQuestionIndex}
+              jokers={currentJokers}
+              onUsePhoneCall={handleUsePhoneCall}
+              onUseFiftyFifty={handleUseFiftyFifty}
             />
           )}
         </div>

@@ -1,6 +1,7 @@
 import { MillionaireQuestion } from "@/types/millionaire";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import Jokers from "./Jokers";
 
 type QuestionDisplayProps = {
   question: MillionaireQuestion;
@@ -12,6 +13,12 @@ type QuestionDisplayProps = {
   isHost: boolean;
   isCurrentTeam: boolean;
   questionIndex: number;
+  jokers: {
+    phoneCall: boolean;
+    fiftyFifty: boolean;
+  };
+  onUsePhoneCall: () => void;
+  onUseFiftyFifty: () => void;
 };
 
 type AnswerState = "selected" | "correct" | "incorrect" | null;
@@ -26,10 +33,14 @@ export default function QuestionDisplay({
   isHost,
   isCurrentTeam,
   questionIndex,
+  jokers,
+  onUsePhoneCall,
+  onUseFiftyFifty,
 }: QuestionDisplayProps) {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [answerState, setAnswerState] = useState<AnswerState>(null);
   const [showValidateButton, setShowValidateButton] = useState(false);
+  const [hiddenAnswers, setHiddenAnswers] = useState<number[]>([]);
 
   useEffect(() => {
     setSelectedAnswer(null);
@@ -90,32 +101,50 @@ export default function QuestionDisplay({
 
   return (
     <div className="max-w-2xl mx-auto p-6">
+      <Jokers
+        jokers={jokers}
+        onUsePhoneCall={onUsePhoneCall}
+        onUseFiftyFifty={() => {
+          const wrongAnswers = question.answers
+            .map((_, index) => index)
+            .filter((index) => index !== question.correctAnswer);
+
+          // Mélanger et prendre 2 réponses fausses aléatoirement
+          const shuffled = wrongAnswers.sort(() => Math.random() - 0.5);
+          setHiddenAnswers(shuffled.slice(0, 2));
+          onUseFiftyFifty();
+        }}
+        disabled={!isCurrentTeam || isHost}
+      />
+
       <div className="mb-6">
         <div className="text-xl font-bold mb-2">{question.text}</div>
       </div>
 
       <div className="grid grid-cols-2 gap-4 mb-6">
-        {question.answers.map((answer, index) => (
-          <motion.button
-            key={index}
-            onClick={() => handleAnswerClick(index)}
-            disabled={
-              isHost ||
-              !isCurrentTeam ||
-              answerState === "correct" ||
-              answerState === "incorrect"
-            }
-            whileHover={{ scale: isHost || !isCurrentTeam ? 1 : 1.02 }}
-            whileTap={{ scale: isHost || !isCurrentTeam ? 1 : 0.98 }}
-            className={`p-4 rounded-lg text-left transition-colors ${getAnswerStyle(
-              index
-            )}`}
-          >
-            <span className="font-medium">
-              {String.fromCharCode(65 + index)}. {answer}
-            </span>
-          </motion.button>
-        ))}
+        {question.answers.map((answer, index) =>
+          hiddenAnswers.includes(index) ? null : (
+            <motion.button
+              key={index}
+              onClick={() => handleAnswerClick(index)}
+              disabled={
+                isHost ||
+                !isCurrentTeam ||
+                answerState === "correct" ||
+                answerState === "incorrect"
+              }
+              whileHover={{ scale: isHost || !isCurrentTeam ? 1 : 1.02 }}
+              whileTap={{ scale: isHost || !isCurrentTeam ? 1 : 0.98 }}
+              className={`p-4 rounded-lg text-left transition-colors ${getAnswerStyle(
+                index
+              )}`}
+            >
+              <span className="font-medium">
+                {String.fromCharCode(65 + index)}. {answer}
+              </span>
+            </motion.button>
+          )
+        )}
       </div>
 
       {showValidateButton && (

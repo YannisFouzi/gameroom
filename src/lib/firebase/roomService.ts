@@ -221,13 +221,21 @@ export const roomService = {
 
     if (!room.gameData) return;
 
-    // Initialiser les données du jeu en conservant les données existantes
+    // Initialiser les données du jeu avec les jokers
+    const initialJokers = Object.fromEntries(
+      room.gameData.remainingTeams.map((teamId) => [
+        teamId,
+        { phoneCall: false, fiftyFifty: false },
+      ])
+    );
+
     await updateDoc(doc(db, "rooms", roomId), {
       gamePhase: "millionaire-playing",
       "gameData.currentQuestionIndex": 0,
       "gameData.usedCategories": [],
       "gameData.scores": {},
       "gameData.currentCategory": null,
+      "gameData.jokers": initialJokers,
       updatedAt: serverTimestamp(),
     });
   },
@@ -316,6 +324,18 @@ export const roomService = {
     await updateDoc(doc(db, "rooms", roomId), {
       "gameData.currentTeamIndex": nextTeamIndex,
       "gameData.currentCategory": null,
+      updatedAt: serverTimestamp(),
+    });
+  },
+
+  async useJoker(
+    roomId: string,
+    teamId: string,
+    jokerType: "phoneCall" | "fiftyFifty"
+  ) {
+    const db = getDb();
+    await updateDoc(doc(db, "rooms", roomId), {
+      [`gameData.jokers.${teamId}.${jokerType}`]: true,
       updatedAt: serverTimestamp(),
     });
   },

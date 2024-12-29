@@ -13,6 +13,13 @@ export type MillionaireQuestion = {
   category: MillionaireCategory;
 };
 
+export type JokerType = "phoneCall" | "fiftyFifty";
+
+export type TeamJokers = {
+  phoneCall: boolean;
+  fiftyFifty: boolean;
+};
+
 export type MillionaireGameData = {
   currentTeamIndex: number;
   remainingTeams: string[];
@@ -21,4 +28,5 @@ export type MillionaireGameData = {
   currentQuestionIndex: number;
   usedCategories: MillionaireCategory[];
   scores: Record<string, number>; // teamId -> score
+  jokers: Record<string, TeamJokers>; // teamId -> jokers status
 };
