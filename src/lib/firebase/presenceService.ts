@@ -1,10 +1,9 @@
 import { Player, Room } from "@/types/room";
 import { doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
-import { getDb } from "./config";
+import { db } from "./config";
 
 export const presenceService = {
   async initializePresence(roomId: string, playerId: string) {
-    const db = getDb();
     const playerRef = doc(db, "rooms", roomId);
 
     // Mettre à jour le statut du joueur quand il se connecte
@@ -33,7 +32,6 @@ export const presenceService = {
   },
 
   async cleanupInactivePlayers(roomId: string, inactiveTimeout: number = 5) {
-    const db = getDb();
     const now = new Date();
     const roomRef = doc(db, "rooms", roomId);
     const roomSnap = await getDoc(roomRef);
@@ -46,6 +44,8 @@ export const presenceService = {
 
     // Vérifier chaque joueur
     Object.entries(players).forEach(([playerId, player]: [string, Player]) => {
+      if (!player.lastSeen) return; // Skip si lastSeen n'existe pas
+
       const lastSeenDate = player.lastSeen.toDate();
       const minutesSinceLastSeen =
         (now.getTime() - lastSeenDate.getTime()) / 60000;

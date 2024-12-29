@@ -17,7 +17,7 @@ export function PlayerCard({ player, teamId }: PlayerCardProps) {
     transition,
     isDragging,
   } = useSortable({
-    id: player.playerId || player.id,
+    id: player.playerId || player.id || `player-${player.name}`,
     data: {
       type: "player",
       teamId,

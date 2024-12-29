@@ -46,9 +46,12 @@ export type GameData = {
 } & Partial<MillionaireGameData>;
 
 export type Player = {
+  id?: string;
   name: string;
   avatar: string;
   teamId?: string;
+  isOnline?: boolean;
+  lastSeen?: Timestamp;
 };
 
 export type Room = {
@@ -62,6 +65,7 @@ export type Room = {
   teams: Record<string, Team>;
   settings: {
     maxTeams: number;
+    maxPlayers: number;
     isPublic: boolean;
   };
   createdAt: Date;

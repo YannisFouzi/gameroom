@@ -47,6 +47,7 @@ export function usePlayer(roomId: string) {
   return {
     teamId,
     isHost,
+    playerId: localStorage.getItem(`player_${roomId}`),
     clearPlayer,
   };
 }
