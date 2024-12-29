@@ -1,4 +1,4 @@
-import { MillionaireQuestion } from "@/types/millionaire";
+import { JokerType, MillionaireQuestion } from "@/types/millionaire";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Jokers from "./Jokers";
@@ -55,11 +55,15 @@ export default function QuestionDisplay({
   const [showValidateButton, setShowValidateButton] = useState(false);
   const [hiddenAnswers, setHiddenAnswers] = useState<number[]>([]);
   const [isDoubleAnswerActive, setIsDoubleAnswerActive] = useState(false);
+  const [usedJokersForQuestion, setUsedJokersForQuestion] = useState<
+    JokerType[]
+  >([]);
 
   useEffect(() => {
     setShowValidateButton(false);
     setHiddenAnswers([]);
     setIsDoubleAnswerActive(false);
+    setUsedJokersForQuestion([]);
   }, [questionIndex]);
 
   useEffect(() => {
@@ -110,21 +114,31 @@ export default function QuestionDisplay({
   };
 
   const handleValidate = () => {
-    const isCorrect = selectedAnswer === question.correctAnswer;
-    onUpdateAnswerState(
-      selectedAnswer,
-      isCorrect ? "correct" : "incorrect",
-      selectedAnswers
-    );
     if (!isDoubleAnswerActive) {
-      onAnswer(selectedAnswer!);
+      // Logique normale
+      const isCorrect = selectedAnswer === question.correctAnswer;
+      onUpdateAnswerState(
+        selectedAnswer,
+        isCorrect ? "correct" : "incorrect",
+        selectedAnswers
+      );
     } else {
-      // ... logique double réponse ...
+      // Logique pour le joker double réponse
+      const hasCorrectAnswer = selectedAnswers.includes(question.correctAnswer);
+      onUpdateAnswerState(
+        null,
+        hasCorrectAnswer ? "correct" : "incorrect",
+        selectedAnswers
+      );
     }
   };
 
   const handleQuit = () => {
-    onAnswer(selectedAnswer!);
+    if (isDoubleAnswerActive) {
+      onAnswer(selectedAnswers[0]);
+    } else {
+      onAnswer(selectedAnswer!);
+    }
     onQuit();
   };
 
@@ -138,41 +152,54 @@ export default function QuestionDisplay({
 
     // Si le joker Double réponse est actif
     if (isDoubleAnswerActive) {
-      // Si on a validé la réponse (correct ou incorrect)
       if (answerState === "correct" || answerState === "incorrect") {
         if (index === question.correctAnswer) {
-          return "bg-green-100"; // La bonne réponse est toujours en vert
+          return "bg-green-100 text-black";
         }
         if (selectedAnswers.includes(index)) {
           return index === question.correctAnswer
-            ? "bg-green-100"
-            : "bg-red-100";
+            ? "bg-green-100 text-black"
+            : "bg-red-100 text-black";
         }
-        return "bg-gray-50"; // Autres réponses en gris
+        return "bg-gray-50 text-black";
       }
 
-      // Avant validation
       if (selectedAnswers.includes(index)) {
-        return "bg-orange-100"; // Réponse sélectionnée en orange
+        return "bg-orange-100 text-black";
       }
-      return "bg-blue-50 hover:bg-blue-100"; // Réponse non sélectionnée en bleu
+      return "bg-blue-50 hover:bg-blue-100 text-black";
     }
 
-    // Comportement normal (sans Double réponse)
+    // Comportement normal
     if (answerState === "selected" && index === selectedAnswer) {
-      return "bg-orange-100";
+      return "bg-orange-100 text-black";
     }
     if (answerState === "correct" && index === selectedAnswer) {
-      return "bg-green-100";
+      return "bg-green-100 text-black";
     }
     if (answerState === "incorrect") {
-      if (index === selectedAnswer) return "bg-red-100";
-      if (index === question.correctAnswer) return "bg-green-100";
+      if (index === selectedAnswer) return "bg-red-100 text-black";
+      if (index === question.correctAnswer) return "bg-green-100 text-black";
     }
-    if (isHost || !isCurrentTeam) return "bg-gray-50 cursor-default";
+    if (isHost || !isCurrentTeam) return "bg-gray-50 text-black cursor-default";
     return selectedAnswer === null
-      ? "bg-blue-50 hover:bg-blue-100"
-      : "bg-gray-50";
+      ? "bg-blue-50 hover:bg-blue-100 text-black"
+      : "bg-gray-50 text-black";
+  };
+
+  const handleUseFiftyFifty = () => {
+    const wrongAnswers = question.answers
+      .map((_, index) => index)
+      .filter((index) => index !== question.correctAnswer);
+
+    const shuffled = wrongAnswers.sort(() => Math.random() - 0.5);
+    setHiddenAnswers(shuffled.slice(0, 2));
+    onUseFiftyFifty();
+  };
+
+  const handleUseDoubleAnswer = () => {
+    setIsDoubleAnswerActive(true);
+    onUseDoubleAnswer();
   };
 
   if (!isHost && !isCurrentTeam) {
@@ -197,20 +224,8 @@ export default function QuestionDisplay({
       <Jokers
         jokers={jokers}
         onUsePhoneCall={onUsePhoneCall}
-        onUseFiftyFifty={() => {
-          const wrongAnswers = question.answers
-            .map((_, index) => index)
-            .filter((index) => index !== question.correctAnswer);
-
-          // Mélanger et prendre 2 réponses fausses aléatoirement
-          const shuffled = wrongAnswers.sort(() => Math.random() - 0.5);
-          setHiddenAnswers(shuffled.slice(0, 2));
-          onUseFiftyFifty();
-        }}
-        onUseDoubleAnswer={() => {
-          setIsDoubleAnswerActive(true);
-          onUseDoubleAnswer();
-        }}
+        onUseFiftyFifty={handleUseFiftyFifty}
+        onUseDoubleAnswer={handleUseDoubleAnswer}
         disabled={!isCurrentTeam || isHost}
       />
 

@@ -284,7 +284,7 @@ export const roomService = {
     if (!currentTeam || !room.gameData?.remainingTeams) return;
 
     if (!isCorrect) {
-      // En cas de mauvaise réponse, on donne les points du palier sécurisé
+      // En cas de mauvaise réponse, on passe directement au joueur suivant
       const securePoints = this.calculateSecurePoints(currentQuestionIndex);
       const nextTeamIndex =
         (currentTeamIndex + 1) % room.gameData.remainingTeams.length;
@@ -296,7 +296,6 @@ export const roomService = {
         updatedAt: serverTimestamp(),
       });
     }
-    // La bonne réponse est gérée ailleurs maintenant
   },
 
   async quitWithPoints(roomId: string, points: number) {

@@ -11,14 +11,14 @@ export default function ScoreDisplay({ room, currentTeam }: ScoreDisplayProps) {
 
   return (
     <div className="bg-gray-50 p-4 rounded-lg mb-6">
-      <h3 className="text-lg font-semibold mb-4">Scores</h3>
+      <h3 className="text-lg font-semibold mb-4 text-black">Scores</h3>
       <div className="space-y-2">
         {Object.entries(room.teams).map(([teamId, team]) => (
           <motion.div
             key={teamId}
             className={`p-3 rounded-lg ${
               teamId === currentTeam ? "bg-blue-50" : "bg-white"
-            }`}
+            } text-black`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
@@ -29,9 +29,9 @@ export default function ScoreDisplay({ room, currentTeam }: ScoreDisplayProps) {
                   alt={team.name}
                   className="w-8 h-8 rounded-full"
                 />
-                <span className="font-medium">{team.name}</span>
+                <span className="font-medium text-black">{team.name}</span>
               </div>
-              <span className="text-xl font-bold">
+              <span className="text-xl font-bold text-black">
                 {scores[teamId] || 0} points
               </span>
             </div>

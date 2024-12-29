@@ -74,15 +74,12 @@ function MillionaireContent() {
 
     const isCorrect = answerIndex === currentQuestion.correctAnswer;
 
-    if (!isCorrect) {
-      await roomService.submitMillionaireAnswer(
-        room.id,
-        false,
-        gameData.currentQuestionIndex,
-        0
-      );
-    }
-    // La bonne réponse est gérée visuellement d'abord
+    await roomService.submitMillionaireAnswer(
+      room.id,
+      isCorrect,
+      gameData.currentQuestionIndex,
+      currentQuestion.points
+    );
   };
 
   const handleNextQuestion = async () => {

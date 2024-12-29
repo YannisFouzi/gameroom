@@ -22,14 +22,18 @@ export default function Jokers({
 }: JokersProps) {
   const [showPhoneCallModal, setShowPhoneCallModal] = useState(false);
 
+  const isFiftyFiftyDisabled = disabled || jokers.fiftyFifty;
+
+  const isDoubleAnswerDisabled = disabled || jokers.doubleAnswer;
+
   return (
     <div className="flex gap-4 mb-6">
       <motion.button
         whileHover={!disabled && !jokers.phoneCall ? { scale: 1.05 } : {}}
         className={`flex-1 p-4 rounded-lg ${
           jokers.phoneCall
-            ? "bg-gray-100 cursor-not-allowed"
-            : "bg-blue-50 hover:bg-blue-100"
+            ? "bg-gray-100 cursor-not-allowed text-gray-500"
+            : "bg-blue-50 hover:bg-blue-100 text-black"
         }`}
         onClick={() => setShowPhoneCallModal(true)}
         disabled={disabled || jokers.phoneCall}
@@ -39,28 +43,28 @@ export default function Jokers({
       </motion.button>
 
       <motion.button
-        whileHover={!disabled && !jokers.fiftyFifty ? { scale: 1.05 } : {}}
+        whileHover={!disabled && !isFiftyFiftyDisabled ? { scale: 1.05 } : {}}
         className={`flex-1 p-4 rounded-lg ${
-          jokers.fiftyFifty
-            ? "bg-gray-100 cursor-not-allowed"
-            : "bg-blue-50 hover:bg-blue-100"
+          isFiftyFiftyDisabled
+            ? "bg-gray-100 cursor-not-allowed text-gray-500"
+            : "bg-blue-50 hover:bg-blue-100 text-black"
         }`}
         onClick={onUseFiftyFifty}
-        disabled={disabled || jokers.fiftyFifty}
+        disabled={isFiftyFiftyDisabled}
       >
         <span className="text-2xl mb-2">50:50</span>
         <p className="text-sm">Retirer deux mauvaises réponses</p>
       </motion.button>
 
       <motion.button
-        whileHover={!disabled && !jokers.doubleAnswer ? { scale: 1.05 } : {}}
+        whileHover={!disabled && !isDoubleAnswerDisabled ? { scale: 1.05 } : {}}
         className={`flex-1 p-4 rounded-lg ${
-          jokers.doubleAnswer
-            ? "bg-gray-100 cursor-not-allowed"
-            : "bg-blue-50 hover:bg-blue-100"
+          isDoubleAnswerDisabled
+            ? "bg-gray-100 cursor-not-allowed text-gray-500"
+            : "bg-blue-50 hover:bg-blue-100 text-black"
         }`}
         onClick={onUseDoubleAnswer}
-        disabled={disabled || jokers.doubleAnswer}
+        disabled={isDoubleAnswerDisabled}
       >
         <span className="text-2xl mb-2">2️⃣</span>
         <p className="text-sm">Double réponse</p>

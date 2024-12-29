@@ -44,8 +44,8 @@ export default function CategorySelector({
           whileTap={{ scale: 0.95 }}
           className={`p-6 rounded-lg text-center ${
             usedCategories.includes(category.id)
-              ? "bg-gray-100 cursor-not-allowed"
-              : "bg-blue-50 hover:bg-blue-100"
+              ? "bg-gray-100 cursor-not-allowed text-gray-500"
+              : "bg-blue-50 hover:bg-blue-100 text-black"
           }`}
         >
           <div className="text-4xl mb-2">{category.icon}</div>

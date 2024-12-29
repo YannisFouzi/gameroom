@@ -46,15 +46,15 @@ export default function ProgressLadder({
             <motion.div
               className={`flex justify-between items-center p-2 rounded ${
                 currentQuestion + 1 === step.level
-                  ? "bg-blue-100 font-bold"
+                  ? "bg-blue-100 font-bold text-black"
                   : currentQuestion + 1 > step.level
-                  ? "text-gray-400"
-                  : ""
+                  ? "text-gray-500"
+                  : "text-black"
               } ${
                 step.isVictoryLevel
-                  ? "bg-green-50 border-2 border-green-300 font-bold"
+                  ? "bg-green-50 border-2 border-green-300 font-bold text-black"
                   : step.isSecureLevel
-                  ? "bg-orange-50 border border-orange-200"
+                  ? "bg-orange-50 border border-orange-200 text-black"
                   : ""
               }`}
               animate={{
