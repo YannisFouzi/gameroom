@@ -47,21 +47,18 @@ function MillionaireContent() {
 
   // Vérifier si le jeu est terminé
   useEffect(() => {
-    // Vérifier que le jeu est bien initialisé et que toutes les équipes ont joué
     const usedCategories = room?.gameData?.usedCategories || [];
-    const remainingTeams = room?.gameData?.remainingTeams || [];
+    const allCategories = Object.keys(millionaireQuestions);
 
     if (
-      usedCategories.length > 0 && // Au moins une catégorie a été jouée
-      usedCategories.length === remainingTeams.length && // Toutes les équipes ont joué
-      !room?.gameData?.currentCategory // Pas de catégorie en cours (question terminée)
+      usedCategories.length === allCategories.length &&
+      !room?.gameData?.currentCategory
     ) {
       router.push(`/room/${room?.id}/millionaire-results`);
     }
   }, [
     room?.gameData?.usedCategories,
     room?.gameData?.currentCategory,
-    room?.gameData?.remainingTeams,
     room?.id,
     router,
   ]);

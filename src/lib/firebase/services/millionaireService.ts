@@ -96,6 +96,7 @@ export const millionaireService = {
     await updateDoc(doc(db, "rooms", roomId), {
       "gameData.currentTeamIndex": nextTeamIndex,
       "gameData.currentCategory": null,
+      "gameData.currentQuestionIndex": 0,
       "gameData.selectedAnswer": null,
       "gameData.answerState": null,
       "gameData.selectedAnswers": [],
@@ -119,6 +120,7 @@ export const millionaireService = {
       [`gameData.scores.${currentTeam}`]: increment(points),
       "gameData.currentTeamIndex": nextTeamIndex,
       "gameData.currentCategory": null,
+      "gameData.currentQuestionIndex": 0,
       updatedAt: serverTimestamp(),
     });
   },

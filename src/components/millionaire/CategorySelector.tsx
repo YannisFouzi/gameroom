@@ -1,5 +1,5 @@
+import { millionaireQuestions } from "@/data/millionaireQuestions";
 import { MillionaireCategory } from "@/types/millionaire";
-import { motion } from "framer-motion";
 
 type CategorySelectorProps = {
   usedCategories: MillionaireCategory[];
@@ -35,23 +35,26 @@ export default function CategorySelector({
 
   return (
     <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
-      {categories.map((category) => (
-        <motion.button
-          key={category.id}
-          onClick={() => onSelectCategory(category.id)}
-          disabled={usedCategories.includes(category.id)}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className={`p-6 rounded-lg text-center ${
-            usedCategories.includes(category.id)
-              ? "bg-gray-100 cursor-not-allowed text-gray-500"
-              : "bg-blue-50 hover:bg-blue-100 text-black"
-          }`}
-        >
-          <div className="text-4xl mb-2">{category.icon}</div>
-          <h3 className="text-lg font-medium">{category.name}</h3>
-        </motion.button>
-      ))}
+      {(Object.keys(millionaireQuestions) as MillionaireCategory[]).map(
+        (category) => {
+          const categoryInfo = categories.find((c) => c.id === category);
+          return (
+            <button
+              key={category}
+              onClick={() => onSelectCategory(category)}
+              disabled={usedCategories.includes(category)}
+              className={`p-6 rounded-lg text-center ${
+                usedCategories.includes(category)
+                  ? "bg-gray-100 cursor-not-allowed text-gray-500"
+                  : "bg-blue-50 hover:bg-blue-100 text-black"
+              }`}
+            >
+              <div className="text-4xl mb-2">{categoryInfo?.icon}</div>
+              <h3 className="text-lg font-medium">{categoryInfo?.name}</h3>
+            </button>
+          );
+        }
+      )}
     </div>
   );
 }
