@@ -8,7 +8,11 @@ import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { millionaireQuestions } from "@/data/millionaireQuestions";
 import { usePlayer } from "@/hooks/usePlayer";
 import { roomService } from "@/lib/firebase/roomService";
-import { MillionaireCategory, MillionaireGameData } from "@/types/millionaire";
+import {
+  AnswerState,
+  MillionaireCategory,
+  MillionaireGameData,
+} from "@/types/millionaire";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -26,6 +30,9 @@ function MillionaireContent() {
     usedCategories: room?.gameData?.usedCategories || [],
     scores: room?.gameData?.scores || {},
     jokers: room?.gameData?.jokers || {},
+    selectedAnswer: room?.gameData?.selectedAnswer || null,
+    answerState: room?.gameData?.answerState || null,
+    selectedAnswers: room?.gameData?.selectedAnswers || [],
   };
 
   const currentTeam = gameData.remainingTeams[gameData.currentTeamIndex];
@@ -129,6 +136,20 @@ function MillionaireContent() {
     await roomService.useJoker(room.id, teamId, "doubleAnswer");
   };
 
+  const handleUpdateAnswerState = async (
+    selectedAnswer: number | null,
+    answerState: AnswerState,
+    selectedAnswers: number[] = []
+  ) => {
+    if (!room) return;
+    await roomService.updateAnswerState(
+      room.id,
+      selectedAnswer?.toString() || null,
+      answerState,
+      selectedAnswers
+    );
+  };
+
   // Vérifier si teamId existe et récupérer les jokers
   const currentJokers =
     teamId && gameData.jokers[teamId]
@@ -191,6 +212,14 @@ function MillionaireContent() {
               onUsePhoneCall={handleUsePhoneCall}
               onUseFiftyFifty={handleUseFiftyFifty}
               onUseDoubleAnswer={handleUseDoubleAnswer}
+              selectedAnswer={
+                gameData.selectedAnswer !== null
+                  ? parseInt(gameData.selectedAnswer)
+                  : null
+              }
+              answerState={gameData.answerState}
+              selectedAnswers={gameData.selectedAnswers}
+              onUpdateAnswerState={handleUpdateAnswerState}
             />
           )}
         </div>

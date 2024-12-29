@@ -21,6 +21,14 @@ type QuestionDisplayProps = {
   onUsePhoneCall: () => void;
   onUseFiftyFifty: () => void;
   onUseDoubleAnswer: () => void;
+  selectedAnswer: number | null;
+  answerState: "selected" | "correct" | "incorrect" | null;
+  selectedAnswers: number[];
+  onUpdateAnswerState: (
+    selectedAnswer: number | null,
+    answerState: "selected" | "correct" | "incorrect" | null,
+    selectedAnswers: number[]
+  ) => void;
 };
 
 type AnswerState = "selected" | "correct" | "incorrect" | null;
@@ -39,27 +47,35 @@ export default function QuestionDisplay({
   onUsePhoneCall,
   onUseFiftyFifty,
   onUseDoubleAnswer,
+  selectedAnswer,
+  answerState,
+  selectedAnswers,
+  onUpdateAnswerState,
 }: QuestionDisplayProps) {
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
-  const [answerState, setAnswerState] = useState<AnswerState>(null);
   const [showValidateButton, setShowValidateButton] = useState(false);
   const [hiddenAnswers, setHiddenAnswers] = useState<number[]>([]);
-  const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [isDoubleAnswerActive, setIsDoubleAnswerActive] = useState(false);
-  const [answerStates, setAnswerStates] = useState<
-    Record<number, "selected" | "correct" | "incorrect" | null>
-  >({});
 
   useEffect(() => {
-    setSelectedAnswer(null);
-    setAnswerState(null);
     setShowValidateButton(false);
-    setSelectedAnswers([]);
-    setAnswerStates({});
+    setHiddenAnswers([]);
     setIsDoubleAnswerActive(false);
   }, [questionIndex]);
 
+  useEffect(() => {
+    if (
+      answerState === "selected" &&
+      (selectedAnswer !== null || selectedAnswers.length > 0)
+    ) {
+      setShowValidateButton(true);
+    } else {
+      setShowValidateButton(false);
+    }
+  }, [answerState, selectedAnswer, selectedAnswers]);
+
   const handleAnswerClick = (index: number) => {
+    console.log("Click on answer", index); // Debug
+
     if (
       !isHost &&
       isCurrentTeam &&
@@ -70,53 +86,40 @@ export default function QuestionDisplay({
         // Gérer la sélection multiple
         if (selectedAnswers.includes(index)) {
           // Si la réponse est déjà sélectionnée, on la retire
-          setSelectedAnswers(selectedAnswers.filter((i) => i !== index));
+          const newSelectedAnswers = selectedAnswers.filter((i) => i !== index);
+          onUpdateAnswerState(null, "selected", newSelectedAnswers);
         } else {
           // Si on a déjà 2 réponses sélectionnées
           if (selectedAnswers.length === 2) {
             // On retire la première réponse (la plus ancienne) et on ajoute la nouvelle
-            setSelectedAnswers([selectedAnswers[1], index]);
+            const newSelectedAnswers = [selectedAnswers[1], index];
+            onUpdateAnswerState(null, "selected", newSelectedAnswers);
           } else {
             // Sinon on ajoute simplement la nouvelle réponse
-            setSelectedAnswers([...selectedAnswers, index]);
+            const newSelectedAnswers = [...selectedAnswers, index];
+            onUpdateAnswerState(null, "selected", newSelectedAnswers);
           }
         }
         setShowValidateButton(selectedAnswers.length > 0);
       } else {
-        // Comportement normal
-        setSelectedAnswer(index);
+        console.log("Updating answer state", index); // Debug
+        onUpdateAnswerState(index, "selected", []);
         setShowValidateButton(true);
-        setAnswerState("selected");
       }
     }
   };
 
   const handleValidate = () => {
-    if (isDoubleAnswerActive) {
-      const hasCorrectAnswer = selectedAnswers.includes(question.correctAnswer);
-
-      // Mettre à jour les états des réponses
-      const newAnswerStates: Record<number, "correct" | "incorrect"> = {};
-      selectedAnswers.forEach((index) => {
-        newAnswerStates[index] =
-          index === question.correctAnswer ? "correct" : "incorrect";
-      });
-      if (!hasCorrectAnswer) {
-        newAnswerStates[question.correctAnswer] = "correct";
-      }
-
-      setAnswerStates(newAnswerStates);
-      setShowValidateButton(false);
-      // Mettre à jour l'état global de la réponse
-      setAnswerState(hasCorrectAnswer ? "correct" : "incorrect");
-      // Appeler onAnswer avec la bonne réponse si elle a été trouvée
-      onAnswer(hasCorrectAnswer ? question.correctAnswer : selectedAnswers[0]);
-    } else {
-      // Comportement normal existant
-      const isCorrect = selectedAnswer === question.correctAnswer;
-      setAnswerState(isCorrect ? "correct" : "incorrect");
-      setShowValidateButton(false);
+    const isCorrect = selectedAnswer === question.correctAnswer;
+    onUpdateAnswerState(
+      selectedAnswer,
+      isCorrect ? "correct" : "incorrect",
+      selectedAnswers
+    );
+    if (!isDoubleAnswerActive) {
       onAnswer(selectedAnswer!);
+    } else {
+      // ... logique double réponse ...
     }
   };
 
@@ -126,6 +129,13 @@ export default function QuestionDisplay({
   };
 
   const getAnswerStyle = (index: number) => {
+    console.log("getAnswerStyle", {
+      index,
+      selectedAnswer,
+      answerState,
+      isDoubleAnswerActive,
+    });
+
     // Si le joker Double réponse est actif
     if (isDoubleAnswerActive) {
       // Si on a validé la réponse (correct ou incorrect)
@@ -234,7 +244,7 @@ export default function QuestionDisplay({
         )}
       </div>
 
-      {showValidateButton && (
+      {showValidateButton && !isHost && isCurrentTeam && (
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

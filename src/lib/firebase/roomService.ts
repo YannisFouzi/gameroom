@@ -1,5 +1,9 @@
 import { generateUUID } from "@/lib/utils";
-import { JokerType, MillionaireCategory } from "@/types/millionaire";
+import {
+  AnswerState,
+  JokerType,
+  MillionaireCategory,
+} from "@/types/millionaire";
 import { Celebrity, Room, RoomStatus, Team } from "@/types/room";
 import {
   addDoc,
@@ -235,6 +239,9 @@ export const roomService = {
       "gameData.usedCategories": [],
       "gameData.scores": {},
       "gameData.currentCategory": null,
+      "gameData.selectedAnswer": null,
+      "gameData.answerState": null,
+      "gameData.selectedAnswers": [],
       "gameData.jokers": initialJokers,
       updatedAt: serverTimestamp(),
     });
@@ -315,6 +322,9 @@ export const roomService = {
     const db = getDb();
     await updateDoc(doc(db, "rooms", roomId), {
       "gameData.currentQuestionIndex": nextQuestionIndex,
+      "gameData.selectedAnswer": null,
+      "gameData.answerState": null,
+      "gameData.selectedAnswers": [],
       updatedAt: serverTimestamp(),
     });
   },
@@ -324,6 +334,9 @@ export const roomService = {
     await updateDoc(doc(db, "rooms", roomId), {
       "gameData.currentTeamIndex": nextTeamIndex,
       "gameData.currentCategory": null,
+      "gameData.selectedAnswer": null,
+      "gameData.answerState": null,
+      "gameData.selectedAnswers": [],
       updatedAt: serverTimestamp(),
     });
   },
@@ -332,6 +345,21 @@ export const roomService = {
     const db = getDb();
     await updateDoc(doc(db, "rooms", roomId), {
       [`gameData.jokers.${teamId}.${jokerType}`]: true,
+      updatedAt: serverTimestamp(),
+    });
+  },
+
+  async updateAnswerState(
+    roomId: string,
+    selectedAnswer: string | null,
+    answerState: AnswerState,
+    selectedAnswers: number[] = []
+  ) {
+    const db = getDb();
+    await updateDoc(doc(db, "rooms", roomId), {
+      "gameData.selectedAnswer": selectedAnswer,
+      "gameData.answerState": answerState,
+      "gameData.selectedAnswers": selectedAnswers,
       updatedAt: serverTimestamp(),
     });
   },

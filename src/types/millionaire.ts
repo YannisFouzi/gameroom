@@ -21,6 +21,8 @@ export type TeamJokers = {
   doubleAnswer: boolean;
 };
 
+export type AnswerState = "selected" | "correct" | "incorrect" | null;
+
 export type MillionaireGameData = {
   currentTeamIndex: number;
   remainingTeams: string[];
@@ -30,4 +32,7 @@ export type MillionaireGameData = {
   usedCategories: MillionaireCategory[];
   scores: Record<string, number>; // teamId -> score
   jokers: Record<string, TeamJokers>; // teamId -> jokers status
+  selectedAnswer: string | null;
+  answerState: AnswerState;
+  selectedAnswers: number[]; // Pour le joker double réponse
 };
