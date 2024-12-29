@@ -185,35 +185,22 @@ export const roomService = {
     const db = getDb();
     const room = await this.getRoom(roomId);
 
-    // Vérifier que gameData et remainingTeams existent
-    if (!room.gameData?.remainingTeams?.length) {
-      throw new Error("No winning team found");
-    }
+    // Trouver l'équipe gagnante (celle avec le plus de points)
+    const scores = room.gameData?.scores || {};
+    const winningTeamId = Object.entries(scores).reduce((a, b) =>
+      scores[a[0]] > scores[b[0]] ? a : b
+    )[0];
 
-    const winningTeamId = room.gameData.remainingTeams[0];
     const winningTeam = room.teams[winningTeamId];
 
-    if (!winningTeam) {
-      throw new Error("Winning team not found");
-    }
-
-    // Récupérer tous les IDs d'équipes et mettre l'équipe gagnante en premier
-    const allTeamIds = Object.keys(room.teams);
-    const reorderedTeams = [
-      winningTeamId,
-      ...allTeamIds.filter((id) => id !== winningTeamId),
-    ];
-
     await updateDoc(doc(db, "rooms", roomId), {
-      currentGame: 2,
-      gamePhase: "millionaire-rules",
+      currentGame: 3, // Passer au jeu suivant
+      gamePhase: "rate-yourself-rules",
       gameData: {
         currentTeamIndex: 0,
-        remainingTeams: reorderedTeams, // Toutes les équipes sont de retour en jeu
-        startingTeam: winningTeamId,
+        remainingTeams: Object.keys(room.teams), // Toutes les équipes participent
+        winningTeamId,
         winningTeamName: winningTeam.name,
-        questions: [],
-        currentQuestion: 0,
       },
       updatedAt: serverTimestamp(),
     });
@@ -387,6 +374,31 @@ export const roomService = {
     const db = getDb();
     await updateDoc(doc(db, "rooms", roomId), {
       "gameData.doubleAnswerActive": isActive,
+      updatedAt: serverTimestamp(),
+    });
+  },
+
+  async startRateYourselfGame(roomId: string) {
+    const db = getDb();
+    const room = await this.getRoom(roomId);
+
+    if (!room.gameData) return;
+
+    // Initialiser les positions des équipes à 0
+    const positions = Object.fromEntries(
+      Object.keys(room.teams).map((teamId) => [teamId, 0])
+    );
+
+    await updateDoc(doc(db, "rooms", roomId), {
+      gamePhase: "rate-yourself-playing",
+      gameData: {
+        ...room.gameData,
+        positions,
+        currentTheme: null,
+        selectedDifficulty: null,
+        currentQuestion: null,
+        answerState: null,
+      },
       updatedAt: serverTimestamp(),
     });
   },
