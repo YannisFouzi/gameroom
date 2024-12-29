@@ -289,4 +289,21 @@ export const roomService = {
       });
     }
   },
+
+  async moveToNextQuestion(roomId: string, nextQuestionIndex: number) {
+    const db = getDb();
+    await updateDoc(doc(db, "rooms", roomId), {
+      "gameData.currentQuestionIndex": nextQuestionIndex,
+      updatedAt: serverTimestamp(),
+    });
+  },
+
+  async moveToNextTeam(roomId: string, nextTeamIndex: number) {
+    const db = getDb();
+    await updateDoc(doc(db, "rooms", roomId), {
+      "gameData.currentTeamIndex": nextTeamIndex,
+      "gameData.currentCategory": null,
+      updatedAt: serverTimestamp(),
+    });
+  },
 };

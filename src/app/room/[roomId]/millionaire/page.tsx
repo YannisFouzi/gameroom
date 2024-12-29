@@ -27,6 +27,7 @@ function MillionaireContent() {
   };
 
   const currentTeam = gameData.remainingTeams[gameData.currentTeamIndex];
+  const isCurrentTeam = currentTeam === teamId;
 
   // Vérifier si le jeu est terminé
   useEffect(() => {
@@ -68,10 +69,39 @@ function MillionaireContent() {
       points *= 2;
     }
 
-    await roomService.submitMillionaireAnswer(room.id, isCorrect, points);
+    // Pour une bonne réponse, on soumet immédiatement
+    if (isCorrect) {
+      await roomService.submitMillionaireAnswer(room.id, true, points);
+    } else {
+      // Pour une mauvaise réponse, on attend que le joueur clique sur "Quitter"
+      await roomService.submitMillionaireAnswer(room.id, false, 0);
+    }
   };
 
-  const isCurrentTeam = currentTeam === teamId;
+  const handleNextQuestion = async () => {
+    if (!room || !gameData?.currentCategory) return;
+
+    // Si c'est la dernière question, on passe à l'équipe suivante
+    if (gameData.currentQuestionIndex === 14) {
+      const nextTeamIndex =
+        (gameData.currentTeamIndex + 1) % gameData.remainingTeams.length;
+      await roomService.moveToNextTeam(room.id, nextTeamIndex);
+    } else {
+      // Sinon on passe à la question suivante
+      await roomService.moveToNextQuestion(
+        room.id,
+        gameData.currentQuestionIndex + 1
+      );
+    }
+  };
+
+  const handleQuit = async () => {
+    if (!room) return;
+    // Passer à l'équipe suivante et réinitialiser la catégorie
+    const nextTeamIndex =
+      (gameData.currentTeamIndex + 1) % gameData.remainingTeams.length;
+    await roomService.moveToNextTeam(room.id, nextTeamIndex);
+  };
 
   if (!room || !gameData) return <div>Chargement...</div>;
 
@@ -112,6 +142,8 @@ function MillionaireContent() {
             ]
           }
           onAnswer={handleAnswer}
+          onNextQuestion={handleNextQuestion}
+          onQuit={handleQuit}
           isHost={isHost}
           isCurrentTeam={isCurrentTeam}
           questionIndex={gameData.currentQuestionIndex}
