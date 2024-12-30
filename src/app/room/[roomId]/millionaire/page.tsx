@@ -301,7 +301,7 @@ function MillionaireContent() {
             )}
           </div>
 
-          {isHost && (
+          {isHost && gameData.currentCategory && (
             <div className="lg:col-span-1">
               <ProgressLadder currentQuestion={gameData.currentQuestionIndex} />
             </div>
