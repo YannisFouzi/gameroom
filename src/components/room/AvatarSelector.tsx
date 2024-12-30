@@ -1,64 +1,71 @@
-import Image from "next/image";
-import { useState } from "react";
-
-const DEFAULT_AVATARS = ["/avatars/avatar1.png", "/avatars/avatar2.png"];
+import { motion } from "framer-motion";
 
 type AvatarSelectorProps = {
   selectedAvatar: string;
   onSelect: (avatar: string) => void;
 };
 
+const avatars = [
+  "/avatars/avatar1.png",
+  "/avatars/avatar2.png",
+  "/avatars/avatar3.png",
+  "/avatars/avatar4.png",
+  "/avatars/avatar5.png",
+  "/avatars/avatar6.png",
+  "/avatars/avatar7.png",
+  "/avatars/avatar8.png",
+];
+
 export default function AvatarSelector({
   selectedAvatar,
   onSelect,
 }: AvatarSelectorProps) {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
-    <div className="relative">
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-blue-500 hover:border-blue-600 transition-colors"
-      >
-        <Image
-          src={selectedAvatar}
-          alt="Selected avatar"
-          width={80}
-          height={80}
-          className="object-cover"
-          priority
-        />
-      </button>
-
-      {isOpen && (
-        <div className="absolute top-full left-0 mt-2 p-2 bg-white rounded-lg shadow-lg border grid grid-cols-2 gap-2 z-10">
-          {DEFAULT_AVATARS.map((avatar) => (
-            <button
-              key={avatar}
-              type="button"
-              onClick={() => {
-                onSelect(avatar);
-                setIsOpen(false);
-              }}
-              className={`w-16 h-16 rounded-full overflow-hidden border-2 transition-colors ${
-                selectedAvatar === avatar
-                  ? "border-blue-500"
-                  : "border-transparent hover:border-blue-300"
-              }`}
+    <div className="grid grid-cols-4 gap-4 p-4 w-full max-w-md">
+      {avatars.map((avatar, index) => (
+        <motion.div
+          key={avatar}
+          className={`relative cursor-pointer rounded-xl overflow-hidden 
+            ${
+              selectedAvatar === avatar
+                ? "ring-4 ring-purple-500"
+                : "hover:ring-2 ring-white/50"
+            }
+          `}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{
+            opacity: 1,
+            y: 0,
+            transition: { delay: index * 0.1 },
+          }}
+          onClick={() => onSelect(avatar)}
+        >
+          <div className="aspect-square">
+            <img
+              src={avatar}
+              alt={`Avatar ${index + 1}`}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          {selectedAvatar === avatar && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="absolute inset-0 bg-purple-500/20 flex items-center justify-center"
             >
-              <Image
-                src={avatar}
-                alt="Avatar option"
-                width={64}
-                height={64}
-                className="object-cover"
-                priority
-              />
-            </button>
-          ))}
-        </div>
-      )}
+              <motion.span
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="text-2xl"
+              >
+                ✓
+              </motion.span>
+            </motion.div>
+          )}
+        </motion.div>
+      ))}
     </div>
   );
 }

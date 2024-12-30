@@ -53,11 +53,13 @@ export default function TeamForm({
       onSubmit={handleSubmit}
       className="space-y-8 bg-white/5 p-8 rounded-xl backdrop-blur-sm border border-white/10"
     >
-      <div className="flex flex-col items-center">
-        <label className="block text-lg font-medium mb-4 text-white">
+      <div className="flex flex-col items-center space-y-4">
+        <label className="block text-lg font-medium text-white text-center">
           Choisissez votre avatar d'équipe
         </label>
-        <AvatarSelector selectedAvatar={avatar} onSelect={setAvatar} />
+        <div className="w-full max-w-md">
+          <AvatarSelector selectedAvatar={avatar} onSelect={setAvatar} />
+        </div>
       </div>
 
       <div>
