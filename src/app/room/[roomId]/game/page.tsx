@@ -74,7 +74,12 @@ function GameContent() {
 
     case "guessing":
       return (
-        <GuessingPhase isCurrentTeam={isCurrentTeam} onSubmit={handleGuess} />
+        <GuessingPhase
+          isCurrentTeam={isCurrentTeam}
+          onSubmit={handleGuess}
+          room={room}
+          teamId={teamId}
+        />
       );
 
     case "results":
