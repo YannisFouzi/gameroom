@@ -14,6 +14,7 @@ type PlayerWheelProps = {
   onAnswerQuestion: (isCorrect: boolean) => void;
   showQuestion: boolean;
   selectedDifficulty: 1 | 3 | 5 | 8 | null;
+  questionAnswered: boolean;
 };
 
 export default function PlayerWheel({
@@ -26,6 +27,7 @@ export default function PlayerWheel({
   onAnswerQuestion,
   showQuestion,
   selectedDifficulty,
+  questionAnswered,
 }: PlayerWheelProps) {
   if (!isCurrentTeam && !subCategory) {
     return (
@@ -83,7 +85,7 @@ export default function PlayerWheel({
             </div>
           </div>
 
-          {currentQuestions && !showQuestion && (
+          {currentQuestions && !showQuestion && !questionAnswered && (
             <DifficultyButtons
               questions={currentQuestions}
               onSelectDifficulty={onSelectDifficulty}

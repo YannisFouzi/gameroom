@@ -5,7 +5,7 @@ import PlayerWheel from "@/components/wheel/PlayerWheel";
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { getRandomSubCategory, wheelData } from "@/data/wheelData";
 import { usePlayer } from "@/hooks/usePlayer";
-import { wheelService } from "@/lib/firebase/services";
+import { gameTransitionService, wheelService } from "@/lib/firebase/services";
 import { Theme } from "@/types/wheel";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -63,7 +63,13 @@ function WheelContent() {
 
   const handleAnswerQuestion = async (isCorrect: boolean) => {
     if (!room) return;
-    await wheelService.answerQuestion(room.id, isCorrect);
+    await wheelService.answerQuestion(
+      room.id,
+      isCorrect,
+      room.gameData?.currentTeamId || "",
+      wheelState?.selectedDifficulty || 1
+    );
+    await gameTransitionService.switchTeam(room.id);
   };
 
   return (
@@ -73,6 +79,8 @@ function WheelContent() {
           mustSpin={mustSpin}
           prizeNumber={prizeNumber}
           onStopSpinning={handleStopSpinning}
+          scores={wheelState?.scores || {}}
+          teams={room?.teams || {}}
         />
       ) : (
         <PlayerWheel
@@ -85,6 +93,7 @@ function WheelContent() {
           onAnswerQuestion={handleAnswerQuestion}
           showQuestion={wheelState?.showQuestion || false}
           selectedDifficulty={wheelState?.selectedDifficulty || null}
+          questionAnswered={wheelState?.questionAnswered || false}
         />
       )}
     </div>

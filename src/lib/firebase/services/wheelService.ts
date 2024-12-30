@@ -7,8 +7,9 @@ export const wheelService = {
   async startSpin(roomId: string, prizeNumber: number) {
     const roomRef = doc(db, "rooms", roomId);
     const roomDoc = await getDoc(roomRef);
-    const currentUsedSubCategories =
-      roomDoc.data()?.gameData?.wheelState?.usedSubCategories || {};
+    const currentWheelState = roomDoc.data()?.gameData?.wheelState;
+    const currentUsedSubCategories = currentWheelState?.usedSubCategories || {};
+    const currentScores = currentWheelState?.scores || {};
 
     await updateDoc(roomRef, {
       "gameData.wheelState": {
@@ -20,6 +21,7 @@ export const wheelService = {
         showQuestion: false,
         questionAnswered: false,
         selectedDifficulty: null,
+        scores: currentScores,
       },
     });
   },
@@ -31,6 +33,8 @@ export const wheelService = {
     usedSubCategories: Partial<Record<Theme, string[]>>
   ) {
     const roomRef = doc(db, "rooms", roomId);
+    const roomDoc = await getDoc(roomRef);
+    const currentScores = roomDoc.data()?.gameData?.wheelState?.scores || {};
     const allOptions = subCategories[theme];
     const used = usedSubCategories[theme] || [];
     let updatedUsedSubCategories;
@@ -56,6 +60,7 @@ export const wheelService = {
         showQuestion: false,
         questionAnswered: false,
         selectedDifficulty: null,
+        scores: currentScores,
       },
     });
   },
@@ -68,11 +73,32 @@ export const wheelService = {
     });
   },
 
-  async answerQuestion(roomId: string, isCorrect: boolean) {
+  async answerQuestion(
+    roomId: string,
+    isCorrect: boolean,
+    teamId: string,
+    difficulty: 1 | 3 | 5 | 8
+  ) {
     const roomRef = doc(db, "rooms", roomId);
+    const roomDoc = await getDoc(roomRef);
+    const currentScores = roomDoc.data()?.gameData?.wheelState?.scores || {};
+
+    let updatedScores = { ...currentScores };
+    if (isCorrect) {
+      updatedScores[teamId] = (updatedScores[teamId] || 0) + difficulty;
+    }
+
     await updateDoc(roomRef, {
-      "gameData.wheelState.questionAnswered": true,
-      "gameData.wheelState.showQuestion": false,
+      "gameData.wheelState": {
+        ...roomDoc.data()?.gameData?.wheelState,
+        questionAnswered: true,
+        showQuestion: false,
+        selectedDifficulty: null,
+        selectedTheme: null,
+        subCategory: null,
+        isSpinning: false,
+        scores: updatedScores,
+      },
     });
   },
 };

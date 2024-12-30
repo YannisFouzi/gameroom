@@ -1,5 +1,5 @@
 import { AnswerState } from "@/types/millionaire";
-import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../config";
 import { baseRoomService } from "./baseRoomService";
 
@@ -85,6 +85,23 @@ export const gameTransitionService = {
         currentTeamId: winningTeam.teamId,
       },
       updatedAt: serverTimestamp(),
+    });
+  },
+
+  async switchTeam(roomId: string) {
+    const roomRef = doc(db, "rooms", roomId);
+    const roomDoc = await getDoc(roomRef);
+    const currentTeamId = roomDoc.data()?.gameData?.currentTeamId;
+    const teams = Object.keys(roomDoc.data()?.teams || {});
+
+    // Trouver l'index de l'équipe suivante
+    const currentIndex = teams.indexOf(currentTeamId);
+    const nextIndex = (currentIndex + 1) % teams.length;
+    const nextTeamId = teams[nextIndex];
+
+    // Changer uniquement l'équipe courante
+    await updateDoc(roomRef, {
+      "gameData.currentTeamId": nextTeamId,
     });
   },
 };

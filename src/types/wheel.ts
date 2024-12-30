@@ -22,4 +22,5 @@ export type WheelState = {
   showQuestion: boolean;
   questionAnswered: boolean;
   selectedDifficulty: 1 | 3 | 5 | 8 | null;
+  scores: Record<string, number>;
 };

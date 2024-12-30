@@ -1,20 +1,34 @@
 import { Question } from "@/data/questions";
+import { motion } from "framer-motion";
 
 type QuestionDisplayProps = {
   question: Question;
   isVisible: boolean;
   onAnswer: (isCorrect: boolean) => void;
+  onQuestionAnswered?: () => void;
 };
 
 export default function QuestionDisplay({
   question,
   isVisible,
   onAnswer,
+  onQuestionAnswered,
 }: QuestionDisplayProps) {
   if (!isVisible) return null;
 
+  const handleAnswer = async (isCorrect: boolean) => {
+    await onAnswer(isCorrect);
+    if (onQuestionAnswered) {
+      onQuestionAnswered();
+    }
+  };
+
   return (
-    <div className="flex flex-col gap-4 items-center p-6 bg-white rounded-lg shadow-lg">
+    <motion.div
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      className="flex flex-col gap-4 items-center p-6 bg-white rounded-lg shadow-lg"
+    >
       <div className="text-center mb-4">
         <h3 className="text-xl font-bold mb-2">
           Question ({question.difficulty} points)
@@ -29,18 +43,18 @@ export default function QuestionDisplay({
 
       <div className="flex gap-4">
         <button
-          onClick={() => onAnswer(true)}
+          onClick={() => handleAnswer(true)}
           className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600"
         >
           OK
         </button>
         <button
-          onClick={() => onAnswer(false)}
+          onClick={() => handleAnswer(false)}
           className="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600"
         >
           NUL
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 }
