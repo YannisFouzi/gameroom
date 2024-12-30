@@ -144,6 +144,28 @@ export function ResultsPhase({
             </h2>
           )}
         </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="space-y-4"
+        >
+          <h3 className="text-2xl font-bold text-white">
+            Vos célébrités trouvées :
+          </h3>
+          <div className="space-y-2">
+            {Object.values(celebrities)
+              .filter((celebrity) => celebrity.foundBy === teamId)
+              .map((celebrity) => (
+                <div
+                  key={celebrity.id}
+                  className="text-xl text-white/80 font-medium"
+                >
+                  {celebrity.name}
+                </div>
+              ))}
+          </div>
+        </motion.div>
       </div>
     </div>
   );
