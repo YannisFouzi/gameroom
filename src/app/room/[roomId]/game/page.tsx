@@ -67,6 +67,8 @@ function GameContent() {
           celebrities={room.gameData.celebrities}
           startTime={room.gameData.startTime || Date.now()}
           isHost={isHost}
+          room={room}
+          teamId={teamId}
         />
       );
 

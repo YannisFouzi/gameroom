@@ -38,7 +38,7 @@ export function ExplanationPhase({
               <img
                 src={currentTeam.avatar}
                 alt={currentTeam.name}
-                className="w-40 h-40 mx-auto"
+                className="w-24 h-24 mx-auto"
               />
             </motion.div>
 
