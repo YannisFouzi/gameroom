@@ -29,12 +29,17 @@ export type Celebrity = {
 };
 
 export type GamePhase =
+  | "waiting"
+  | "playing"
   | "explanation"
   | "memorization"
   | "guessing"
   | "results"
   | "millionaire-rules"
-  | "millionaire-playing";
+  | "millionaire-playing"
+  | "millionaire-results"
+  | "evaluation-rules"
+  | "evaluation-playing";
 
 export type GameData = {
   celebrities?: Record<string, Celebrity>;

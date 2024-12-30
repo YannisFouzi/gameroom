@@ -7,20 +7,11 @@ export const gameTransitionService = {
   async startNextGame(roomId: string) {
     const room = await baseRoomService.getRoom(roomId);
 
-    if (!room.gameData?.scores) {
-      throw new Error("No scores found");
-    }
-
-    // Trouver l'équipe gagnante (celle avec le plus haut score)
-    const winningTeamEntry = Object.entries(room.gameData.scores).sort(
-      ([, scoreA], [, scoreB]) => scoreB - scoreA
-    )[0];
-
-    if (!winningTeamEntry) {
+    if (!room.gameData?.remainingTeams?.length) {
       throw new Error("No winning team found");
     }
 
-    const [winningTeamId] = winningTeamEntry;
+    const winningTeamId = room.gameData.remainingTeams[0];
     const winningTeam = room.teams[winningTeamId];
 
     if (!winningTeam) {
@@ -34,13 +25,15 @@ export const gameTransitionService = {
     ];
 
     await updateDoc(doc(db, "rooms", roomId), {
-      currentGame: 3,
-      gamePhase: "evaluation-rules",
+      currentGame: 2,
+      gamePhase: "millionaire-rules",
       gameData: {
         currentTeamIndex: 0,
         remainingTeams: reorderedTeams,
         startingTeam: winningTeamId,
         winningTeamName: winningTeam.name,
+        questions: [],
+        currentQuestion: 0,
       },
       updatedAt: serverTimestamp(),
     });
@@ -56,6 +49,34 @@ export const gameTransitionService = {
       "gameData.selectedAnswer": selectedAnswer,
       "gameData.answerState": answerState,
       "gameData.selectedAnswers": selectedAnswers,
+      updatedAt: serverTimestamp(),
+    });
+  },
+
+  async startEvaluationGame(roomId: string) {
+    const room = await baseRoomService.getRoom(roomId);
+
+    if (!room.gameData?.scores) {
+      throw new Error("No scores found");
+    }
+
+    // Trouver l'équipe gagnante basée sur les scores
+    const sortedTeams = Object.entries(room.teams)
+      .map(([teamId, team]) => ({
+        teamId,
+        name: team.name,
+        score: room.gameData?.scores?.[teamId] || 0,
+      }))
+      .sort((a, b) => b.score - a.score);
+
+    const winningTeam = sortedTeams[0];
+
+    await updateDoc(doc(db, "rooms", roomId), {
+      gamePhase: "evaluation-rules",
+      gameData: {
+        winningTeamName: winningTeam.name,
+        winningTeamId: winningTeam.teamId,
+      },
       updatedAt: serverTimestamp(),
     });
   },
