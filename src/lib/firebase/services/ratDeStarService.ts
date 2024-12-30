@@ -3,6 +3,14 @@ import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../config";
 import { baseRoomService } from "./baseRoomService";
 
+function normalizeString(str: string): string {
+  return str
+    .toLowerCase()
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
 const CELEBRITIES: Record<string, Celebrity> = {
   sarkozy: {
     id: "sarkozy",
@@ -12,8 +20,8 @@ const CELEBRITIES: Record<string, Celebrity> = {
   },
   zidane: {
     id: "zidane",
-    name: "Zinedine Zidane",
-    validAnswers: ["zidane", "zinedine zidane"],
+    name: "Zinédine Zidane",
+    validAnswers: ["zidane", "zinedine zidane", "zinédine zidane"],
     imageUrl: "/ratDeStar/Zinedine_Zidane.png",
   },
 };
@@ -54,10 +62,14 @@ export const ratDeStarService = {
 
   async submitGuess(roomId: string, teamId: string, guess: string) {
     const room = await baseRoomService.getRoom(roomId);
-    const normalizedGuess = guess.toLowerCase().trim();
+    const normalizedGuess = normalizeString(guess);
 
     const celebrity = Object.values(room.gameData?.celebrities || {}).find(
-      (c) => !c.foundBy && c.validAnswers.includes(normalizedGuess)
+      (c) =>
+        !c.foundBy &&
+        c.validAnswers.some(
+          (answer) => normalizeString(answer) === normalizedGuess
+        )
     );
 
     if (celebrity) {
