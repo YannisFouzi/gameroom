@@ -92,6 +92,7 @@ function GameContent() {
           remainingTeams={room.gameData.remainingTeams}
           isHost={isHost}
           onNextGame={handleNextGame}
+          teamId={teamId}
         />
       );
 
