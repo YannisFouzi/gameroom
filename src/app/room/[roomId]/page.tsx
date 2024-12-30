@@ -3,7 +3,6 @@
 import HostControls from "@/components/room/HostControls";
 import RoomQRCode from "@/components/room/RoomQRCode";
 import ScoreBoard from "@/components/room/ScoreBoard";
-import TeamManager from "@/components/room/TeamManager";
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
 import { usePresence } from "@/hooks/usePresence";
@@ -122,22 +121,27 @@ function RoomContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black">
-      <div className="container mx-auto p-4 min-h-screen flex items-center justify-center">
-        <div className="max-w-2xl w-full space-y-8">
-          {isHost ? (
-            // Vue de l'hôte
-            <>
-              <HostControls room={room} />
-              <ScoreBoard room={room} teamId={teamId} isHost={isHost} />
-              <TeamManager room={room} showCreateTeam={false} />
-              <div className="mt-8">
-                <RoomQRCode roomId={roomId as string} />
-              </div>
-            </>
-          ) : (
-            // Vue des joueurs
-            renderPlayerView()
-          )}
+      <div className="container mx-auto p-4 min-h-screen flex flex-col items-center">
+        <h1 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent">
+          Soirée du Nouvel An 2024
+        </h1>
+
+        <div className="flex-1 w-full flex items-center justify-center">
+          <div className="max-w-2xl w-full space-y-8">
+            {isHost ? (
+              // Vue de l'hôte
+              <>
+                <HostControls room={room} />
+                <ScoreBoard room={room} teamId={teamId} isHost={isHost} />
+                <div className="mt-8">
+                  <RoomQRCode roomId={roomId as string} />
+                </div>
+              </>
+            ) : (
+              // Vue des joueurs
+              renderPlayerView()
+            )}
+          </div>
         </div>
       </div>
     </div>
