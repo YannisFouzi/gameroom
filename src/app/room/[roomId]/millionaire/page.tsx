@@ -233,15 +233,25 @@ function MillionaireContent() {
 
             {isHost && (
               <div className="mb-6">
-                <h2 className="text-xl font-bold mb-2">
-                  Tour de l'équipe : {room.teams[currentTeam]?.name}
-                </h2>
-                {gameData.currentCategory && (
-                  <p className="text-gray-600">
-                    Question {gameData.currentQuestionIndex + 1}/15 - Catégorie{" "}
-                    {gameData.currentCategory}
-                  </p>
-                )}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 text-center"
+                >
+                  <h2 className="text-2xl font-bold text-white mb-2">
+                    Tour de l'équipe : {room.teams[currentTeam]?.name}
+                  </h2>
+                  {gameData.currentCategory ? (
+                    <p className="text-lg text-white/80">
+                      Question {gameData.currentQuestionIndex + 1}/15 -
+                      Catégorie {gameData.currentCategory}
+                    </p>
+                  ) : (
+                    <p className="text-lg text-white/80">
+                      En attente de la sélection de la catégorie...
+                    </p>
+                  )}
+                </motion.div>
               </div>
             )}
 
@@ -250,7 +260,7 @@ function MillionaireContent() {
                 <h3 className="text-xl font-semibold mb-4">
                   C'est le tour de l'équipe {room.teams[currentTeam]?.name}
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-white/80">
                   Attendez votre tour pour jouer...
                 </p>
               </div>

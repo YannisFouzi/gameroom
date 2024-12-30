@@ -24,13 +24,7 @@ export default function CategorySelector({
   ];
 
   if (!isCurrentTeam) {
-    return (
-      <div className="text-center p-6">
-        <p className="text-gray-600">
-          En attente de la sélection de la catégorie...
-        </p>
-      </div>
-    );
+    return null;
   }
 
   return (
