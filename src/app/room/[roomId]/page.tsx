@@ -7,6 +7,7 @@ import TeamManager from "@/components/room/TeamManager";
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
 import { usePresence } from "@/hooks/usePresence";
+import { motion } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -22,6 +23,83 @@ function RoomContent() {
       router.push(`/room/${room.id}/game`);
     }
   }, [room?.status, room?.id, router]);
+
+  const renderPlayerView = () => {
+    const currentTeam = room.teams[teamId || ""];
+    if (!currentTeam) return null;
+
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center space-y-6"
+      >
+        <div className="space-y-4">
+          <motion.div
+            animate={{
+              scale: [1, 1.02, 1],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="w-32 h-32 mx-auto"
+          >
+            <img
+              src={currentTeam.avatar}
+              alt={currentTeam.name}
+              className="w-full h-full rounded-full"
+            />
+          </motion.div>
+
+          <div>
+            <h1 className="text-4xl font-bold text-white">
+              {currentTeam.name}
+            </h1>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          {currentTeam.members.map((member, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="text-xl text-white/80"
+            >
+              {member.name}
+            </motion.div>
+          ))}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="mt-12 text-purple-300/80 text-lg"
+        >
+          En attente du lancement de la partie...
+          <motion.span
+            animate={{ opacity: [0, 1, 0] }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="inline-block ml-1"
+          >
+            🎮
+          </motion.span>
+        </motion.div>
+      </motion.div>
+    );
+  };
 
   if (loading) {
     return (
@@ -45,17 +123,20 @@ function RoomContent() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black">
       <div className="container mx-auto p-4 min-h-screen flex items-center justify-center">
         <div className="max-w-2xl w-full space-y-8">
-          {/* Contrôles de l'hôte en haut */}
-          {isHost && <HostControls room={room} />}
-
-          {/* Liste des équipes au centre */}
-          <ScoreBoard room={room} teamId={teamId} isHost={isHost} />
-          <TeamManager room={room} showCreateTeam={false} />
-
-          {/* QR Code en bas */}
-          <div className="mt-8">
-            <RoomQRCode roomId={roomId as string} />
-          </div>
+          {isHost ? (
+            // Vue de l'hôte
+            <>
+              <HostControls room={room} />
+              <ScoreBoard room={room} teamId={teamId} isHost={isHost} />
+              <TeamManager room={room} showCreateTeam={false} />
+              <div className="mt-8">
+                <RoomQRCode roomId={roomId as string} />
+              </div>
+            </>
+          ) : (
+            // Vue des joueurs
+            renderPlayerView()
+          )}
         </div>
       </div>
     </div>

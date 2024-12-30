@@ -32,25 +32,12 @@ export default function TeamManager({
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold text-white">Équipes</h2>
-        {showCreateTeam && isHost && (
-          <button
-            onClick={handleCreateTeam}
-            disabled={isUpdating}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
-          >
-            Nouvelle équipe
-          </button>
-        )}
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {Object.entries(room.teams || {}).map(([tid, team]) => (
           <div
             key={tid}
             className={`border rounded-lg p-4 ${
-              tid === teamId ? "bg-blue-50" : "bg-white"
+              tid === teamId ? "bg-white/10" : "bg-white/5"
             }`}
           >
             <div className="flex items-center gap-3 mb-4">
@@ -59,18 +46,15 @@ export default function TeamManager({
                 alt={team.name}
                 className="w-10 h-10 rounded-full"
               />
-              <h3 className="font-medium">{team.name}</h3>
+              <h3 className="font-medium text-white">{team.name}</h3>
             </div>
             <div className="space-y-2">
               {team.members.map((member, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between p-2 bg-white rounded border"
+                  className="flex items-center justify-between p-2 bg-white/5 rounded border border-white/10"
                 >
-                  <span>{member.name}</span>
-                  <span className="text-sm text-gray-500">
-                    Score: {member.score}
-                  </span>
+                  <span className="text-white">{member.name}</span>
                 </div>
               ))}
             </div>
