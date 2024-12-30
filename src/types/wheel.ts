@@ -23,4 +23,5 @@ export type WheelState = {
   questionAnswered: boolean;
   selectedDifficulty: 1 | 3 | 5 | 8 | null;
   scores: Record<string, number>;
+  gameFinished: boolean;
 };

@@ -7,11 +7,12 @@ import { getRandomSubCategory, wheelData } from "@/data/wheelData";
 import { usePlayer } from "@/hooks/usePlayer";
 import { gameTransitionService, wheelService } from "@/lib/firebase/services";
 import { Theme } from "@/types/wheel";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function WheelContent() {
   const { room } = useRoom();
+  const router = useRouter();
   const { isHost, teamId } = usePlayer(room?.id || "");
   const [mustSpin, setMustSpin] = useState(false);
   const [prizeNumber, setPrizeNumber] = useState(0);
@@ -27,6 +28,16 @@ function WheelContent() {
       setPrizeNumber(wheelState.prizeNumber || 0);
     }
   }, [wheelState]);
+
+  useEffect(() => {
+    if (room?.gamePhase === "wheel-results") {
+      router.push(`/room/${room.id}/wheel-results`);
+    }
+  }, [room?.gamePhase, room?.id, router]);
+
+  if (room?.gamePhase === "wheel-results") {
+    return null;
+  }
 
   const handleSpinWheel = async () => {
     if (!room || mustSpin) return;

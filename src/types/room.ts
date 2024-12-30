@@ -41,7 +41,8 @@ export type GamePhase =
   | "millionaire-results"
   | "evaluation-rules"
   | "evaluation-playing"
-  | "wheel";
+  | "wheel"
+  | "wheel-results";
 
 export type GameData = {
   celebrities?: Record<string, Celebrity>;
@@ -50,6 +51,7 @@ export type GameData = {
   startTime?: number;
   startingTeam?: string;
   winningTeamName?: string;
+  winningTeamId?: string;
   wheelState?: WheelState;
   currentTeamId?: string;
 } & {

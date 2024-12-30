@@ -86,6 +86,20 @@ export const wheelService = {
     let updatedScores = { ...currentScores };
     if (isCorrect) {
       updatedScores[teamId] = (updatedScores[teamId] || 0) + difficulty;
+
+      // Vérifier si l'équipe a gagné
+      if (updatedScores[teamId] >= 20) {
+        await updateDoc(roomRef, {
+          gamePhase: "wheel-results",
+          "gameData.winningTeamId": teamId,
+          "gameData.wheelState": {
+            ...roomDoc.data()?.gameData?.wheelState,
+            scores: updatedScores,
+            gameFinished: true,
+          },
+        });
+        return;
+      }
     }
 
     await updateDoc(roomRef, {
