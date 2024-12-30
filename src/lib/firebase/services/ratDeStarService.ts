@@ -83,4 +83,11 @@ export const ratDeStarService = {
       return false;
     }
   },
+
+  async setLastFoundCelebrity(roomId: string, celebrityName: string | null) {
+    const roomRef = doc(db, "rooms", roomId);
+    await updateDoc(roomRef, {
+      "gameData.lastFoundCelebrity": celebrityName,
+    });
+  },
 };

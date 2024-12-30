@@ -1,3 +1,4 @@
+import { ratDeStarService } from "@/lib/firebase/services/ratDeStarService";
 import { Room } from "@/types/room";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -43,6 +44,13 @@ export function GuessingPhase({
         });
         setGuess("");
 
+        if (isCorrect) {
+          await ratDeStarService.setLastFoundCelebrity(room.id, guess);
+          setTimeout(() => {
+            ratDeStarService.setLastFoundCelebrity(room.id, null);
+          }, 3000);
+        }
+
         setTimeout(() => {
           setFeedback(null);
         }, 3000);
@@ -56,6 +64,21 @@ export function GuessingPhase({
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4">
         <div className="max-w-md mx-auto text-center space-y-12">
+          {room.gameData.lastFoundCelebrity && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
+            >
+              <div className="bg-white/10 p-8 rounded-xl border border-white/20">
+                <h2 className="text-4xl font-bold text-white">
+                  {room.gameData.lastFoundCelebrity}
+                </h2>
+              </div>
+            </motion.div>
+          )}
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -116,6 +139,21 @@ export function GuessingPhase({
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4">
       <div className="max-w-md mx-auto text-center space-y-12">
+        {room.gameData.lastFoundCelebrity && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
+          >
+            <div className="bg-white/10 p-8 rounded-xl border border-white/20">
+              <h2 className="text-4xl font-bold text-white">
+                {room.gameData.lastFoundCelebrity}
+              </h2>
+            </div>
+          </motion.div>
+        )}
+
         {currentTeam && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}

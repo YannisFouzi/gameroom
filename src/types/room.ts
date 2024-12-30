@@ -49,6 +49,7 @@ export type GameData = {
   remainingTeams: string[];
   currentTeamIndex: number;
   startTime?: number;
+  lastFoundCelebrity?: string;
   startingTeam?: string;
   winningTeamName?: string;
   winningTeamId?: string;
