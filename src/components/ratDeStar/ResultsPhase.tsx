@@ -45,6 +45,9 @@ export function ResultsPhase({
                 </div>
               </div>
             </div>
+            <div className="mt-4 text-lg text-yellow-100">
+              Cette équipe commencera le prochain jeu en premier !
+            </div>
           </div>
         </div>
 
@@ -134,9 +137,14 @@ export function ResultsPhase({
           className="p-8 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10"
         >
           {isWinner ? (
-            <h2 className="text-3xl font-bold text-white">
-              🏆 Félicitations ! Vous avez gagné ! 🏆
-            </h2>
+            <>
+              <h2 className="text-3xl font-bold text-white mb-4">
+                🏆 Félicitations ! Vous avez gagné ! 🏆
+              </h2>
+              <p className="text-xl text-white/80">
+                Vous commencerez le prochain jeu en premier ! 🎲
+              </p>
+            </>
           ) : (
             <h2 className="text-3xl font-bold text-white">
               Game Over ! L'équipe {winningTeam.name} a gagné !
