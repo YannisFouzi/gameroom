@@ -52,7 +52,12 @@ function GameContent() {
   switch (room.gamePhase) {
     case "explanation":
       return (
-        <ExplanationPhase isHost={isHost} onStart={handleStartMemorization} />
+        <ExplanationPhase
+          isHost={isHost}
+          onStart={handleStartMemorization}
+          room={room}
+          teamId={teamId}
+        />
       );
 
     case "memorization":

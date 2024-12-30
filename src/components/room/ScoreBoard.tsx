@@ -17,11 +17,7 @@ export default function ScoreBoard({ room, teamId, isHost }: ScoreBoardProps) {
           }`}
         >
           <div className="flex items-center gap-3">
-            <img
-              src={team.avatar}
-              alt={team.name}
-              className="w-8 h-8 rounded-full"
-            />
+            <img src={team.avatar} alt={team.name} className="w-12 h-12" />
             <div>
               <span className="font-medium text-white">{team.name}</span>
               <p className="text-sm text-gray-300">

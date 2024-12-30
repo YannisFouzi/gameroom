@@ -44,12 +44,11 @@ function RoomContent() {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="w-32 h-32 mx-auto"
           >
             <img
               src={currentTeam.avatar}
               alt={currentTeam.name}
-              className="w-full h-full rounded-full"
+              className="w-40 h-40 mx-auto"
             />
           </motion.div>
 
