@@ -18,9 +18,9 @@ export default function CategorySelector({
       name: "Histoire & Géographie",
       icon: "🌍",
     },
-    { id: "musique" as MillionaireCategory, name: "Musique", icon: "🎵" },
+    { id: "sport" as MillionaireCategory, name: "Sport", icon: "⚽" },
     { id: "annees80" as MillionaireCategory, name: "Années 80", icon: "🕹️" },
-    { id: "mystere" as MillionaireCategory, name: "Mystère", icon: "❓" },
+    { id: "television" as MillionaireCategory, name: "Télévision", icon: "📺" },
   ];
 
   if (!isCurrentTeam) {

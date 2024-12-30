@@ -1,8 +1,8 @@
 export type MillionaireCategory =
   | "histoire"
-  | "musique"
+  | "sport"
   | "annees80"
-  | "mystere";
+  | "television";
 
 export type MillionaireQuestion = {
   id: string;
