@@ -17,7 +17,7 @@ export function ExplanationPhase({
   const currentTeam = teamId ? room.teams[teamId] : null;
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto p-6">
       {!isHost && currentTeam && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -65,27 +65,91 @@ export function ExplanationPhase({
         </motion.div>
       )}
 
-      <h2 className="text-2xl font-bold mb-4 text-white">
-        Rat de Star - Règles du jeu
-      </h2>
-      <div className="space-y-4 mb-6 text-white/80">
-        <p>1. Une mosaïque de célébrités va s'afficher pendant 1 minute</p>
-        <p>2. Mémorisez un maximum de personnalités</p>
-        <p>3. À tour de rôle, chaque équipe devra nommer une célébrité</p>
-        <p>4. Si la réponse est correcte, l'équipe continue</p>
-        <p>
-          5. Si la réponse est incorrecte ou déjà donnée, l'équipe est éliminée
-        </p>
-        <p>6. Le jeu continue jusqu'à ce qu'il ne reste qu'une équipe</p>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="text-center mb-12"
+      >
+        <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent">
+          Rat de Star
+        </h2>
+        <p className="text-xl text-white/80">Prêt à tester votre mémoire ?</p>
+      </motion.div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bg-white/5 p-6 rounded-xl backdrop-blur-sm border border-white/10"
+        >
+          <div className="text-3xl mb-4">👀</div>
+          <h3 className="text-xl font-bold text-white mb-2">
+            Phase 1: Observation
+          </h3>
+          <p className="text-white/80">
+            Une mosaïque de célébrités va s'afficher pendant 1 minute.
+            Mémorisez-en un maximum !
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-white/5 p-6 rounded-xl backdrop-blur-sm border border-white/10"
+        >
+          <div className="text-3xl mb-4">🎯</div>
+          <h3 className="text-xl font-bold text-white mb-2">Phase 2: Action</h3>
+          <p className="text-white/80">
+            À tour de rôle, chaque équipe nomme une célébrité. Soyez
+            stratégiques !
+          </p>
+          <div className="mt-4 p-3 bg-white/5 rounded-lg border border-white/10">
+            <p className="text-sm text-white/70">
+              <span className="text-yellow-400">⚠️ Important :</span> Vous
+              pouvez entrer soit le nom complet, soit uniquement le nom de
+              famille. Seule l'orthographe compte, pas les majuscules !
+            </p>
+            <p className="text-sm text-white/70 mt-2">
+              Exemples : "alain delon" ou "delon"
+            </p>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="bg-white/5 p-6 rounded-xl backdrop-blur-sm border border-white/10"
+        >
+          <div className="text-3xl mb-4">🏆</div>
+          <h3 className="text-xl font-bold text-white mb-2">
+            Phase 3: Élimination
+          </h3>
+          <p className="text-white/80">
+            Une erreur ou une répétition élimine l'équipe. Dernière équipe en
+            lice gagne !
+          </p>
+          <div className="mt-4 p-3 bg-white/5 rounded-lg border border-white/10">
+            <p className="text-sm text-white/70">
+              <span className="text-yellow-400">🎲 Bonus :</span> L'équipe
+              gagnante commencera le prochain jeu en premier !
+            </p>
+          </div>
+        </motion.div>
       </div>
 
       {isHost && (
-        <button
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
           onClick={onStart}
-          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-lg hover:opacity-90 transition-opacity"
+          className="w-full mt-12 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-8 rounded-xl font-bold text-xl shadow-lg hover:shadow-xl transition-all hover:opacity-90"
         >
-          Commencer
-        </button>
+          Lancer le jeu 🎮
+        </motion.button>
       )}
     </div>
   );
