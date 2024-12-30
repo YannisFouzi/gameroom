@@ -35,10 +35,17 @@ function WheelContent() {
 
     const theme = wheelData[prizeNumber].option as Theme;
     setSelectedTheme(theme);
-    const randomSubCategory = getRandomSubCategory(theme);
+    const usedSubCategories =
+      room.gameData?.wheelState?.usedSubCategories || {};
+    const randomSubCategory = getRandomSubCategory(theme, usedSubCategories);
     setSubCategory(randomSubCategory);
 
-    await wheelService.stopSpin(room.id, theme, randomSubCategory);
+    await wheelService.stopSpin(
+      room.id,
+      theme,
+      randomSubCategory,
+      usedSubCategories
+    );
     setMustSpin(false);
   };
 

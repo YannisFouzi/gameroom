@@ -55,6 +55,7 @@ export type GameData = {
     prizeNumber?: number;
     selectedTheme: Theme | null;
     subCategory: string | null;
+    usedSubCategories?: Partial<Record<Theme, string[]>>;
   };
   currentTeamId?: string;
 } & {

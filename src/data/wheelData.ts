@@ -31,7 +31,37 @@ export const subCategories: Record<Theme, string[]> = {
   Marque: ["Asus", "Google", "Microsoft"],
 };
 
-export const getRandomSubCategory = (theme: Theme): string => {
-  const options = subCategories[theme];
-  return options[Math.floor(Math.random() * options.length)];
+export const getRandomSubCategory = (
+  theme: Theme,
+  usedSubCategories: Partial<Record<Theme, string[]>> = {}
+): string => {
+  const allOptions = subCategories[theme];
+  const used = usedSubCategories[theme] || [];
+
+  console.log("getRandomSubCategory:", {
+    theme,
+    allOptions,
+    used,
+    usedLength: used.length,
+    allOptionsLength: allOptions.length,
+    isResetting: used.length >= allOptions.length - 1,
+  });
+
+  if (used.length >= allOptions.length - 1) {
+    const lastUsed = used[used.length - 1];
+    const availableOptions = allOptions.filter((opt) => opt !== lastUsed);
+    console.log("Resetting subcategories:", {
+      lastUsed,
+      availableOptions,
+    });
+    return availableOptions[
+      Math.floor(Math.random() * availableOptions.length)
+    ];
+  }
+
+  const availableOptions = allOptions.filter((opt) => !used.includes(opt));
+  console.log("Normal selection:", {
+    availableOptions,
+  });
+  return availableOptions[Math.floor(Math.random() * availableOptions.length)];
 };
