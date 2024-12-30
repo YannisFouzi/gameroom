@@ -25,6 +25,7 @@ function RoomContent() {
   }, [room?.status, room?.id, router]);
 
   const renderPlayerView = () => {
+    if (!room) return null;
     const currentTeam = room.teams[teamId || ""];
     if (!currentTeam) return null;
 

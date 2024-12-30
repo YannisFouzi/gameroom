@@ -54,7 +54,7 @@ export default function JoinRoomPage() {
               ease: "easeInOut",
             }}
           >
-            Rejoindre la Soirée du Nouvel An 🎉
+            Rejoindre la Soirée du Nouvel An
           </motion.h1>
 
           {error && (
