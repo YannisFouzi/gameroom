@@ -238,12 +238,8 @@ function MillionaireContent() {
                   animate={{ opacity: 1 }}
                   className="p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 text-center"
                 >
-                  <h2 className="text-2xl font-bold text-white mb-2">
-                    Tour de l'équipe : {room.teams[currentTeam]?.name}
-                  </h2>
                   {gameData.currentCategory ? (
-                    <p className="text-lg text-white/80">
-                      Question {gameData.currentQuestionIndex + 1}/15 -
+                    <p className="text-2xl font-bold text-white">
                       Catégorie {gameData.currentCategory}
                     </p>
                   ) : (
