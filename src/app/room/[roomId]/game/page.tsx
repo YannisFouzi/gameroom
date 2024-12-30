@@ -79,6 +79,7 @@ function GameContent() {
           onSubmit={handleGuess}
           room={room}
           teamId={teamId}
+          isHost={isHost}
         />
       );
 
