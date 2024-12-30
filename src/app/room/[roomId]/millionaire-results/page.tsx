@@ -2,7 +2,7 @@
 
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
-import { gameTransitionService } from "@/lib/firebase/services/gameTransitionService";
+import { gameTransitionService } from "@/lib/firebase/services";
 import { motion } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -41,7 +41,12 @@ function MillionaireResultsContent() {
 
   const handleNextGame = async () => {
     if (!room) return;
-    await gameTransitionService.startEvaluationGame(room.id);
+    try {
+      await gameTransitionService.startEvaluationGame(room.id);
+      router.push(`/room/${room.id}/evaluation-rules`);
+    } catch (error) {
+      console.error("Erreur lors du passage au jeu suivant:", error);
+    }
   };
 
   return (

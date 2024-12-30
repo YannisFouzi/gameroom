@@ -2,8 +2,10 @@
 
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
-import { roomService } from "@/lib/firebase/roomService";
+import { db } from "@/lib/firebase/config";
+import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 function EvaluationRulesContent() {
   const router = useRouter();
@@ -11,9 +13,23 @@ function EvaluationRulesContent() {
   const { isHost } = usePlayer(room?.id || "");
   const winningTeamName = room?.gameData?.winningTeamName || "";
 
+  useEffect(() => {
+    if (room?.gamePhase === "wheel") {
+      router.push(`/room/${room.id}/wheel`);
+    }
+  }, [room?.gamePhase, room?.id, router]);
+
   const handleStart = async () => {
     if (!room?.id) return;
-    await roomService.startEvaluationGame(room.id);
+    try {
+      await updateDoc(doc(db, "rooms", room.id), {
+        gamePhase: "wheel",
+        updatedAt: serverTimestamp(),
+      });
+      router.push(`/room/${room.id}/wheel`);
+    } catch (error) {
+      console.error("Erreur lors du démarrage du jeu:", error);
+    }
   };
 
   return (

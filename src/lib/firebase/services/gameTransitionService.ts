@@ -56,8 +56,13 @@ export const gameTransitionService = {
   async startEvaluationGame(roomId: string) {
     const room = await baseRoomService.getRoom(roomId);
 
-    if (!room.gameData?.scores) {
-      throw new Error("No scores found");
+    // Initialiser les scores si nécessaire
+    const scores = room.gameData?.scores || {};
+    if (Object.keys(scores).length === 0) {
+      // Créer un objet scores avec 0 pour chaque équipe
+      Object.keys(room.teams).forEach((teamId) => {
+        scores[teamId] = 0;
+      });
     }
 
     // Trouver l'équipe gagnante basée sur les scores
@@ -65,7 +70,7 @@ export const gameTransitionService = {
       .map(([teamId, team]) => ({
         teamId,
         name: team.name,
-        score: room.gameData?.scores?.[teamId] || 0,
+        score: scores[teamId] || 0,
       }))
       .sort((a, b) => b.score - a.score);
 
@@ -74,8 +79,10 @@ export const gameTransitionService = {
     await updateDoc(doc(db, "rooms", roomId), {
       gamePhase: "evaluation-rules",
       gameData: {
+        scores,
         winningTeamName: winningTeam.name,
         winningTeamId: winningTeam.teamId,
+        currentTeamId: winningTeam.teamId,
       },
       updatedAt: serverTimestamp(),
     });

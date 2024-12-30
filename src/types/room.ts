@@ -1,5 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 import { MillionaireGameData } from "./millionaire";
+import { Theme } from "./wheel";
 
 export type RoomStatus = "waiting" | "playing" | "finished";
 
@@ -39,7 +40,8 @@ export type GamePhase =
   | "millionaire-playing"
   | "millionaire-results"
   | "evaluation-rules"
-  | "evaluation-playing";
+  | "evaluation-playing"
+  | "wheel";
 
 export type GameData = {
   celebrities?: Record<string, Celebrity>;
@@ -48,7 +50,16 @@ export type GameData = {
   startTime?: number;
   startingTeam?: string;
   winningTeamName?: string;
-} & Partial<MillionaireGameData>;
+  wheelState?: {
+    isSpinning: boolean;
+    prizeNumber?: number;
+    selectedTheme: Theme | null;
+    subCategory: string | null;
+  };
+  currentTeamId?: string;
+} & {
+  [K in keyof MillionaireGameData]?: MillionaireGameData[K];
+};
 
 export type Player = {
   id?: string;
