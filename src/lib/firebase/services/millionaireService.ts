@@ -1,8 +1,10 @@
 import { MillionaireCategory } from "@/types/millionaire";
+import { Room } from "@/types/room";
 import {
   arrayUnion,
   doc,
   increment,
+  runTransaction,
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
@@ -107,21 +109,38 @@ export const millionaireService = {
   },
 
   async quitWithPoints(roomId: string, points: number) {
-    const room = await baseRoomService.getRoom(roomId);
-    const currentTeamIndex = room.gameData?.currentTeamIndex || 0;
-    const currentTeam = room.gameData?.remainingTeams[currentTeamIndex];
+    const roomRef = doc(db, "rooms", roomId);
 
-    if (!currentTeam || !room.gameData?.remainingTeams) return;
+    await runTransaction(db, async (transaction) => {
+      const roomDoc = await transaction.get(roomRef);
+      if (!roomDoc.exists()) return;
 
-    const nextTeamIndex =
-      (currentTeamIndex + 1) % room.gameData.remainingTeams.length;
+      const room = roomDoc.data() as Room;
+      if (!room.gameData) return;
 
-    await updateDoc(doc(db, "rooms", roomId), {
-      [`gameData.scores.${currentTeam}`]: increment(points),
-      "gameData.currentTeamIndex": nextTeamIndex,
-      "gameData.currentCategory": null,
-      "gameData.currentQuestionIndex": 0,
-      updatedAt: serverTimestamp(),
+      const currentTeam =
+        room.gameData.remainingTeams[room.gameData.currentTeamIndex];
+      const nextTeamIndex =
+        (room.gameData.currentTeamIndex + 1) %
+        room.gameData.remainingTeams.length;
+
+      // Mettre à jour le score
+      const currentScore = (room.gameData.scores || {})[currentTeam] || 0;
+      const newScores = {
+        ...(room.gameData.scores || {}),
+        [currentTeam]: currentScore + points,
+      };
+
+      // Réinitialiser les états pour l'équipe suivante
+      transaction.update(roomRef, {
+        "gameData.scores": newScores,
+        "gameData.currentTeamIndex": nextTeamIndex,
+        "gameData.currentCategory": null,
+        "gameData.currentQuestionIndex": 0,
+        "gameData.answerState": null, // Réinitialisation
+        "gameData.selectedAnswer": null, // Réinitialisation
+        "gameData.selectedAnswers": [], // Réinitialisation
+      });
     });
   },
 };
