@@ -2,6 +2,7 @@
 
 import TeamForm from "@/components/room/TeamForm";
 import { roomService } from "@/lib/firebase/roomService";
+import { motion } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -19,16 +20,12 @@ export default function JoinRoomPage() {
     try {
       setIsLoading(true);
       setError(null);
-
       const { teamId, deviceId } = await roomService.addTeam(
         roomId as string,
         teamData
       );
-
-      // Stocker l'ID de l'équipe et du device
       localStorage.setItem(`team_${roomId}`, teamId);
       localStorage.setItem(`device_${roomId}`, deviceId);
-
       router.push(`/room/${roomId}`);
     } catch (err) {
       console.error("Erreur lors de la connexion à la room:", err);
@@ -39,16 +36,40 @@ export default function JoinRoomPage() {
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-md">
-      <h1 className="text-2xl font-bold mb-6">Rejoindre la partie</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black">
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-xl"
+        >
+          <motion.h1
+            className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent"
+            animate={{
+              scale: [1, 1.02, 1],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            Rejoindre la Soirée du Nouvel An 🎉
+          </motion.h1>
 
-      {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
-          {error}
-        </div>
-      )}
+          {error && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="mb-6 p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-lg text-center"
+            >
+              {error}
+            </motion.div>
+          )}
 
-      <TeamForm onSubmit={handleJoinRoom} isLoading={isLoading} />
+          <TeamForm onSubmit={handleJoinRoom} isLoading={isLoading} />
+        </motion.div>
+      </div>
     </div>
   );
 }

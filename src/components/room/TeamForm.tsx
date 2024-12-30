@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useState } from "react";
 import AvatarSelector from "./AvatarSelector";
 
@@ -48,24 +49,27 @@ export default function TeamForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <motion.form
+      onSubmit={handleSubmit}
+      className="space-y-8 bg-white/5 p-8 rounded-xl backdrop-blur-sm border border-white/10"
+    >
       <div className="flex flex-col items-center">
-        <label className="block text-sm font-medium mb-2">
-          Avatar d'équipe
+        <label className="block text-lg font-medium mb-4 text-white">
+          Choisissez votre avatar d'équipe
         </label>
         <AvatarSelector selectedAvatar={avatar} onSelect={setAvatar} />
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-2">
-          Nom de l'équipe
+        <label className="block text-lg font-medium mb-3 text-white">
+          Nom de votre équipe
         </label>
         <input
           type="text"
           value={teamName}
           onChange={(e) => setTeamName(e.target.value)}
-          className="w-full p-2 border rounded-md"
-          placeholder="Entrez le nom de votre équipe"
+          className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+          placeholder="Les Fêtards du Nouvel An..."
           required
           minLength={2}
           maxLength={30}
@@ -73,48 +77,87 @@ export default function TeamForm({
       </div>
 
       <div className="space-y-4">
-        <label className="block text-sm font-medium">Membres de l'équipe</label>
+        <label className="block text-lg font-medium text-white">
+          Qui participe ?
+        </label>
         {members.map((member, index) => (
-          <div key={index} className="flex gap-2">
+          <motion.div
+            key={index}
+            className="flex gap-2"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
             <input
               type="text"
               value={member}
               onChange={(e) => handleMemberChange(index, e.target.value)}
-              className="flex-1 p-2 border rounded-md"
-              placeholder={`Nom du membre ${index + 1}`}
+              className="flex-1 p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              placeholder={`Participant ${index + 1}`}
               required
               minLength={2}
               maxLength={20}
             />
             {members.length > 1 && (
-              <button
+              <motion.button
                 type="button"
                 onClick={() => handleRemoveMember(index)}
-                className="px-3 py-2 text-red-600 hover:bg-red-50 rounded-md"
+                className="px-4 py-2 text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Retirer
-              </button>
+                ✕
+              </motion.button>
             )}
-          </div>
+          </motion.div>
         ))}
-        <button
+        <motion.button
           type="button"
           onClick={handleAddMember}
-          className="w-full p-2 border-2 border-dashed border-gray-300 rounded-md hover:border-gray-400 text-gray-600"
+          className="w-full p-3 border border-white/20 rounded-lg text-white hover:bg-white/5 transition-all"
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.99 }}
         >
-          + Ajouter un membre
-        </button>
+          + Ajouter un participant
+        </motion.button>
       </div>
 
-      <button
+      <motion.button
         type="submit"
         disabled={
           isLoading || !teamName.trim() || members.every((m) => !m.trim())
         }
-        className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50"
+        className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-6 rounded-lg font-bold text-lg shadow-lg hover:shadow-xl disabled:opacity-50 transition-all"
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
       >
-        {isLoading ? "Connexion..." : "Rejoindre la partie"}
-      </button>
-    </form>
+        {isLoading ? (
+          <span className="flex items-center justify-center">
+            <svg
+              className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            Connexion...
+          </span>
+        ) : (
+          "C'est parti ! 🎊"
+        )}
+      </motion.button>
+    </motion.form>
   );
 }

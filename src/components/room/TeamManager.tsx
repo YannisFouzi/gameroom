@@ -5,9 +5,13 @@ import { useState } from "react";
 
 type TeamManagerProps = {
   room: Room;
+  showCreateTeam?: boolean;
 };
 
-export default function TeamManager({ room }: TeamManagerProps) {
+export default function TeamManager({
+  room,
+  showCreateTeam = true,
+}: TeamManagerProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const { teamId, isHost } = usePlayer(room.id);
 
@@ -29,8 +33,8 @@ export default function TeamManager({ room }: TeamManagerProps) {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold">Équipes</h2>
-        {isHost && (
+        <h2 className="text-xl font-semibold text-white">Équipes</h2>
+        {showCreateTeam && isHost && (
           <button
             onClick={handleCreateTeam}
             disabled={isUpdating}

@@ -42,18 +42,20 @@ function RoomContent() {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Colonne de gauche: Contrôles et QR Code */}
-        <div className="space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black">
+      <div className="container mx-auto p-4 min-h-screen flex items-center justify-center">
+        <div className="max-w-2xl w-full space-y-8">
+          {/* Contrôles de l'hôte en haut */}
           {isHost && <HostControls room={room} />}
-          <RoomQRCode roomId={roomId as string} />
-        </div>
 
-        {/* Colonne centrale: Tableau des scores */}
-        <div className="lg:col-span-2">
+          {/* Liste des équipes au centre */}
           <ScoreBoard room={room} teamId={teamId} isHost={isHost} />
-          <TeamManager room={room} />
+          <TeamManager room={room} showCreateTeam={false} />
+
+          {/* QR Code en bas */}
+          <div className="mt-8">
+            <RoomQRCode roomId={roomId as string} />
+          </div>
         </div>
       </div>
     </div>

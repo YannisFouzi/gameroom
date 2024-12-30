@@ -22,15 +22,13 @@ export default function HostControls({ room }: HostControlsProps) {
   };
 
   return (
-    <div className="space-y-6 p-4 border rounded-lg">
-      <h2 className="text-xl font-semibold">Contrôles du maître du jeu</h2>
-
+    <div className="space-y-6 p-4 border rounded-lg bg-gradient-to-r from-purple-600 to-pink-600">
       <div className="space-y-4">
         {isWaiting && (
           <button
             onClick={handleStartGame}
             disabled={Object.keys(room.teams).length < 2 || isUpdating}
-            className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 disabled:opacity-50"
+            className="w-full bg-white/10 backdrop-blur-sm text-white py-2 px-4 rounded-md hover:bg-white/20 disabled:opacity-50 transition-all duration-200"
           >
             {isUpdating ? "Démarrage..." : "Démarrer la partie"}
           </button>
