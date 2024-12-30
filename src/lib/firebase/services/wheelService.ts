@@ -17,6 +17,9 @@ export const wheelService = {
         selectedTheme: null,
         subCategory: null,
         usedSubCategories: currentUsedSubCategories,
+        showQuestion: false,
+        questionAnswered: false,
+        selectedDifficulty: null,
       },
     });
   },
@@ -50,7 +53,26 @@ export const wheelService = {
         selectedTheme: theme,
         subCategory,
         usedSubCategories: updatedUsedSubCategories,
+        showQuestion: false,
+        questionAnswered: false,
+        selectedDifficulty: null,
       },
+    });
+  },
+
+  async selectDifficulty(roomId: string, difficulty: 1 | 3 | 5 | 8) {
+    const roomRef = doc(db, "rooms", roomId);
+    await updateDoc(roomRef, {
+      "gameData.wheelState.selectedDifficulty": difficulty,
+      "gameData.wheelState.showQuestion": true,
+    });
+  },
+
+  async answerQuestion(roomId: string, isCorrect: boolean) {
+    const roomRef = doc(db, "rooms", roomId);
+    await updateDoc(roomRef, {
+      "gameData.wheelState.questionAnswered": true,
+      "gameData.wheelState.showQuestion": false,
     });
   },
 };

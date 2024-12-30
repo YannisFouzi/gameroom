@@ -19,6 +19,14 @@ function WheelContent() {
   const [subCategory, setSubCategory] = useState<string | null>(null);
 
   const isCurrentTeam = room?.gameData?.currentTeamId === teamId;
+  const wheelState = room?.gameData?.wheelState;
+
+  useEffect(() => {
+    if (wheelState) {
+      setMustSpin(wheelState.isSpinning);
+      setPrizeNumber(wheelState.prizeNumber || 0);
+    }
+  }, [wheelState]);
 
   const handleSpinWheel = async () => {
     if (!room || mustSpin) return;
@@ -35,8 +43,7 @@ function WheelContent() {
 
     const theme = wheelData[prizeNumber].option as Theme;
     setSelectedTheme(theme);
-    const usedSubCategories =
-      room.gameData?.wheelState?.usedSubCategories || {};
+    const usedSubCategories = wheelState?.usedSubCategories || {};
     const randomSubCategory = getRandomSubCategory(theme, usedSubCategories);
     setSubCategory(randomSubCategory);
 
@@ -49,17 +56,18 @@ function WheelContent() {
     setMustSpin(false);
   };
 
-  useEffect(() => {
-    if (room?.gameData?.wheelState) {
-      setMustSpin(room.gameData.wheelState.isSpinning);
-      setPrizeNumber(room.gameData.wheelState.prizeNumber || 0);
-      setSelectedTheme(room.gameData.wheelState.selectedTheme);
-      setSubCategory(room.gameData.wheelState.subCategory);
-    }
-  }, [room?.gameData?.wheelState]);
+  const handleSelectDifficulty = async (difficulty: 1 | 3 | 5 | 8) => {
+    if (!room) return;
+    await wheelService.selectDifficulty(room.id, difficulty);
+  };
+
+  const handleAnswerQuestion = async (isCorrect: boolean) => {
+    if (!room) return;
+    await wheelService.answerQuestion(room.id, isCorrect);
+  };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto px-4">
       {isHost ? (
         <HostWheel
           mustSpin={mustSpin}
@@ -70,9 +78,13 @@ function WheelContent() {
         <PlayerWheel
           isCurrentTeam={isCurrentTeam}
           onSpinWheel={handleSpinWheel}
-          selectedTheme={selectedTheme}
-          subCategory={subCategory}
-          isSpinning={mustSpin}
+          selectedTheme={wheelState?.selectedTheme || null}
+          subCategory={wheelState?.subCategory || null}
+          isSpinning={wheelState?.isSpinning || false}
+          onSelectDifficulty={handleSelectDifficulty}
+          onAnswerQuestion={handleAnswerQuestion}
+          showQuestion={wheelState?.showQuestion || false}
+          selectedDifficulty={wheelState?.selectedDifficulty || null}
         />
       )}
     </div>
