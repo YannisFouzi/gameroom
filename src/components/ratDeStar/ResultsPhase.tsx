@@ -30,17 +30,17 @@ export function ResultsPhase({
             <h2 className="text-3xl font-bold text-white mb-4">
               🏆 Équipe Gagnante 🏆
             </h2>
-            <div className="flex items-center justify-center gap-4 mb-4">
+            <div className="flex items-center justify-center gap-4">
               <img
                 src={winningTeam.avatar}
                 alt={winningTeam.name}
-                className="w-16 h-16 rounded-full border-4 border-white"
+                className="w-24 h-auto object-contain"
               />
               <div>
                 <div className="text-2xl font-bold text-white">
                   {winningTeam.name}
                 </div>
-                <div className="text-sm text-yellow-100">
+                <div className="text-lg text-yellow-100">
                   {winningTeam.members.map((member) => member.name).join(", ")}
                 </div>
               </div>
@@ -48,33 +48,32 @@ export function ResultsPhase({
           </div>
         </div>
 
-        <h2 className="text-2xl font-bold mb-6 text-center">
-          Récapitulatif des trouvailles
-        </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
           {Object.entries(celebrities).map(([id, celebrity]) => (
-            <div key={id} className="space-y-2">
-              <img
-                src={celebrity.imageUrl}
-                alt={celebrity.name}
-                className="w-full aspect-square object-cover rounded-lg"
-              />
+            <div key={id} className="flex flex-col items-center space-y-2">
+              <div className="flex items-center justify-center">
+                <img
+                  src={celebrity.imageUrl}
+                  alt={celebrity.name}
+                  className="w-full h-auto object-contain"
+                  style={{ maxHeight: "200px" }}
+                />
+              </div>
               {celebrity.foundBy && (
-                <div className="text-sm text-center text-green-600">
-                  Trouvé par{" "}
-                  {teams[celebrity.foundBy]?.name || "équipe inconnue"}
+                <div className="text-lg font-medium text-green-500">
+                  Trouvé par {teams[celebrity.foundBy]?.name}
                 </div>
               )}
             </div>
           ))}
         </div>
 
-        <div className="mt-8 text-center">
+        <div className="mt-12 text-center">
           <button
             onClick={onNextGame}
-            className="bg-blue-600 text-white py-3 px-8 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors"
+            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-8 rounded-xl font-bold text-xl shadow-lg hover:opacity-90 transition-all"
           >
-            Passer au jeu suivant : Qui veut gagner des millions
+            Passer au jeu suivant →
           </button>
         </div>
       </div>
