@@ -24,15 +24,18 @@ export default function ScoreDisplay({ room, currentTeam }: ScoreDisplayProps) {
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <img
-                  src={team.avatar}
-                  alt={team.name}
-                  className="w-8 h-8 rounded-full"
-                />
+                <div className="w-12 h-12 flex items-center justify-center">
+                  <img
+                    src={team.avatar}
+                    alt={team.name}
+                    className="max-w-full max-h-full object-contain"
+                  />
+                </div>
                 <span className="font-medium text-black">{team.name}</span>
               </div>
               <span className="text-xl font-bold text-black">
-                {scores[teamId] || 0} points
+                {scores[teamId] || 0} point
+                {(scores[teamId] || 0) > 1 ? "s" : ""}
               </span>
             </div>
           </motion.div>
