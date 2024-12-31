@@ -6,9 +6,14 @@ import LiquidFillGauge from "react-liquid-gauge";
 type ScoreGaugeProps = {
   score: number;
   teamName: string;
+  avatar: string;
 };
 
-export default function ScoreGauge({ score, teamName }: ScoreGaugeProps) {
+export default function ScoreGauge({
+  score,
+  teamName,
+  avatar,
+}: ScoreGaugeProps) {
   console.log("ScoreGauge render:", { score, teamName });
   const [currentScore, setCurrentScore] = useState(score);
 
@@ -49,6 +54,11 @@ export default function ScoreGauge({ score, teamName }: ScoreGaugeProps) {
 
   return (
     <div className="flex flex-col items-center">
+      <img
+        src={avatar}
+        alt={`Avatar ${teamName}`}
+        className="w-16 h-16 mb-2 rounded-full"
+      />
       <h3 className="text-lg font-semibold mb-2 text-white">{teamName}</h3>
       <LiquidFillGauge
         key={currentScore}

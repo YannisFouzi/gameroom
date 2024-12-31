@@ -28,6 +28,7 @@ export default function HostWheel({
             key={teamId}
             score={scores[teamId] || 0}
             teamName={teams[teamId]?.name || "Équipe"}
+            avatar={teams[teamId]?.avatar || ""}
           />
         ))}
       </div>
