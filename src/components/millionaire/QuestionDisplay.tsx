@@ -244,9 +244,9 @@ export default function QuestionDisplay({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative mb-8 p-12 rounded-xl overflow-hidden min-h-[200px] flex items-center justify-center"
+        className="relative mb-6 p-6 rounded-xl overflow-hidden min-h-[120px] flex items-center justify-center w-full max-w-5xl mx-auto"
       >
-        {/* Background animé plus visible */}
+        {/* Background animé */}
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-700">
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
           <motion.div
@@ -255,7 +255,7 @@ export default function QuestionDisplay({
               x: ["0%", "100%", "0%"],
             }}
             transition={{
-              duration: 3, // Plus rapide
+              duration: 3,
               ease: "easeInOut",
               repeat: Infinity,
             }}
@@ -264,9 +264,7 @@ export default function QuestionDisplay({
 
         {/* Contenu de la question */}
         <div className="relative text-center w-full">
-          <p className="text-2xl text-white/90 max-w-3xl mx-auto">
-            {question.text}
-          </p>
+          <p className="text-2xl text-white/90">{question.text}</p>
         </div>
       </motion.div>
 
