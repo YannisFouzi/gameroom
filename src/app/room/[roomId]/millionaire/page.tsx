@@ -180,8 +180,10 @@ function MillionaireContent() {
   const playerTeam = teamId ? room.teams[teamId] : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4">
-      <div className="container mx-auto">
+    <div className={`min-h-screen ${isHost ? "flex gap-12 p-12" : "p-6"}`}>
+      {/* Colonne principale (2/3) - Questions et réponses */}
+      <div className={`${isHost ? "w-3/4" : "w-full"} max-w-[1400px] mx-auto`}>
+        {/* Info équipe pour les joueurs */}
         {!isHost && playerTeam && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -201,15 +203,14 @@ function MillionaireContent() {
               <img
                 src={playerTeam.avatar}
                 alt={playerTeam.name}
-                className="w-24 h-24 mx-auto"
+                className="w-24 h-24 mx-auto rounded-full"
               />
             </motion.div>
 
             <div className="space-y-4">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent">
+              <h1 className="text-4xl font-bold text-white">
                 {playerTeam.name}
               </h1>
-
               <div className="space-y-2">
                 {playerTeam.members.map((member, index) => (
                   <motion.div
@@ -227,93 +228,90 @@ function MillionaireContent() {
           </motion.div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div className={`${isHost ? "lg:col-span-3" : "lg:col-span-4"}`}>
-            {isHost && <ScoreDisplay room={room} currentTeam={currentTeam} />}
+        {/* Message pour les joueurs qui ne jouent pas */}
+        {!isHost && !isCurrentTeam && (
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold text-white mb-4">
+              C'est au tour de l'équipe {room.teams[currentTeam]?.name}
+            </h3>
+            <p className="text-xl text-white/80">
+              Attendez votre tour pour jouer...
+            </p>
+          </div>
+        )}
 
+        {/* Scores uniquement pour l'hôte */}
+        {isHost && <ScoreDisplay room={room} currentTeam={currentTeam} />}
+
+        {gameData?.currentCategory ? (
+          <QuestionDisplay
+            question={
+              millionaireQuestions[gameData.currentCategory][
+                gameData.currentQuestionIndex
+              ]
+            }
+            onAnswer={handleAnswer}
+            onNextQuestion={handleNextQuestion}
+            onQuit={handleQuit}
+            onQuitWithPoints={handleQuitWithPoints}
+            currentPoints={
+              millionaireQuestions[gameData.currentCategory][
+                gameData.currentQuestionIndex
+              ].points
+            }
+            isHost={isHost}
+            isCurrentTeam={isCurrentTeam}
+            questionIndex={gameData.currentQuestionIndex}
+            jokers={currentJokers}
+            onUsePhoneCall={handleUsePhoneCall}
+            onUseFiftyFifty={handleUseFiftyFifty}
+            onUseDoubleAnswer={handleUseDoubleAnswer}
+            selectedAnswer={
+              gameData.selectedAnswer !== null
+                ? parseInt(gameData.selectedAnswer)
+                : null
+            }
+            answerState={gameData.answerState}
+            selectedAnswers={gameData.selectedAnswers}
+            onUpdateAnswerState={handleUpdateAnswerState}
+            phoneCallModalOpen={gameData.phoneCallModalOpen || false}
+            onPhoneCallModalChange={handlePhoneCallModalChange}
+            hiddenAnswers={gameData.hiddenAnswers}
+            onSetHiddenAnswers={handleSetHiddenAnswers}
+            doubleAnswerActive={gameData.doubleAnswerActive}
+            onSetDoubleAnswerActive={handleSetDoubleAnswerActive}
+          />
+        ) : (
+          <>
+            {/* Message d'attente pour l'hôte */}
             {isHost && (
-              <div className="mb-6">
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 text-center"
-                >
-                  {gameData.currentCategory ? (
-                    <p className="text-2xl font-bold text-white">
-                      Catégorie {gameData.currentCategory}
-                    </p>
-                  ) : (
-                    <p className="text-lg text-white/80">
-                      En attente de la sélection de la catégorie...
-                    </p>
-                  )}
-                </motion.div>
-              </div>
-            )}
-
-            {!isHost && !isCurrentTeam ? (
-              <div className="max-w-2xl mx-auto p-6 text-center">
-                <h3 className="text-xl font-semibold mb-4">
-                  C'est le tour de l'équipe {room.teams[currentTeam]?.name}
+              <div className="text-center mb-8">
+                <h3 className="text-2xl font-bold text-white mb-4">
+                  L'équipe {room.teams[currentTeam]?.name} choisit sa catégorie
                 </h3>
-                <p className="text-white/80">
-                  Attendez votre tour pour jouer...
+                <p className="text-xl text-white/80">
+                  En attente de la sélection...
                 </p>
               </div>
-            ) : !gameData.currentCategory ? (
-              <CategorySelector
-                usedCategories={gameData.usedCategories}
-                onSelectCategory={handleCategorySelect}
-                isCurrentTeam={isCurrentTeam}
-              />
-            ) : (
-              <QuestionDisplay
-                question={
-                  millionaireQuestions[gameData.currentCategory][
-                    gameData.currentQuestionIndex
-                  ]
-                }
-                onAnswer={handleAnswer}
-                onNextQuestion={handleNextQuestion}
-                onQuit={handleQuit}
-                onQuitWithPoints={handleQuitWithPoints}
-                currentPoints={
-                  millionaireQuestions[gameData.currentCategory][
-                    gameData.currentQuestionIndex
-                  ].points
-                }
-                isHost={isHost}
-                isCurrentTeam={isCurrentTeam}
-                questionIndex={gameData.currentQuestionIndex}
-                jokers={currentJokers}
-                onUsePhoneCall={handleUsePhoneCall}
-                onUseFiftyFifty={handleUseFiftyFifty}
-                onUseDoubleAnswer={handleUseDoubleAnswer}
-                selectedAnswer={
-                  gameData.selectedAnswer !== null
-                    ? parseInt(gameData.selectedAnswer)
-                    : null
-                }
-                answerState={gameData.answerState}
-                selectedAnswers={gameData.selectedAnswers}
-                onUpdateAnswerState={handleUpdateAnswerState}
-                phoneCallModalOpen={gameData.phoneCallModalOpen || false}
-                onPhoneCallModalChange={handlePhoneCallModalChange}
-                hiddenAnswers={gameData.hiddenAnswers}
-                onSetHiddenAnswers={handleSetHiddenAnswers}
-                doubleAnswerActive={gameData.doubleAnswerActive}
-                onSetDoubleAnswerActive={handleSetDoubleAnswerActive}
-              />
             )}
-          </div>
-
-          {isHost && gameData.currentCategory && (
-            <div className="lg:col-span-1">
-              <ProgressLadder currentQuestion={gameData.currentQuestionIndex} />
-            </div>
-          )}
-        </div>
+            <CategorySelector
+              onSelectCategory={handleCategorySelect}
+              usedCategories={gameData?.usedCategories || []}
+              isHost={isHost}
+              isCurrentTeam={isCurrentTeam}
+            />
+          </>
+        )}
       </div>
+
+      {/* Colonne latérale (1/4) - Paliers uniquement pour l'hôte */}
+      {isHost && (
+        <div className="w-1/4">
+          <ProgressLadder
+            currentQuestion={gameData?.currentQuestionIndex || 0}
+          />
+        </div>
+      )}
     </div>
   );
 }

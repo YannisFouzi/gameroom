@@ -244,7 +244,7 @@ export default function QuestionDisplay({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative mb-8 p-8 rounded-xl overflow-hidden"
+        className="relative mb-8 p-12 rounded-xl overflow-hidden min-h-[200px] flex items-center justify-center"
       >
         {/* Background animé plus visible */}
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-700">
@@ -263,11 +263,13 @@ export default function QuestionDisplay({
         </div>
 
         {/* Contenu de la question */}
-        <div className="relative">
-          <h2 className="text-2xl font-bold text-white mb-2">
+        <div className="relative text-center w-full">
+          <h2 className="text-3xl font-bold text-white mb-4">
             Question {questionIndex + 1}
           </h2>
-          <p className="text-xl text-white/90">{question.text}</p>
+          <p className="text-2xl text-white/90 max-w-3xl mx-auto">
+            {question.text}
+          </p>
         </div>
       </motion.div>
 
@@ -286,8 +288,17 @@ export default function QuestionDisplay({
               whileHover={{ scale: isHost || !isCurrentTeam ? 1 : 1.02 }}
               whileTap={{ scale: isHost || !isCurrentTeam ? 1 : 0.98 }}
               className={`p-6 rounded-xl flex items-center justify-center transition-all duration-200 border-2 shadow-lg ${
-                // État sélectionné
-                answerState === "selected" && index === selectedAnswer
+                // Double réponse - Affichage des résultats
+                doubleAnswerActive &&
+                (answerState === "correct" || answerState === "incorrect")
+                  ? selectedAnswers.includes(index)
+                    ? index === question.correctAnswer
+                      ? "bg-gradient-to-br from-emerald-500 to-green-600 border-emerald-400 text-white" // Bonne réponse sélectionnée
+                      : "bg-gradient-to-br from-rose-500 to-red-600 border-rose-400 text-white" // Mauvaise réponse sélectionnée
+                    : "bg-white/80 border-gray-200" // Réponses non sélectionnées
+                  : // État sélectionné normal (pendant la sélection)
+                  (answerState === "selected" && index === selectedAnswer) ||
+                    (doubleAnswerActive && selectedAnswers.includes(index))
                   ? "bg-gradient-to-br from-orange-500 to-orange-600 border-orange-400 text-white"
                   : // État correct
                   answerState === "correct" && index === selectedAnswer
