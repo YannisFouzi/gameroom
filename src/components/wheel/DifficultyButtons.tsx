@@ -1,7 +1,7 @@
 import { Question } from "@/data/questions";
 
 type DifficultyButtonsProps = {
-  onSelectDifficulty: (difficulty: 1 | 3 | 5 | 8) => void;
+  onSelectDifficulty: (difficulty: 2 | 4 | 7 | 10) => void;
   questions: Question[];
   isVisible: boolean;
 };
@@ -18,28 +18,28 @@ export default function DifficultyButtons({
       <h3 className="text-xl font-semibold mb-2">Choisissez la difficulté :</h3>
       <div className="grid grid-cols-2 gap-4">
         <button
-          onClick={() => onSelectDifficulty(1)}
+          onClick={() => onSelectDifficulty(2)}
           className="bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-600"
         >
-          1 point
+          2 points
         </button>
         <button
-          onClick={() => onSelectDifficulty(3)}
+          onClick={() => onSelectDifficulty(4)}
           className="bg-yellow-500 text-white py-3 px-6 rounded-lg hover:bg-yellow-600"
         >
-          3 points
+          4 points
         </button>
         <button
-          onClick={() => onSelectDifficulty(5)}
+          onClick={() => onSelectDifficulty(7)}
           className="bg-orange-500 text-white py-3 px-6 rounded-lg hover:bg-orange-600"
         >
-          5 points
+          7 points
         </button>
         <button
-          onClick={() => onSelectDifficulty(8)}
+          onClick={() => onSelectDifficulty(10)}
           className="bg-red-500 text-white py-3 px-6 rounded-lg hover:bg-red-600"
         >
-          8 points
+          10 points
         </button>
       </div>
     </div>

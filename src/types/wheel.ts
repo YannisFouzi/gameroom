@@ -21,7 +21,7 @@ export type WheelState = {
   usedSubCategories: Partial<Record<Theme, string[]>>;
   showQuestion: boolean;
   questionAnswered: boolean;
-  selectedDifficulty: 1 | 3 | 5 | 8 | null;
+  selectedDifficulty: 2 | 4 | 7 | 10 | null;
   scores: Record<string, number>;
   gameFinished: boolean;
 };

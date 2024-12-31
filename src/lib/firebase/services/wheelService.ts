@@ -65,7 +65,7 @@ export const wheelService = {
     });
   },
 
-  async selectDifficulty(roomId: string, difficulty: 1 | 3 | 5 | 8) {
+  async selectDifficulty(roomId: string, difficulty: 2 | 4 | 7 | 10) {
     const roomRef = doc(db, "rooms", roomId);
     await updateDoc(roomRef, {
       "gameData.wheelState.selectedDifficulty": difficulty,
@@ -77,7 +77,7 @@ export const wheelService = {
     roomId: string,
     isCorrect: boolean,
     teamId: string,
-    difficulty: 1 | 3 | 5 | 8
+    difficulty: 2 | 4 | 7 | 10
   ) {
     const roomRef = doc(db, "rooms", roomId);
     const roomDoc = await getDoc(roomRef);

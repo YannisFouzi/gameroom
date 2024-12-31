@@ -68,7 +68,7 @@ function WheelContent() {
     setMustSpin(false);
   };
 
-  const handleSelectDifficulty = async (difficulty: 1 | 3 | 5 | 8) => {
+  const handleSelectDifficulty = async (difficulty: 2 | 4 | 7 | 10) => {
     if (!room) return;
     await wheelService.selectDifficulty(room.id, difficulty);
   };
@@ -79,7 +79,7 @@ function WheelContent() {
       room.id,
       isCorrect,
       room.gameData?.currentTeamId || "",
-      wheelState?.selectedDifficulty || 1
+      wheelState?.selectedDifficulty || 2
     );
     await gameTransitionService.switchTeam(room.id);
   };

@@ -11,10 +11,10 @@ type PlayerWheelProps = {
   selectedTheme: Theme | null;
   subCategory: string | null;
   isSpinning: boolean;
-  onSelectDifficulty: (difficulty: 1 | 3 | 5 | 8) => void;
+  onSelectDifficulty: (difficulty: 2 | 4 | 7 | 10) => void;
   onAnswerQuestion: (isCorrect: boolean) => void;
   showQuestion: boolean;
-  selectedDifficulty: 1 | 3 | 5 | 8 | null;
+  selectedDifficulty: 2 | 4 | 7 | 10 | null;
   questionAnswered: boolean;
   currentTeam: Team | null;
 };
