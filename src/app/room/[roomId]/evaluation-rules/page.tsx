@@ -144,8 +144,9 @@ function EvaluationRulesContent() {
             <div className="text-3xl mb-4">⭐</div>
             <h3 className="text-xl font-bold text-white mb-2">Difficulté</h3>
             <p className="text-white/80">
-              L'équipe qui répond choisit un niveau de difficulté (1 à 5). Plus
-              c'est difficile, plus vous avancez !
+              L'équipe qui répond choisit un niveau de difficulté parmi 4
+              paliers : 2, 4, 7 ou 10 points. Plus c'est difficile, plus vous
+              avancez !
             </p>
           </motion.div>
 
