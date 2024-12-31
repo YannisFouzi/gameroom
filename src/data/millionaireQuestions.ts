@@ -15,7 +15,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
       text: "Quel est le nom de la ville qui a été la capitale de l'Empire Romain ?",
       answers: ["Athènes", "Rome", "Carthage", "Constantinople"],
       correctAnswer: 1,
-      points: 1,
+      points: 2,
       category: "histoire",
     },
     {
@@ -28,7 +28,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Christophe Colomb",
       ],
       correctAnswer: 3,
-      points: 1,
+      points: 3,
       category: "histoire",
     },
     {
@@ -41,7 +41,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Bataille de Borodino",
       ],
       correctAnswer: 2,
-      points: 2,
+      points: 4,
       category: "histoire",
     },
     {
@@ -54,7 +54,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Le canal de Suez",
       ],
       correctAnswer: 3,
-      points: 1,
+      points: 5,
       category: "histoire",
     },
     {
@@ -62,7 +62,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
       text: "En quelle année la France a-t-elle aboli la peine de mort ?",
       answers: ["1979", "1981", "1999", "1975"],
       correctAnswer: 1,
-      points: 2,
+      points: 7,
       category: "histoire",
     },
     {
@@ -75,7 +75,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Ferdinand Foch",
       ],
       correctAnswer: 2,
-      points: 2,
+      points: 8,
       category: "histoire",
     },
     {
@@ -83,7 +83,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
       text: "Qui fut le dernier empereur d'Occident avant la chute de l'Empire romain en 476 ?",
       answers: ["Honorius", "Théodose II", "Auguste", "Romulus Augustule"],
       correctAnswer: 3,
-      points: 3,
+      points: 9,
       category: "histoire",
     },
     {
@@ -96,7 +96,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Traité de Bruxelles",
       ],
       correctAnswer: 2,
-      points: 2,
+      points: 10,
       category: "histoire",
     },
     {
@@ -109,7 +109,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Martin Luther King Jr.",
       ],
       correctAnswer: 3,
-      points: 2,
+      points: 12,
       category: "histoire",
     },
     {
@@ -122,7 +122,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "L'Empire Mongol",
       ],
       correctAnswer: 1,
-      points: 3,
+      points: 14,
       category: "histoire",
     },
     {
@@ -135,7 +135,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Traité de Versailles",
       ],
       correctAnswer: 2,
-      points: 3,
+      points: 15,
       category: "histoire",
     },
     {
@@ -143,7 +143,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
       text: "En quelle année l'Empire romain d'Occident est-il tombé ?",
       answers: ["395", "482", "476", "499"],
       correctAnswer: 2,
-      points: 2,
+      points: 16,
       category: "histoire",
     },
     {
@@ -151,7 +151,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
       text: "En quelle année l'Empire colonial français a-t-il perdu l'Indochine ?",
       answers: ["1952", "1962", "1965", "1954"],
       correctAnswer: 3,
-      points: 2,
+      points: 18,
       category: "histoire",
     },
     {
@@ -159,7 +159,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
       text: "Quel empereur chinois a fondé la dynastie Ming en 1368 après avoir renversé la dynastie Yuan ?",
       answers: ["Kangxi", "Zhu Yuanzhang", "Qianlong", "Taizu"],
       correctAnswer: 1,
-      points: 3,
+      points: 20,
       category: "histoire",
     },
   ],
@@ -174,7 +174,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Olympique de Marseille",
       ],
       correctAnswer: 3,
-      points: 2,
+      points: 1,
       category: "sport",
     },
     {
@@ -195,7 +195,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
       text: "Quelle équipe nationale a remporté le plus de titres en Coupe du Monde de football ?",
       answers: ["Italie", "Le Brésil", "Pays-Bas", "France"],
       correctAnswer: 1,
-      points: 2,
+      points: 3,
       category: "sport",
     },
     {
@@ -208,7 +208,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Marcel Desailly",
       ],
       correctAnswer: 2,
-      points: 2,
+      points: 4,
       category: "sport",
     },
     {
@@ -221,7 +221,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Eddy Merckx",
       ],
       correctAnswer: 1,
-      points: 2,
+      points: 5,
       category: "sport",
     },
     {
@@ -229,7 +229,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
       text: "En quelle année a eu lieu la première édition des Jeux Olympiques modernes ?",
       answers: ["1800", "1828", "1896", "1515"],
       correctAnswer: 2,
-      points: 2,
+      points: 7,
       category: "sport",
     },
     {
@@ -242,7 +242,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Nathalie Tauziat",
       ],
       correctAnswer: 1,
-      points: 2,
+      points: 8,
       category: "sport",
     },
     {
@@ -255,7 +255,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Girondins de Bordeaux",
       ],
       correctAnswer: 2,
-      points: 3,
+      points: 9,
       category: "sport",
     },
     {
@@ -268,7 +268,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Luc Alphand",
       ],
       correctAnswer: 1,
-      points: 3,
+      points: 10,
       category: "sport",
     },
     {
@@ -281,7 +281,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Novak Djokovic",
       ],
       correctAnswer: 1,
-      points: 2,
+      points: 12,
       category: "sport",
     },
     {
@@ -294,7 +294,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Afrique du Sud",
       ],
       correctAnswer: 1,
-      points: 2,
+      points: 14,
       category: "sport",
     },
     {
@@ -307,7 +307,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Lothar Matthäus",
       ],
       correctAnswer: 3,
-      points: 3,
+      points: 15,
       category: "sport",
     },
     {
@@ -315,7 +315,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
       text: "Quel joueur détient le record absolu de buts marqués en Coupe du Monde de football ?",
       answers: ["Gerd Müller", "Miroslav Klose", "Just Fontaine", "Ronaldo"],
       correctAnswer: 1,
-      points: 2,
+      points: 16,
       category: "sport",
     },
     {
@@ -328,7 +328,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "LeBron James",
       ],
       correctAnswer: 2,
-      points: 3,
+      points: 18,
       category: "sport",
     },
     {
@@ -341,7 +341,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Manny Pacquiao",
       ],
       correctAnswer: 1,
-      points: 3,
+      points: 20,
       category: "sport",
     },
   ],
@@ -356,7 +356,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "La Guerre des étoiles",
       ],
       correctAnswer: 1,
-      points: 2,
+      points: 1,
       category: "annees80",
     },
     {
@@ -377,7 +377,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
       text: 'Quel chanteur a interprété le tube "Like a Virgin" en 1984 ?',
       answers: ["Cyndi Lauper", "Whitney Houston", "Madonna", "Tina Turner"],
       correctAnswer: 2,
-      points: 2,
+      points: 3,
       category: "annees80",
     },
     {
@@ -385,7 +385,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
       text: "Quel film musical de 1987 avec Patrick Swayze et Jennifer Grey raconte une histoire d'amour dans une station balnéaire ?",
       answers: ["Footloose", "Dirty Dancing", "Grease", "Fame"],
       correctAnswer: 1,
-      points: 2,
+      points: 4,
       category: "annees80",
     },
     {
@@ -398,7 +398,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Duran Duran",
       ],
       correctAnswer: 2,
-      points: 2,
+      points: 5,
       category: "annees80",
     },
     {
@@ -406,7 +406,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
       text: "Qui a interprété le célèbre tube \"Don't Stop Believin'\" sorti en 1981 ?",
       answers: ["Queen", "U2", "Journey", "Bon Jovi"],
       correctAnswer: 2,
-      points: 2,
+      points: 7,
       category: "annees80",
     },
     {
@@ -419,7 +419,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Heath Ledger",
       ],
       correctAnswer: 1,
-      points: 2,
+      points: 8,
       category: "annees80",
     },
     {
@@ -427,7 +427,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
       text: 'Qui a chanté "Girls Just Want to Have Fun" en 1983 ?',
       answers: ["Madonna", "Diana Ross", "Janet Jackson", "Cyndi Lauper"],
       correctAnswer: 3,
-      points: 2,
+      points: 9,
       category: "annees80",
     },
     {
@@ -435,7 +435,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
       text: 'En 1983, quel groupe britannique a sorti le tube "Every Breath You Take" ?',
       answers: ["The Rolling Stones", "The Police", "Queen", "The Clash"],
       correctAnswer: 1,
-      points: 2,
+      points: 10,
       category: "annees80",
     },
     {
@@ -448,7 +448,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Pierce Brosnan",
       ],
       correctAnswer: 2,
-      points: 2,
+      points: 12,
       category: "annees80",
     },
     {
@@ -456,7 +456,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
       text: "Quel film culte de 1986, réalisé par Tony Scott, met en scène des pilotes de chasse dans l'US Navy ?",
       answers: ["Les Goonies", "Top Gun", "Predators", "Apocalypse Now"],
       correctAnswer: 1,
-      points: 2,
+      points: 14,
       category: "annees80",
     },
     {
@@ -469,7 +469,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Super Mario Bros.",
       ],
       correctAnswer: 3,
-      points: 2,
+      points: 15,
       category: "annees80",
     },
     {
@@ -477,7 +477,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
       text: "En quelle année la célèbre chaîne musicale MTV a-t-elle été lancée aux États-Unis ?",
       answers: ["1983", "1980", "1981", "1985"],
       correctAnswer: 2,
-      points: 2,
+      points: 16,
       category: "annees80",
     },
     {
@@ -490,7 +490,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Le Dernier Empereur",
       ],
       correctAnswer: 1,
-      points: 2,
+      points: 18,
       category: "annees80",
     },
     {
@@ -498,7 +498,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
       text: "Quel événement musical majeur a eu lieu en 1985 et a réuni plus de 70 artistes internationaux pour lutter contre la famine en Éthiopie, avec des performances en direct à Londres et Philadelphie ?",
       answers: ["Band Aid", "Live Aid", "World Aid", "Unity"],
       correctAnswer: 1,
-      points: 3,
+      points: 20,
       category: "annees80",
     },
   ],
@@ -513,7 +513,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "L'amour est dans le pré",
       ],
       correctAnswer: 2,
-      points: 2,
+      points: 1,
       category: "television",
     },
     {
@@ -534,7 +534,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Cauchemar en cuisine",
       ],
       correctAnswer: 2,
-      points: 2,
+      points: 3,
       category: "television",
     },
     {
@@ -547,7 +547,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Michel Sardou",
       ],
       correctAnswer: 1,
-      points: 2,
+      points: 4,
       category: "television",
     },
     {
@@ -560,7 +560,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Jacques Martin",
       ],
       correctAnswer: 3,
-      points: 2,
+      points: 5,
       category: "television",
     },
     {
@@ -573,7 +573,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Les Enquêtes de Maître Lefort",
       ],
       correctAnswer: 2,
-      points: 2,
+      points: 7,
       category: "television",
     },
     {
@@ -586,7 +586,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Kenneth Branagh",
       ],
       correctAnswer: 2,
-      points: 2,
+      points: 8,
       category: "television",
     },
     {
@@ -599,7 +599,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Le Juste Prix",
       ],
       correctAnswer: 1,
-      points: 2,
+      points: 9,
       category: "television",
     },
     {
@@ -612,7 +612,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Le Gendarme de Saint-Tropez",
       ],
       correctAnswer: 1,
-      points: 2,
+      points: 10,
       category: "television",
     },
     {
@@ -625,7 +625,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Magnum",
       ],
       correctAnswer: 2,
-      points: 2,
+      points: 12,
       category: "television",
     },
     {
@@ -638,7 +638,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Stars à domicile",
       ],
       correctAnswer: 2,
-      points: 2,
+      points: 14,
       category: "television",
     },
     {
@@ -651,7 +651,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Cyrano de Bergerac",
       ],
       correctAnswer: 1,
-      points: 2,
+      points: 15,
       category: "television",
     },
     {
@@ -664,7 +664,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Hélène et les garçons",
       ],
       correctAnswer: 2,
-      points: 2,
+      points: 16,
       category: "television",
     },
     {
@@ -677,7 +677,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Jean-Paul Belmondo",
       ],
       correctAnswer: 2,
-      points: 2,
+      points: 18,
       category: "television",
     },
     {
@@ -690,7 +690,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
         "Gérard Depardieu",
       ],
       correctAnswer: 2,
-      points: 2,
+      points: 20,
       category: "television",
     },
   ],

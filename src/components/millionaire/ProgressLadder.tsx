@@ -16,22 +16,22 @@ export default function ProgressLadder({
 }: ProgressLadderProps) {
   const steps: Step[] = [
     // Palier victoire
-    { level: 15, points: 4, isSecureLevel: false, isVictoryLevel: true },
-    { level: 14, points: 4, isSecureLevel: false },
-    { level: 13, points: 3, isSecureLevel: false },
-    { level: 12, points: 3, isSecureLevel: false },
-    { level: 11, points: 3, isSecureLevel: false },
+    { level: 15, points: 20, isSecureLevel: false, isVictoryLevel: true },
+    { level: 14, points: 18, isSecureLevel: false },
+    { level: 13, points: 16, isSecureLevel: false },
+    { level: 12, points: 15, isSecureLevel: false },
+    { level: 11, points: 14, isSecureLevel: false },
     // Palier sécurité 2
-    { level: 10, points: 3, isSecureLevel: true },
-    { level: 9, points: 2, isSecureLevel: false },
-    { level: 8, points: 2, isSecureLevel: false },
-    { level: 7, points: 2, isSecureLevel: false },
-    { level: 6, points: 2, isSecureLevel: false },
+    { level: 10, points: 12, isSecureLevel: true },
+    { level: 9, points: 10, isSecureLevel: false },
+    { level: 8, points: 9, isSecureLevel: false },
+    { level: 7, points: 8, isSecureLevel: false },
+    { level: 6, points: 7, isSecureLevel: false },
     // Palier sécurité 1
-    { level: 5, points: 2, isSecureLevel: true },
-    { level: 4, points: 1, isSecureLevel: false },
-    { level: 3, points: 1, isSecureLevel: false },
-    { level: 2, points: 1, isSecureLevel: false },
+    { level: 5, points: 5, isSecureLevel: true },
+    { level: 4, points: 4, isSecureLevel: false },
+    { level: 3, points: 3, isSecureLevel: false },
+    { level: 2, points: 2, isSecureLevel: false },
     { level: 1, points: 1, isSecureLevel: false },
   ];
 
@@ -63,7 +63,7 @@ export default function ProgressLadder({
             >
               <span>
                 {step.level.toString().padStart(2, "0")}
-                {currentQuestion + 1 === step.level && " ←"}
+                {currentQuestion + 1 === step.level && ""}
               </span>
               <span>
                 {step.points} point{step.points > 1 ? "s" : ""}
