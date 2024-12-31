@@ -264,9 +264,6 @@ export default function QuestionDisplay({
 
         {/* Contenu de la question */}
         <div className="relative text-center w-full">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Question {questionIndex + 1}
-          </h2>
           <p className="text-2xl text-white/90 max-w-3xl mx-auto">
             {question.text}
           </p>

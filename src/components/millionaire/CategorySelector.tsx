@@ -40,23 +40,42 @@ export default function CategorySelector({
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-6">
         {(Object.keys(millionaireQuestions) as MillionaireCategory[]).map(
           (category) => {
             const categoryInfo = categories.find((c) => c.id === category);
+            const isUsed = usedCategories.includes(category);
+
             return (
               <button
                 key={category}
                 onClick={() => onSelectCategory(category)}
-                disabled={usedCategories.includes(category)}
-                className={`p-6 rounded-lg text-center ${
-                  usedCategories.includes(category)
-                    ? "bg-gray-100 cursor-not-allowed text-gray-500"
-                    : "bg-blue-50 hover:bg-blue-100 text-black"
+                disabled={isUsed}
+                className={`p-8 rounded-xl text-center transition-all duration-200 relative overflow-hidden ${
+                  isUsed
+                    ? "bg-gradient-to-br from-gray-700 to-gray-800 cursor-not-allowed border-2 border-gray-600"
+                    : "bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 border-2 border-blue-400 shadow-lg hover:shadow-xl"
                 }`}
               >
-                <div className="text-4xl mb-2">{categoryInfo?.icon}</div>
-                <h3 className="text-lg font-medium">{categoryInfo?.name}</h3>
+                {isUsed && (
+                  <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] flex items-center justify-center">
+                    <span className="text-2xl text-white/90 font-bold">
+                      Déjà utilisée
+                    </span>
+                  </div>
+                )}
+                <div
+                  className={`text-5xl mb-4 ${isUsed ? "text-gray-400" : ""}`}
+                >
+                  {categoryInfo?.icon}
+                </div>
+                <h3
+                  className={`text-xl font-bold ${
+                    isUsed ? "text-gray-400" : "text-white"
+                  }`}
+                >
+                  {categoryInfo?.name}
+                </h3>
               </button>
             );
           }

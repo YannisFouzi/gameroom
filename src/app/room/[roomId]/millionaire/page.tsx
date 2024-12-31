@@ -26,6 +26,17 @@ function MillionaireContent() {
   const { room } = useRoom();
   const { teamId, isHost } = usePlayer(room?.id || "");
 
+  const categories = [
+    {
+      id: "histoire" as MillionaireCategory,
+      name: "Histoire & Géographie",
+      icon: "🌍",
+    },
+    { id: "sport" as MillionaireCategory, name: "Sport", icon: "⚽" },
+    { id: "annees80" as MillionaireCategory, name: "Années 80", icon: "🕹️" },
+    { id: "television" as MillionaireCategory, name: "Télévision", icon: "📺" },
+  ];
+
   const gameData: MillionaireGameData = {
     currentTeamIndex: room?.gameData?.currentTeamIndex || 0,
     remainingTeams: room?.gameData?.remainingTeams || [],
@@ -243,6 +254,15 @@ function MillionaireContent() {
         {/* Scores uniquement pour l'hôte */}
         {isHost && <ScoreDisplay room={room} currentTeam={currentTeam} />}
 
+        {/* Affichage simple de la catégorie en cours */}
+        {isHost && gameData.currentCategory && (
+          <div className="text-center mb-6">
+            <h3 className="text-2xl font-semibold text-white bg-white/5 backdrop-blur-sm px-6 py-3 rounded-lg inline-block">
+              {categories.find((c) => c.id === gameData.currentCategory)?.name}
+            </h3>
+          </div>
+        )}
+
         {gameData?.currentCategory ? (
           <QuestionDisplay
             question={
@@ -287,11 +307,58 @@ function MillionaireContent() {
             {isHost && (
               <div className="text-center mb-8">
                 <h3 className="text-2xl font-bold text-white mb-4">
-                  L'équipe {room.teams[currentTeam]?.name} choisit sa catégorie
+                  {gameData.currentCategory ? (
+                    <>
+                      L'équipe {room.teams[currentTeam]?.name} joue en{" "}
+                      {
+                        categories.find(
+                          (c) => c.id === gameData.currentCategory
+                        )?.name
+                      }
+                    </>
+                  ) : (
+                    <>
+                      L'équipe {room.teams[currentTeam]?.name} choisit sa
+                      catégorie
+                    </>
+                  )}
                 </h3>
-                <p className="text-xl text-white/80">
-                  En attente de la sélection...
-                </p>
+                <div className="grid grid-cols-2 gap-6 max-w-2xl mx-auto">
+                  {(
+                    Object.keys(millionaireQuestions) as MillionaireCategory[]
+                  ).map((category) => {
+                    const categoryInfo = categories.find(
+                      (c) => c.id === category
+                    );
+                    const isUsed = gameData.usedCategories.includes(category);
+
+                    return (
+                      <div
+                        key={category}
+                        className={`p-8 rounded-xl text-center ${
+                          isUsed
+                            ? "bg-gradient-to-br from-gray-700 to-gray-800 border-2 border-gray-600"
+                            : "bg-gradient-to-br from-blue-500 to-blue-600 border-2 border-blue-400"
+                        }`}
+                      >
+                        <div
+                          className={`text-5xl mb-4 ${
+                            isUsed ? "text-gray-400" : ""
+                          }`}
+                        >
+                          {categoryInfo?.icon}
+                        </div>
+                        <h3
+                          className={`text-xl font-bold ${
+                            isUsed ? "text-gray-400" : "text-white"
+                          }`}
+                        >
+                          {categoryInfo?.name}
+                        </h3>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             )}
             <CategorySelector
