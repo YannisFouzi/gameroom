@@ -1,9 +1,8 @@
 export type Theme =
-  | "Politique"
-  | "Informatique"
-  | "Histoire"
-  | "Animaux"
-  | "Marque";
+  | "Sport"
+  | "Années 80"
+  | "Télévision"
+  | "Histoire et Géographie";
 
 export type WheelData = {
   option: string;

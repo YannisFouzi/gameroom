@@ -2,33 +2,56 @@ import { Theme, WheelData } from "@/types/wheel";
 
 export const wheelData: WheelData[] = [
   {
-    option: "Politique",
+    option: "Sport",
     style: { backgroundColor: "#FF6B6B", textColor: "white" },
   },
   {
-    option: "Informatique",
+    option: "Années 80",
     style: { backgroundColor: "#4ECDC4", textColor: "white" },
   },
   {
-    option: "Histoire",
+    option: "Télévision",
     style: { backgroundColor: "#45B7D1", textColor: "white" },
   },
   {
-    option: "Animaux",
+    option: "Histoire et Géographie",
     style: { backgroundColor: "#96CEB4", textColor: "white" },
-  },
-  {
-    option: "Marque",
-    style: { backgroundColor: "#D4A5A5", textColor: "white" },
   },
 ];
 
 export const subCategories: Record<Theme, string[]> = {
-  Politique: ["Macron", "Sarkozy", "Hollande"],
-  Informatique: ["Excel", "Photoshop", "Spotify"],
-  Histoire: ["Napoléon", "Seconde Guerre Mondiale", "Guerre Froide"],
-  Animaux: ["Dauphin", "Singe", "Chien"],
-  Marque: ["Asus", "Google", "Microsoft"],
+  Sport: [
+    "Cyclisme",
+    "Football",
+    "Jeux Olympiques",
+    "Ski",
+    "Rugby",
+    "Natation",
+  ],
+  "Années 80": [
+    "Chanteurs",
+    "Modes de vie",
+    "Films",
+    "Musiques",
+    "Mode et style vestimentaire",
+    "Albums",
+  ],
+  Télévision: [
+    "Séries françaises de l'époque",
+    "Séries françaises actuelles",
+    "Jeux de l'époque",
+    "Jeux actuels",
+    "Séries américaines",
+    "Stars des années 80",
+  ],
+  "Histoire et Géographie": [
+    "Amérique du Sud",
+    "Première Guerre mondiale",
+    "Guerre froide",
+    "Campagnes napoléoniennes",
+    "Rois de France",
+    "Afrique",
+  ],
 };
 
 export const getRandomSubCategory = (
