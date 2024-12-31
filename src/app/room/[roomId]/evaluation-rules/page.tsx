@@ -117,8 +117,7 @@ function EvaluationRulesContent() {
             <div className="text-3xl mb-4">🎲</div>
             <h3 className="text-xl font-bold text-white mb-2">Le plateau</h3>
             <p className="text-white/80">
-              Chaque équipe commence à la case 0 sur un plateau de 20 cases. Le
-              but est d'atteindre la case 20 en premier !
+              Chaque équipe commence à 0 point et le premier à 25 gagne !
             </p>
           </motion.div>
 

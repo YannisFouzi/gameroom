@@ -88,7 +88,7 @@ export const wheelService = {
       updatedScores[teamId] = (updatedScores[teamId] || 0) + difficulty;
 
       // Vérifier si l'équipe a gagné
-      if (updatedScores[teamId] >= 20) {
+      if (updatedScores[teamId] >= 25) {
         await updateDoc(roomRef, {
           gamePhase: "wheel-results",
           "gameData.winningTeamId": teamId,

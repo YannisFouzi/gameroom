@@ -25,7 +25,7 @@ export default function ScoreGauge({
     setCurrentScore(score);
   }, [score]);
 
-  const percentage = (currentScore / 20) * 100;
+  const percentage = (currentScore / 25) * 100;
   const fillColor = interpolateRgb(startColor, endColor)(percentage / 100);
 
   const colorObj = color(fillColor);
@@ -66,7 +66,7 @@ export default function ScoreGauge({
         height={radius * 2}
         value={percentage}
         textRenderer={(props) => {
-          const value = Math.round((props.value * 20) / 100);
+          const value = Math.round((props.value * 25) / 100);
           const radius = Math.min(props.height / 2, props.width / 2);
           const textPixels = (props.textSize * radius) / 2;
           const valueStyle = {
