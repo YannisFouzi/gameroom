@@ -176,7 +176,9 @@ export default function PlayerWheel({
         // Vue de l'équipe qui pose les questions
         <>
           <div className="text-center mb-6">
-            <h3 className="text-xl font-semibold mb-2">Catégorie :</h3>
+            <h3 className="text-xl font-semibold mb-2 text-white">
+              Catégorie :
+            </h3>
             <div className="bg-blue-50 p-4 rounded-lg">
               <p className="text-2xl font-bold text-blue-800">
                 {selectedTheme} - {subCategory}

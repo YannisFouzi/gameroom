@@ -15,7 +15,7 @@ export default function DifficultyButtons({
 
   return (
     <div className="flex flex-col gap-4 items-center">
-      <h3 className="text-xl font-semibold mb-2">
+      <h3 className="text-xl font-semibold mb-2 text-white">
         Dire à l'équipe adverse quelle difficulté elle veut :
       </h3>
       <div className="grid grid-cols-2 gap-4">
