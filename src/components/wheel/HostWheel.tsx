@@ -18,13 +18,15 @@ export default function HostWheel({
   scores,
   teams,
 }: HostWheelProps) {
+  const teamIds = Object.keys(teams).sort();
+
   return (
     <div className="flex flex-col items-center">
       <div className="flex justify-around mb-8">
-        {Object.entries(scores).map(([teamId, score]) => (
+        {teamIds.map((teamId) => (
           <ScoreGauge
             key={teamId}
-            score={score}
+            score={scores[teamId] || 0}
             teamName={teams[teamId]?.name || "Équipe"}
           />
         ))}
