@@ -135,15 +135,15 @@ function MillionaireRulesContent() {
                   de points :
                 </p>
                 <ul className="space-y-1 text-white/70">
-                  <li>• Questions 1-5 : 1-2 points</li>
-                  <li>• Questions 6-10 : 2-3 points</li>
-                  <li>• Questions 11-15 : 3-4 points</li>
+                  <li>• Questions 1-5 : 1-5 points</li>
+                  <li>• Questions 6-10 : 7-12 points</li>
+                  <li>• Questions 11-15 : 14-20 points</li>
                 </ul>
                 <p>Paliers de sécurité :</p>
                 <ul className="space-y-1 text-white/70">
                   <li>• Échec Q1-5 : 0 point</li>
                   <li>• Échec Q6-10 : 5 points garantis</li>
-                  <li>• Échec Q11-15 : 10 points garantis</li>
+                  <li>• Échec Q11-15 : 12 points garantis</li>
                 </ul>
                 <p className="text-white/90 font-medium">
                   💡 Vous pouvez vous arrêter après chaque bonne réponse pour
