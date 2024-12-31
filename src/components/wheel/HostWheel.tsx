@@ -32,6 +32,10 @@ export default function HostWheel({
         ))}
       </div>
 
+      <div className="text-white text-xl font-semibold mb-8 bg-white/10 backdrop-blur-sm px-6 py-3 rounded-xl">
+        Premier à 20 points remporte la partie !
+      </div>
+
       <Wheel
         mustStartSpinning={mustSpin}
         prizeNumber={prizeNumber}
