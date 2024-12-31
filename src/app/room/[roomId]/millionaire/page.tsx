@@ -319,7 +319,7 @@ function MillionaireContent() {
           ) : (
             <>
               {/* Contenu principal quand pas de catégorie sélectionnée */}
-              <div className="h-screen flex items-center justify-center">
+              <div className="h-full flex items-center justify-center">
                 {/* Message d'attente pour l'hôte */}
                 {isHost ? (
                   <div className="text-center bg-blue-900/80 backdrop-blur-md px-12 py-8 rounded-xl border-2 border-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.3)]">

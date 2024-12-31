@@ -32,8 +32,8 @@ export default function CategorySelector({
   return (
     <div className="max-w-2xl mx-auto">
       {isCurrentTeam && (
-        <div className="text-center mb-8">
-          <h3 className="text-2xl font-bold text-white mb-4">
+        <div className="text-center mb-4">
+          <h3 className="text-2xl font-bold text-white mb-2">
             C'est votre tour !
           </h3>
           <p className="text-xl text-white/80">Choisissez une catégorie</p>
