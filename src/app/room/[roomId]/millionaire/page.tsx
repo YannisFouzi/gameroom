@@ -191,7 +191,7 @@ function MillionaireContent() {
   const playerTeam = teamId ? room.teams[teamId] : null;
 
   return (
-    <div className={`min-h-screen ${isHost ? "flex gap-12 p-12" : "p-6"}`}>
+    <div className={`min-h-screen ${isHost ? "flex gap-4 p-4" : "p-2"}`}>
       {/* Colonne principale (2/3) - Questions et réponses */}
       <div
         className={`${
@@ -269,7 +269,7 @@ function MillionaireContent() {
           {/* Affichage simple de la catégorie en cours */}
           {isHost && gameData.currentCategory && (
             <div className="text-center mb-6">
-              <h3 className="text-2xl font-semibold text-white bg-white/5 backdrop-blur-sm px-6 py-3 rounded-lg inline-block">
+              <h3 className="text-3xl font-bold text-white bg-blue-900/90 px-8 py-4 rounded-lg inline-block border-2 border-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.5)]">
                 {
                   categories.find((c) => c.id === gameData.currentCategory)
                     ?.name
