@@ -88,27 +88,33 @@ export default function Jokers({
       </motion.button>
 
       {phoneCallModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-white rounded-lg p-6 max-w-md w-full"
+            className="bg-gradient-to-b from-blue-900 to-blue-800 rounded-xl p-8 max-w-md w-full text-white border border-blue-700 shadow-xl"
           >
-            <h3 className="text-xl font-bold mb-4">Appel à un ami</h3>
-            <p className="mb-6">
-              Vous pouvez maintenant appeler un ami pour vous aider à répondre à
-              cette question.
-            </p>
-            {!isHost && (
-              <button
-                onClick={() => {
-                  onPhoneCallModalChange(false);
-                  onUsePhoneCall();
-                }}
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
-              >
-                OK
-              </button>
+            <h3 className="text-2xl font-bold mb-4">📞 Appel à un ami</h3>
+            {isHost ? (
+              <p className="mb-4 text-blue-100">
+                L'équipe utilise son joker "Appel à un ami"...
+              </p>
+            ) : (
+              <>
+                <p className="mb-6 text-blue-100">
+                  Vous pouvez maintenant appeler un(e) ami(e) pour vous aider à
+                  répondre à la question.
+                </p>
+                <button
+                  onClick={() => {
+                    onPhoneCallModalChange(false);
+                    onUsePhoneCall();
+                  }}
+                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-500 transition-colors font-bold"
+                >
+                  J'ai terminé mon appel
+                </button>
+              </>
             )}
           </motion.div>
         </div>
