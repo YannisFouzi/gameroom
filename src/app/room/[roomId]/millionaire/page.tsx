@@ -251,9 +251,6 @@ function MillionaireContent() {
           </div>
         )}
 
-        {/* Scores uniquement pour l'hôte */}
-        {isHost && <ScoreDisplay room={room} currentTeam={currentTeam} />}
-
         {/* Affichage simple de la catégorie en cours */}
         {isHost && gameData.currentCategory && (
           <div className="text-center mb-6">
@@ -371,9 +368,10 @@ function MillionaireContent() {
         )}
       </div>
 
-      {/* Colonne latérale (1/4) - Paliers uniquement pour l'hôte */}
+      {/* Colonne latérale (1/4) - Scores et Paliers pour l'hôte */}
       {isHost && (
-        <div className="w-1/4">
+        <div className="w-1/4 space-y-8">
+          <ScoreDisplay room={room} currentTeam={currentTeam} />
           <ProgressLadder
             currentQuestion={gameData?.currentQuestionIndex || 0}
           />

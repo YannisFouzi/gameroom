@@ -36,35 +36,25 @@ export default function ProgressLadder({
   ];
 
   return (
-    <div className="bg-gray-50 p-4 rounded-lg">
-      <div className="space-y-2">
+    <div className="bg-gradient-to-b from-blue-900 to-blue-950 p-1.5 rounded-lg">
+      <div className="space-y-1">
         {steps.map((step) => (
-          <div key={step.level}>
-            {step.isSecureLevel && (
-              <div className="border-t-2 border-orange-300 my-3" />
-            )}
+          <div key={step.level} className="px-1">
             <motion.div
-              className={`flex justify-between items-center p-2 rounded ${
-                currentQuestion + 1 === step.level
-                  ? "bg-blue-100 font-bold text-black"
-                  : currentQuestion + 1 > step.level
-                  ? "text-gray-500"
-                  : "text-black"
-              } ${
+              className={`flex justify-between items-center px-4 py-1.5 rounded ${
                 step.isVictoryLevel
-                  ? "bg-green-50 border-2 border-green-300 font-bold text-black"
+                  ? "bg-yellow-500 text-white font-extrabold border-2 border-yellow-400 shadow-[0_0_10px_2px_rgba(234,179,8,0.3)]"
                   : step.isSecureLevel
-                  ? "bg-orange-50 border border-orange-200 text-black"
-                  : ""
+                  ? "bg-blue-800 text-white font-extrabold border-2 border-yellow-500 shadow-[0_0_10px_2px_rgba(234,179,8,0.3)]"
+                  : currentQuestion + 1 === step.level
+                  ? "bg-blue-800 text-white font-bold border-2 border-white shadow-[0_0_10px_2px_rgba(255,255,255,0.3)]"
+                  : "bg-blue-900/50 text-white/90 font-semibold"
               }`}
               animate={{
-                scale: currentQuestion + 1 === step.level ? 1.05 : 1,
+                scale: currentQuestion + 1 === step.level ? 1.02 : 1,
               }}
             >
-              <span>
-                {step.level.toString().padStart(2, "0")}
-                {currentQuestion + 1 === step.level && ""}
-              </span>
+              <span className="text-base">{step.level}</span>
               <span>
                 {step.points} point{step.points > 1 ? "s" : ""}
               </span>
