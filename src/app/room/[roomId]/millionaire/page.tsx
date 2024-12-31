@@ -192,11 +192,11 @@ function MillionaireContent() {
 
   return (
     <div className={`min-h-screen ${isHost ? "flex gap-4 p-4" : "p-2"}`}>
-      {/* Colonne principale (2/3) - Questions et réponses */}
+      {/* Colonne principale (2/3) - Ajout de flex et items-center */}
       <div
         className={`${
           isHost ? "w-3/4" : "w-full"
-        } max-w-[1400px] mx-auto relative`}
+        } max-w-[1400px] mx-auto relative h-screen flex items-center`}
         style={
           isHost
             ? {
@@ -207,8 +207,8 @@ function MillionaireContent() {
             : undefined
         }
       >
-        {/* Contenu existant */}
-        <div className="relative">
+        {/* Contenu - Prend toute la largeur */}
+        <div className="relative w-full">
           {/* Info équipe pour les joueurs */}
           {!isHost && playerTeam && (
             <motion.div
