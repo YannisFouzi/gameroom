@@ -35,7 +35,7 @@ export function MemorizationPhase({
     const interval = setInterval(() => {
       const now = Date.now();
       const elapsed = Math.floor((now - start) / 1000);
-      const remaining = Math.max(0, 6000 - elapsed);
+      const remaining = Math.max(0, 6 - elapsed);
       setTimeLeft(remaining);
     }, 100);
 
@@ -109,33 +109,34 @@ export function MemorizationPhase({
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="h-screen flex flex-col p-2">
       <motion.div
-        className="text-center mb-12"
+        className="text-center mb-2"
         animate={{ scale: timeLeft <= 3 ? [1, 1.2, 1] : 1 }}
         transition={{ duration: 0.5, repeat: timeLeft <= 3 ? Infinity : 0 }}
       >
-        <div className="inline-block px-8 py-4 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
-          <div className="text-6xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent">
+        <div className="inline-block px-4 py-1 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+          <div className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent">
             {timeLeft}s
           </div>
         </div>
       </motion.div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+      <div className="flex-1 grid grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-1 auto-rows-fr">
         {Object.entries(celebrities).map(([id, celebrity]) => (
-          <div key={id} className="flex items-center justify-center">
-            <img
-              src={celebrity.imageUrl}
-              alt="Célébrité"
-              className="w-full h-auto object-contain"
-              style={{ maxHeight: "200px" }}
-              onError={(e) => {
-                console.error(
-                  `Erreur de chargement de l'image: ${celebrity.imageUrl}`
-                );
-                e.currentTarget.src = "/ratDeStar/placeholder.jpg";
-              }}
-            />
+          <div key={id} className="flex items-center justify-center p-0.5">
+            <div className="relative w-full h-full">
+              <img
+                src={celebrity.imageUrl}
+                alt="Célébrité"
+                className="absolute inset-0 w-full h-full object-contain"
+                onError={(e) => {
+                  console.error(
+                    `Erreur de chargement de l'image: ${celebrity.imageUrl}`
+                  );
+                  e.currentTarget.src = "/ratDeStar/placeholder.jpg";
+                }}
+              />
+            </div>
           </div>
         ))}
       </div>
