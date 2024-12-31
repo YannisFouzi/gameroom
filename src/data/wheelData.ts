@@ -14,7 +14,7 @@ export const wheelData: WheelData[] = [
     style: { backgroundColor: "#45B7D1", textColor: "white" },
   },
   {
-    option: "Histoire et Géographie",
+    option: "Histoire / Géo",
     style: { backgroundColor: "#96CEB4", textColor: "white" },
   },
 ];
