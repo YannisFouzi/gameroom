@@ -241,9 +241,35 @@ export default function QuestionDisplay({
         onPhoneCallModalChange={onPhoneCallModalChange}
       />
 
-      <div className="mb-6">
-        <div className="text-xl font-bold mb-2">{question.text}</div>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative mb-8 p-8 rounded-xl overflow-hidden"
+      >
+        {/* Background animé plus visible */}
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-700">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+            animate={{
+              x: ["0%", "100%", "0%"],
+            }}
+            transition={{
+              duration: 3, // Plus rapide
+              ease: "easeInOut",
+              repeat: Infinity,
+            }}
+          />
+        </div>
+
+        {/* Contenu de la question */}
+        <div className="relative">
+          <h2 className="text-2xl font-bold text-white mb-2">
+            Question {questionIndex + 1}
+          </h2>
+          <p className="text-xl text-white/90">{question.text}</p>
+        </div>
+      </motion.div>
 
       <div className="grid grid-cols-2 gap-4 mb-6">
         {question.answers.map((answer, index) =>
