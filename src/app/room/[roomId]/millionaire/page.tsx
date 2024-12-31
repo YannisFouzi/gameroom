@@ -318,70 +318,25 @@ function MillionaireContent() {
             />
           ) : (
             <>
-              {/* Message d'attente pour l'hôte */}
-              {isHost && (
-                <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold text-white mb-4">
-                    {gameData.currentCategory ? (
-                      <>
-                        L'équipe {room.teams[currentTeam]?.name} joue en{" "}
-                        {
-                          categories.find(
-                            (c) => c.id === gameData.currentCategory
-                          )?.name
-                        }
-                      </>
-                    ) : (
-                      <>
-                        L'équipe {room.teams[currentTeam]?.name} choisit sa
-                        catégorie
-                      </>
-                    )}
-                  </h3>
-                  <div className="grid grid-cols-2 gap-6 max-w-2xl mx-auto">
-                    {(
-                      Object.keys(millionaireQuestions) as MillionaireCategory[]
-                    ).map((category) => {
-                      const categoryInfo = categories.find(
-                        (c) => c.id === category
-                      );
-                      const isUsed = gameData.usedCategories.includes(category);
-
-                      return (
-                        <div
-                          key={category}
-                          className={`p-8 rounded-xl text-center ${
-                            isUsed
-                              ? "bg-gradient-to-br from-gray-700 to-gray-800 border-2 border-gray-600"
-                              : "bg-gradient-to-br from-blue-500 to-blue-600 border-2 border-blue-400"
-                          }`}
-                        >
-                          <div
-                            className={`text-5xl mb-4 ${
-                              isUsed ? "text-gray-400" : ""
-                            }`}
-                          >
-                            {categoryInfo?.icon}
-                          </div>
-                          <h3
-                            className={`text-xl font-bold ${
-                              isUsed ? "text-gray-400" : "text-white"
-                            }`}
-                          >
-                            {categoryInfo?.name}
-                          </h3>
-                        </div>
-                      );
-                    })}
+              {/* Contenu principal quand pas de catégorie sélectionnée */}
+              <div className="h-screen flex items-center justify-center">
+                {/* Message d'attente pour l'hôte */}
+                {isHost ? (
+                  <div className="text-center bg-blue-900/80 backdrop-blur-md px-12 py-8 rounded-xl border-2 border-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+                    <h3 className="text-4xl font-bold text-white">
+                      L'équipe {room.teams[currentTeam]?.name} choisit sa
+                      catégorie
+                    </h3>
                   </div>
-                </div>
-              )}
-              <CategorySelector
-                onSelectCategory={handleCategorySelect}
-                usedCategories={gameData?.usedCategories || []}
-                isHost={isHost}
-                isCurrentTeam={isCurrentTeam}
-              />
+                ) : (
+                  <CategorySelector
+                    onSelectCategory={handleCategorySelect}
+                    usedCategories={gameData?.usedCategories || []}
+                    isHost={isHost}
+                    isCurrentTeam={isCurrentTeam}
+                  />
+                )}
+              </div>
             </>
           )}
         </div>
