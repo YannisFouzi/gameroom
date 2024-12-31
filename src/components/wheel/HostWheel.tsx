@@ -21,7 +21,7 @@ export default function HostWheel({
   const teamIds = Object.keys(teams).sort();
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center overflow-x-hidden">
       <div className="flex justify-around mb-8">
         {teamIds.map((teamId) => (
           <ScoreGauge
@@ -37,18 +37,20 @@ export default function HostWheel({
         Premier à 20 points remporte la partie !
       </div>
 
-      <Wheel
-        mustStartSpinning={mustSpin}
-        prizeNumber={prizeNumber}
-        data={wheelData}
-        onStopSpinning={onStopSpinning}
-        backgroundColors={wheelData.map((d) => d.style.backgroundColor)}
-        textColors={wheelData.map((d) => d.style.textColor)}
-        fontSize={24}
-        outerBorderWidth={3}
-        radiusLineWidth={2}
-        spinDuration={0.8}
-      />
+      <div className="overflow-hidden">
+        <Wheel
+          mustStartSpinning={mustSpin}
+          prizeNumber={prizeNumber}
+          data={wheelData}
+          onStopSpinning={onStopSpinning}
+          backgroundColors={wheelData.map((d) => d.style.backgroundColor)}
+          textColors={wheelData.map((d) => d.style.textColor)}
+          fontSize={24}
+          outerBorderWidth={3}
+          radiusLineWidth={2}
+          spinDuration={0.8}
+        />
+      </div>
     </div>
   );
 }

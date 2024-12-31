@@ -3,19 +3,19 @@ import { Theme, WheelData } from "@/types/wheel";
 export const wheelData: WheelData[] = [
   {
     option: "Sport",
-    style: { backgroundColor: "#FF6B6B", textColor: "white" },
+    style: { backgroundColor: "#FF4444", textColor: "white" },
   },
   {
     option: "Années 80",
-    style: { backgroundColor: "#4ECDC4", textColor: "white" },
+    style: { backgroundColor: "#4CAF50", textColor: "white" },
   },
   {
     option: "Télévision",
-    style: { backgroundColor: "#45B7D1", textColor: "white" },
+    style: { backgroundColor: "#2196F3", textColor: "white" },
   },
   {
     option: "Histoire / Géo",
-    style: { backgroundColor: "#96CEB4", textColor: "white" },
+    style: { backgroundColor: "#9C27B0", textColor: "white" },
   },
 ];
 
@@ -44,7 +44,7 @@ export const subCategories: Record<Theme, string[]> = {
     "Séries américaines",
     "Stars des années 80",
   ],
-  "Histoire et Géographie": [
+  "Histoire / Géo": [
     "Amérique du Sud",
     "Première Guerre mondiale",
     "Guerre froide",

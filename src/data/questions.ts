@@ -482,7 +482,7 @@ export const questions: Record<Theme, Record<string, Question[]>> = {
       },
     ],
   },
-  "Histoire et Géographie": {
+  "Histoire / Géo": {
     "Amérique du Sud": [
       {
         id: "ams1",
