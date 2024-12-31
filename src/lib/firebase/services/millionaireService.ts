@@ -68,6 +68,19 @@ export const millionaireService = {
 
     if (!currentTeam || !room.gameData?.remainingTeams) return;
 
+    if (isCorrect) {
+      // Si c'est la dernière question (index 14 = question 15)
+      if (currentQuestionIndex === 14) {
+        // Ajouter les points et rediriger vers les résultats
+        await updateDoc(doc(db, "rooms", roomId), {
+          [`gameData.scores.${currentTeam}`]: increment(points),
+          gamePhase: "millionaire-results", // Redirection vers les résultats
+          updatedAt: serverTimestamp(),
+        });
+        return;
+      }
+    }
+
     if (!isCorrect) {
       const securePoints = this.calculateSecurePoints(currentQuestionIndex);
       const nextTeamIndex =

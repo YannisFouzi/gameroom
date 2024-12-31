@@ -6,7 +6,7 @@ import Jokers from "./Jokers";
 type QuestionDisplayProps = {
   question: MillionaireQuestion;
   onAnswer: (answerIndex: number) => void;
-  onNextQuestion: () => void;
+  onNextQuestion: (nextIndex: number) => void;
   onQuit: () => void;
   onQuitWithPoints: () => void;
   currentPoints: number;
@@ -282,24 +282,33 @@ export default function QuestionDisplay({
         </motion.button>
       )}
 
-      {answerState === "correct" && !isHost && (
+      {answerState === "correct" && (
         <div className="space-y-4">
-          <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            onClick={onNextQuestion}
-            className="w-full bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700"
-          >
-            Question suivante
-          </motion.button>
-          <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            onClick={onQuitWithPoints}
-            className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700"
-          >
-            Quitter avec {currentPoints} points
-          </motion.button>
+          {questionIndex === 14 ? (
+            // Si c'est la dernière question (15ème)
+            <button
+              onClick={onQuitWithPoints}
+              className="w-full bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-600"
+            >
+              🏆 Victoire : quitter avec {currentPoints} points
+            </button>
+          ) : (
+            // Pour toutes les autres questions
+            <>
+              <button
+                onClick={() => onNextQuestion(questionIndex + 1)}
+                className="w-full bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600"
+              >
+                Question suivante
+              </button>
+              <button
+                onClick={onQuitWithPoints}
+                className="w-full bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-600"
+              >
+                Quitter avec {currentPoints} points
+              </button>
+            </>
+          )}
         </div>
       )}
 
