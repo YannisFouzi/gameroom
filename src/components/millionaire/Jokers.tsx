@@ -37,10 +37,10 @@ export default function Jokers({
         whileHover={
           !isButtonDisabled && !jokers.phoneCall ? { scale: 1.05 } : {}
         }
-        className={`flex-1 p-6 rounded-xl flex flex-col items-center justify-center gap-3 ${
+        className={`flex-1 p-4 rounded-xl flex flex-col items-center justify-center gap-2 ${
           jokers.phoneCall
             ? "bg-gradient-to-br from-gray-700 to-gray-800 cursor-not-allowed opacity-75 shadow-inner border-2 border-gray-600"
-            : "bg-gradient-to-br from-indigo-500 to-purple-600 border-2 border-indigo-400 shadow-lg"
+            : "bg-gradient-to-br from-yellow-500 to-amber-600 border-2 border-yellow-400 shadow-lg"
         } transition-all duration-200`}
         onClick={() => !isHost && onPhoneCallModalChange(true)}
         disabled={isButtonDisabled || jokers.phoneCall}
@@ -58,10 +58,10 @@ export default function Jokers({
         whileHover={
           !isButtonDisabled && !isFiftyFiftyDisabled ? { scale: 1.05 } : {}
         }
-        className={`flex-1 p-6 rounded-xl flex flex-col items-center justify-center gap-3 ${
+        className={`flex-1 p-4 rounded-xl flex flex-col items-center justify-center gap-2 ${
           isFiftyFiftyDisabled
             ? "bg-gradient-to-br from-gray-700 to-gray-800 cursor-not-allowed opacity-75 shadow-inner border-2 border-gray-600"
-            : "bg-gradient-to-br from-indigo-500 to-purple-600 border-2 border-indigo-400 shadow-lg"
+            : "bg-gradient-to-br from-yellow-500 to-amber-600 border-2 border-yellow-400 shadow-lg"
         } transition-all duration-200`}
         onClick={onUseFiftyFifty}
         disabled={isButtonDisabled || isFiftyFiftyDisabled}
@@ -79,10 +79,10 @@ export default function Jokers({
         whileHover={
           !isButtonDisabled && !isDoubleAnswerDisabled ? { scale: 1.05 } : {}
         }
-        className={`flex-1 p-6 rounded-xl flex flex-col items-center justify-center gap-3 ${
+        className={`flex-1 p-4 rounded-xl flex flex-col items-center justify-center gap-2 ${
           isDoubleAnswerDisabled
             ? "bg-gradient-to-br from-gray-700 to-gray-800 cursor-not-allowed opacity-75 shadow-inner border-2 border-gray-600"
-            : "bg-gradient-to-br from-indigo-500 to-purple-600 border-2 border-indigo-400 shadow-lg"
+            : "bg-gradient-to-br from-yellow-500 to-amber-600 border-2 border-yellow-400 shadow-lg"
         } transition-all duration-200`}
         onClick={onUseDoubleAnswer}
         disabled={isButtonDisabled || isDoubleAnswerDisabled}
