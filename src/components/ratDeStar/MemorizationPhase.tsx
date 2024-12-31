@@ -109,11 +109,15 @@ export function MemorizationPhase({
   }
 
   return (
-    <div className="h-screen flex flex-col p-2">
+    <div className="h-screen flex flex-col p-2 overflow-hidden">
       <motion.div
         className="text-center mb-2"
-        animate={{ scale: timeLeft <= 3 ? [1, 1.2, 1] : 1 }}
-        transition={{ duration: 0.5, repeat: timeLeft <= 3 ? Infinity : 0 }}
+        animate={{ scale: timeLeft <= 3 ? [1, 1.02, 1] : 1 }}
+        transition={{
+          duration: 0.5,
+          repeat: timeLeft <= 3 ? Infinity : 0,
+          repeatType: "reverse",
+        }}
       >
         <div className="inline-block px-4 py-1 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
           <div className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent">
