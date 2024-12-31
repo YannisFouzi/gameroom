@@ -179,11 +179,17 @@ function MillionaireContent() {
   };
 
   // Modification ici : on récupère toujours les jokers de l'équipe active
-  const currentJokers = gameData.jokers[currentTeam] || {
-    phoneCall: false,
-    fiftyFifty: false,
-    doubleAnswer: false,
-  };
+  const currentJokers = gameData.currentCategory
+    ? gameData.jokers[currentTeam]?.[gameData.currentCategory] || {
+        phoneCall: false,
+        fiftyFifty: false,
+        doubleAnswer: false,
+      }
+    : {
+        phoneCall: false,
+        fiftyFifty: false,
+        doubleAnswer: false,
+      };
 
   if (!room || !gameData) return <div>Chargement...</div>;
 

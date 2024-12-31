@@ -48,10 +48,21 @@ export const millionaireService = {
     roomId: string,
     category: MillionaireCategory
   ) {
+    const room = await baseRoomService.getRoom(roomId);
+    const currentTeam =
+      room.gameData?.remainingTeams[room.gameData.currentTeamIndex];
+
+    if (!currentTeam) return;
+
     await updateDoc(doc(db, "rooms", roomId), {
       "gameData.currentCategory": category,
       "gameData.currentQuestionIndex": 0,
       "gameData.usedCategories": arrayUnion(category),
+      [`gameData.jokers.${currentTeam}.${category}`]: {
+        phoneCall: false,
+        fiftyFifty: false,
+        doubleAnswer: false,
+      },
       updatedAt: serverTimestamp(),
     });
   },

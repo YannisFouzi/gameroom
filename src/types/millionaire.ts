@@ -16,9 +16,11 @@ export type MillionaireQuestion = {
 export type JokerType = "phoneCall" | "fiftyFifty" | "doubleAnswer";
 
 export type TeamJokers = {
-  phoneCall: boolean;
-  fiftyFifty: boolean;
-  doubleAnswer: boolean;
+  [category: string]: {
+    phoneCall: boolean;
+    fiftyFifty: boolean;
+    doubleAnswer: boolean;
+  };
 };
 
 export type AnswerState = "selected" | "correct" | "incorrect" | null;

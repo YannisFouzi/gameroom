@@ -1,11 +1,17 @@
 import { JokerType } from "@/types/millionaire";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../config";
+import { baseRoomService } from "./baseRoomService";
 
 export const jokerService = {
   async useJoker(roomId: string, teamId: string, jokerType: JokerType) {
+    const room = await baseRoomService.getRoom(roomId);
+    const category = room.gameData?.currentCategory;
+
+    if (!category) return;
+
     await updateDoc(doc(db, "rooms", roomId), {
-      [`gameData.jokers.${teamId}.${jokerType}`]: true,
+      [`gameData.jokers.${teamId}.${category}.${jokerType}`]: true,
       updatedAt: serverTimestamp(),
     });
   },
