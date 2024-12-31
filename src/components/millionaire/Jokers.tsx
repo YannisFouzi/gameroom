@@ -28,45 +28,60 @@ export default function Jokers({
   const isFiftyFiftyDisabled = jokers.fiftyFifty;
   const isDoubleAnswerDisabled = jokers.doubleAnswer;
 
+  // L'hôte ne peut pas cliquer sur les jokers
+  const isButtonDisabled = disabled || isHost;
+
   return (
     <div className="flex gap-4 mb-6">
       <motion.button
-        whileHover={!disabled && !jokers.phoneCall ? { scale: 1.05 } : {}}
+        whileHover={
+          !isButtonDisabled && !jokers.phoneCall ? { scale: 1.05 } : {}
+        }
         className={`flex-1 p-4 rounded-lg ${
           jokers.phoneCall
             ? "bg-gray-100 cursor-not-allowed text-gray-500 line-through"
+            : isHost
+            ? "bg-blue-50 cursor-not-allowed text-black"
             : "bg-blue-50 hover:bg-blue-100 text-black"
         }`}
-        onClick={() => onPhoneCallModalChange(true)}
-        disabled={disabled || jokers.phoneCall}
+        onClick={() => !isHost && onPhoneCallModalChange(true)}
+        disabled={isButtonDisabled || jokers.phoneCall}
       >
         <span className="text-2xl mb-2">📞</span>
         <p className="text-sm">Appel à un ami</p>
       </motion.button>
 
       <motion.button
-        whileHover={!disabled && !isFiftyFiftyDisabled ? { scale: 1.05 } : {}}
+        whileHover={
+          !isButtonDisabled && !isFiftyFiftyDisabled ? { scale: 1.05 } : {}
+        }
         className={`flex-1 p-4 rounded-lg ${
           isFiftyFiftyDisabled
             ? "bg-gray-100 cursor-not-allowed text-gray-500 line-through"
+            : isHost
+            ? "bg-blue-50 cursor-not-allowed text-black"
             : "bg-blue-50 hover:bg-blue-100 text-black"
         }`}
         onClick={onUseFiftyFifty}
-        disabled={isFiftyFiftyDisabled}
+        disabled={isButtonDisabled || isFiftyFiftyDisabled}
       >
         <span className="text-2xl mb-2">50:50</span>
         <p className="text-sm">Retirer deux mauvaises réponses</p>
       </motion.button>
 
       <motion.button
-        whileHover={!disabled && !isDoubleAnswerDisabled ? { scale: 1.05 } : {}}
+        whileHover={
+          !isButtonDisabled && !isDoubleAnswerDisabled ? { scale: 1.05 } : {}
+        }
         className={`flex-1 p-4 rounded-lg ${
           isDoubleAnswerDisabled
             ? "bg-gray-100 cursor-not-allowed text-gray-500 line-through"
+            : isHost
+            ? "bg-blue-50 cursor-not-allowed text-black"
             : "bg-blue-50 hover:bg-blue-100 text-black"
         }`}
         onClick={onUseDoubleAnswer}
-        disabled={isDoubleAnswerDisabled}
+        disabled={isButtonDisabled || isDoubleAnswerDisabled}
       >
         <span className="text-2xl mb-2">2️⃣</span>
         <p className="text-sm">Double réponse</p>
