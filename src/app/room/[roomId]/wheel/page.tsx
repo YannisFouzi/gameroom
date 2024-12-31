@@ -18,6 +18,7 @@ function WheelContent() {
   const [prizeNumber, setPrizeNumber] = useState(0);
   const [selectedTheme, setSelectedTheme] = useState<Theme | null>(null);
   const [subCategory, setSubCategory] = useState<string | null>(null);
+  const currentTeam = teamId && room ? room.teams[teamId] : null;
 
   const isCurrentTeam = room?.gameData?.currentTeamId === teamId;
   const wheelState = room?.gameData?.wheelState;
@@ -105,6 +106,7 @@ function WheelContent() {
           showQuestion={wheelState?.showQuestion || false}
           selectedDifficulty={wheelState?.selectedDifficulty || null}
           questionAnswered={wheelState?.questionAnswered || false}
+          currentTeam={currentTeam}
         />
       )}
     </div>

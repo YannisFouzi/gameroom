@@ -1,4 +1,5 @@
 import { questions } from "@/data/questions";
+import { Team } from "@/types/room";
 import { Theme } from "@/types/wheel";
 import { motion } from "framer-motion";
 import DifficultyButtons from "./DifficultyButtons";
@@ -15,6 +16,7 @@ type PlayerWheelProps = {
   showQuestion: boolean;
   selectedDifficulty: 1 | 3 | 5 | 8 | null;
   questionAnswered: boolean;
+  currentTeam: Team | null;
 };
 
 export default function PlayerWheel({
@@ -28,11 +30,57 @@ export default function PlayerWheel({
   showQuestion,
   selectedDifficulty,
   questionAnswered,
+  currentTeam,
 }: PlayerWheelProps) {
   if (!isCurrentTeam && !subCategory) {
     return (
-      <div className="text-center p-8">
-        <p className="text-xl">En attente du tour de l'autre équipe...</p>
+      <div className="flex flex-col items-center space-y-8 p-8">
+        {currentTeam && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center space-y-8"
+          >
+            <motion.div
+              animate={{
+                scale: [1, 1.02, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <img
+                src={currentTeam.avatar}
+                alt={currentTeam.name}
+                className="w-24 h-24 mx-auto"
+              />
+            </motion.div>
+
+            <div className="space-y-4">
+              <h1 className="text-4xl font-bold text-white">
+                {currentTeam.name}
+              </h1>
+              <div className="space-y-2">
+                {currentTeam.members.map((member, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="text-xl text-white/80"
+                  >
+                    {member.name}
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+        <p className="text-xl text-white/80">
+          En attente du tour de l'autre équipe...
+        </p>
       </div>
     );
   }
@@ -51,22 +99,69 @@ export default function PlayerWheel({
       className="flex flex-col items-center justify-center p-8"
     >
       {isCurrentTeam ? (
-        // Vue de l'équipe qui joue
         <>
-          <h2 className="text-2xl font-bold mb-6">C'est votre tour !</h2>
+          {currentTeam && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center space-y-8 mb-12"
+            >
+              <motion.div
+                animate={{
+                  scale: [1, 1.02, 1],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                <img
+                  src={currentTeam.avatar}
+                  alt={currentTeam.name}
+                  className="w-24 h-24 mx-auto"
+                />
+              </motion.div>
+
+              <div className="space-y-4">
+                <h1 className="text-4xl font-bold text-white">
+                  {currentTeam.name}
+                </h1>
+                <div className="space-y-2">
+                  {currentTeam.members.map((member, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="text-xl text-white/80"
+                    >
+                      {member.name}
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          <h2 className="text-2xl font-bold mb-6 text-white">
+            C'est votre tour !
+          </h2>
           {!selectedTheme ? (
             <button
               onClick={onSpinWheel}
               disabled={isSpinning}
-              className="bg-blue-600 text-white py-3 px-8 rounded-lg text-lg font-semibold hover:bg-blue-700 disabled:opacity-50"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-8 rounded-xl text-lg font-semibold hover:opacity-90 transition-all disabled:opacity-50"
             >
               {isSpinning ? "La roue tourne..." : "Tourner la roue"}
             </button>
           ) : (
             <div className="text-center">
-              <h3 className="text-xl font-semibold mb-4">Votre catégorie :</h3>
-              <div className="bg-blue-50 p-6 rounded-lg">
-                <p className="text-2xl font-bold text-blue-800">
+              <h3 className="text-xl font-semibold mb-4 text-white">
+                Votre catégorie :
+              </h3>
+              <div className="bg-white/5 backdrop-blur-sm p-6 rounded-xl border border-white/10">
+                <p className="text-2xl font-bold text-white">
                   {selectedTheme} - {subCategory}
                 </p>
               </div>
