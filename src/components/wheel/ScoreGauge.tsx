@@ -1,7 +1,6 @@
 import { color } from "d3-color";
 import { interpolateRgb } from "d3-interpolate";
-import { useSpring, useTransform } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import LiquidFillGauge from "react-liquid-gauge";
 
 type ScoreGaugeProps = {
@@ -10,24 +9,19 @@ type ScoreGaugeProps = {
 };
 
 export default function ScoreGauge({ score, teamName }: ScoreGaugeProps) {
-  // Utiliser motion value pour animer le score
-  const motionValue = useSpring(0);
-  const percentage = useTransform(motionValue, (value) => (value / 20) * 100);
-
-  // Mettre à jour la motion value quand le score change
-  useEffect(() => {
-    motionValue.set(score);
-  }, [score, motionValue]);
+  console.log("ScoreGauge render:", { score, teamName });
+  const [currentScore, setCurrentScore] = useState(score);
 
   const radius = 100;
-  const startColor = "#3B82F6"; // Bleu (blue-500)
-  const endColor = "#EF4444"; // Rouge (red-500)
+  const startColor = "#3B82F6";
+  const endColor = "#EF4444";
 
-  // Utiliser la valeur animée pour le dégradé
-  const fillColor = interpolateRgb(
-    startColor,
-    endColor
-  )(percentage.get() / 100);
+  useEffect(() => {
+    setCurrentScore(score);
+  }, [score]);
+
+  const percentage = (currentScore / 20) * 100;
+  const fillColor = interpolateRgb(startColor, endColor)(percentage / 100);
 
   const colorObj = color(fillColor);
   if (!colorObj) return null;
@@ -57,9 +51,10 @@ export default function ScoreGauge({ score, teamName }: ScoreGaugeProps) {
     <div className="flex flex-col items-center">
       <h3 className="text-lg font-semibold mb-2 text-white">{teamName}</h3>
       <LiquidFillGauge
+        key={currentScore}
         width={radius * 2}
         height={radius * 2}
-        value={percentage.get()}
+        value={percentage}
         textRenderer={(props) => {
           const value = Math.round((props.value * 20) / 100);
           const radius = Math.min(props.height / 2, props.width / 2);

@@ -12,15 +12,11 @@ export default function QuestionDisplay({
   question,
   isVisible,
   onAnswer,
-  onQuestionAnswered,
 }: QuestionDisplayProps) {
   if (!isVisible) return null;
 
-  const handleAnswer = async (isCorrect: boolean) => {
-    await onAnswer(isCorrect);
-    if (onQuestionAnswered) {
-      onQuestionAnswered();
-    }
+  const handleAnswer = (isCorrect: boolean) => {
+    onAnswer(isCorrect);
   };
 
   return (

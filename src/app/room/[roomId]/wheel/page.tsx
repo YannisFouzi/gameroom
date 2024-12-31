@@ -19,6 +19,7 @@ function WheelContent() {
   const [selectedTheme, setSelectedTheme] = useState<Theme | null>(null);
   const [subCategory, setSubCategory] = useState<string | null>(null);
   const currentTeam = teamId && room ? room.teams[teamId] : null;
+  const [localScores, setLocalScores] = useState<Record<string, number>>({});
 
   const isCurrentTeam = room?.gameData?.currentTeamId === teamId;
   const wheelState = room?.gameData?.wheelState;
@@ -35,6 +36,12 @@ function WheelContent() {
       router.push(`/room/${room.id}/wheel-results`);
     }
   }, [room?.gamePhase, room?.id, router]);
+
+  useEffect(() => {
+    if (wheelState?.scores) {
+      setLocalScores(wheelState.scores);
+    }
+  }, [wheelState?.scores]);
 
   if (room?.gamePhase === "wheel-results") {
     return null;
@@ -74,14 +81,47 @@ function WheelContent() {
   };
 
   const handleAnswerQuestion = async (isCorrect: boolean) => {
+    console.log("1. handleAnswerQuestion called", { isCorrect });
     if (!room) return;
-    await wheelService.answerQuestion(
-      room.id,
-      isCorrect,
-      room.gameData?.currentTeamId || "",
-      wheelState?.selectedDifficulty || 2
-    );
-    await gameTransitionService.switchTeam(room.id);
+
+    const teamId = room.gameData?.currentTeamId;
+    const difficulty = wheelState?.selectedDifficulty || 2;
+
+    console.log("2. Current state:", { teamId, difficulty, localScores });
+
+    if (isCorrect && teamId) {
+      const newScore = (localScores[teamId] || 0) + difficulty;
+      console.log("3. Calculating new score:", { newScore });
+
+      setLocalScores((prev) => {
+        console.log("4. Updating scores:", { prev, newScore });
+        return {
+          ...prev,
+          [teamId]: newScore,
+        };
+      });
+
+      try {
+        console.log("5. Calling services");
+        await wheelService.answerQuestion(room.id, true, teamId, difficulty);
+        await gameTransitionService.switchTeam(room.id);
+        console.log("6. Services called successfully");
+      } catch (error) {
+        console.error("7. Error:", error);
+        setLocalScores((prev) => ({
+          ...prev,
+          [teamId]: prev[teamId] || 0,
+        }));
+      }
+    } else {
+      await wheelService.answerQuestion(
+        room.id,
+        false,
+        teamId || "",
+        difficulty
+      );
+      await gameTransitionService.switchTeam(room.id);
+    }
   };
 
   return (
@@ -91,7 +131,7 @@ function WheelContent() {
           mustSpin={mustSpin}
           prizeNumber={prizeNumber}
           onStopSpinning={handleStopSpinning}
-          scores={wheelState?.scores || {}}
+          scores={localScores}
           teams={room?.teams || {}}
         />
       ) : (
@@ -107,7 +147,7 @@ function WheelContent() {
           selectedDifficulty={wheelState?.selectedDifficulty || null}
           questionAnswered={wheelState?.questionAnswered || false}
           currentTeam={currentTeam}
-          scores={wheelState?.scores || {}}
+          scores={localScores}
           teams={room?.teams || {}}
         />
       )}
