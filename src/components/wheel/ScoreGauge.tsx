@@ -68,7 +68,7 @@ export default function ScoreGauge({ score, teamName }: ScoreGaugeProps) {
               <tspan className="value" style={valueStyle}>
                 {value}
               </tspan>
-              <tspan style={{ fontSize: textPixels * 0.4 }}>/20</tspan>
+              <tspan style={{ fontSize: textPixels * 0.4 }}></tspan>
             </tspan>
           );
         }}
