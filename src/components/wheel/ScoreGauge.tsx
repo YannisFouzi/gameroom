@@ -12,8 +12,8 @@ export default function ScoreGauge({ score, teamName }: ScoreGaugeProps) {
   const percentage = (score / 20) * 100;
 
   const radius = 100;
-  const startColor = "#4ECDC4"; // Couleur pour score bas
-  const endColor = "#FF6B6B"; // Couleur pour score élevé
+  const startColor = "#3B82F6"; // Bleu (blue-500)
+  const endColor = "#EF4444"; // Rouge (red-500)
 
   const interpolate = interpolateRgb(startColor, endColor);
   const fillColor = interpolate(percentage / 100);
