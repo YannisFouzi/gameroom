@@ -85,7 +85,7 @@ function WheelContent() {
   };
 
   return (
-    <div className="container mx-auto px-4">
+    <div className="min-h-screen">
       {isHost ? (
         <HostWheel
           mustSpin={mustSpin}
@@ -107,6 +107,8 @@ function WheelContent() {
           selectedDifficulty={wheelState?.selectedDifficulty || null}
           questionAnswered={wheelState?.questionAnswered || false}
           currentTeam={currentTeam}
+          scores={wheelState?.scores || {}}
+          teams={room?.teams || {}}
         />
       )}
     </div>

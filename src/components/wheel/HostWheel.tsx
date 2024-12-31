@@ -1,6 +1,7 @@
 import { wheelData } from "@/data/wheelData";
 import { Team } from "@/types/room";
 import { Wheel } from "react-custom-roulette";
+import ScoreGauge from "./ScoreGauge";
 
 type HostWheelProps = {
   mustSpin: boolean;
@@ -19,13 +20,13 @@ export default function HostWheel({
 }: HostWheelProps) {
   return (
     <div className="flex flex-col items-center">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Scores :</h2>
-        {Object.entries(teams).map(([teamId, team]) => (
-          <div key={teamId} className="flex justify-between mb-2">
-            <span className="font-semibold">{team.name}:</span>
-            <span>{scores[teamId] || 0} points</span>
-          </div>
+      <div className="flex justify-around mb-8">
+        {Object.entries(scores).map(([teamId, score]) => (
+          <ScoreGauge
+            key={teamId}
+            score={score}
+            teamName={teams[teamId]?.name || "Équipe"}
+          />
         ))}
       </div>
 

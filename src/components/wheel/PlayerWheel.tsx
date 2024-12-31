@@ -17,6 +17,8 @@ type PlayerWheelProps = {
   selectedDifficulty: 2 | 4 | 7 | 10 | null;
   questionAnswered: boolean;
   currentTeam: Team | null;
+  scores: Record<string, number>;
+  teams: Record<string, Team>;
 };
 
 export default function PlayerWheel({
@@ -31,6 +33,8 @@ export default function PlayerWheel({
   selectedDifficulty,
   questionAnswered,
   currentTeam,
+  scores,
+  teams,
 }: PlayerWheelProps) {
   if (!isCurrentTeam && !subCategory) {
     return (
