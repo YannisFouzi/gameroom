@@ -60,16 +60,19 @@ function WheelContent() {
   const handleStopSpinning = async () => {
     if (!room) return;
 
-    const theme = wheelData[prizeNumber].option as Theme;
-    setSelectedTheme(theme);
+    const _selectedTheme = wheelData[prizeNumber].option as Theme;
+    setSelectedTheme(_selectedTheme);
     const usedSubCategories = wheelState?.usedSubCategories || {};
-    const randomSubCategory = getRandomSubCategory(theme, usedSubCategories);
-    setSubCategory(randomSubCategory);
+    const _subCategory = getRandomSubCategory(
+      _selectedTheme,
+      usedSubCategories
+    );
+    setSubCategory(_subCategory);
 
     await wheelService.stopSpin(
       room.id,
-      theme,
-      randomSubCategory,
+      _selectedTheme,
+      _subCategory,
       usedSubCategories
     );
     setMustSpin(false);

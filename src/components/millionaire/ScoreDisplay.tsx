@@ -1,5 +1,6 @@
 import { Room } from "@/types/room";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 type ScoreDisplayProps = {
   room: Room;
@@ -24,13 +25,13 @@ export default function ScoreDisplay({ room, currentTeam }: ScoreDisplayProps) {
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 flex items-center justify-center">
-                  <img
-                    src={team.avatar}
-                    alt={team.name}
-                    className="max-w-full max-h-full object-contain"
-                  />
-                </div>
+                <Image
+                  src={team.avatar}
+                  alt={team.name}
+                  width={48}
+                  height={48}
+                  className="w-12 h-12"
+                />
                 <span className="font-medium text-sm text-black">
                   {team.name}
                 </span>

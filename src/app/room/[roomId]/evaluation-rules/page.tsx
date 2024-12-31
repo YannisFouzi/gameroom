@@ -102,7 +102,7 @@ function EvaluationRulesContent() {
           <div className="text-center">
             <div className="text-3xl mb-4">👑</div>
             <div className="text-2xl font-bold text-white">
-              L'équipe "{winningTeamName}" commence !
+              L&apos;équipe &quot;{winningTeamName}&quot; commence !
             </div>
           </div>
         </motion.div>
