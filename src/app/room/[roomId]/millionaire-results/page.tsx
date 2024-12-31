@@ -16,7 +16,7 @@ type TeamWithScore = {
 
 function MillionaireResultsContent() {
   const { room } = useRoom();
-  const { isHost } = usePlayer(room?.id || "");
+  const { isHost, teamId } = usePlayer(room?.id || "");
   const router = useRouter();
 
   useEffect(() => {
@@ -49,73 +49,110 @@ function MillionaireResultsContent() {
     }
   };
 
-  return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-6">Résultats finaux</h2>
-
+  // Vue pour l'hôte
+  const HostView = () => (
+    <div className="max-w-4xl mx-auto p-6 space-y-8">
+      {/* Section gagnant avec plus d'animations et de style */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8 text-center"
+        className="bg-gradient-to-br from-yellow-400 to-amber-500 rounded-xl p-8 text-center shadow-[0_0_30px_rgba(251,191,36,0.3)]"
       >
-        <h3 className="text-xl font-bold mb-2">🏆 Équipe gagnante 🏆</h3>
-        <div className="flex items-center justify-center gap-3 mb-2">
-          <img
-            src={winner.avatar}
-            alt={winner.name}
-            className="w-12 h-12 rounded-full"
-          />
-          <span className="text-2xl font-bold">{winner.name}</span>
+        <h3 className="text-3xl font-extrabold mb-6">🏆 Gagnant 🏆</h3>
+        <div className="flex items-center justify-center gap-6 mb-4">
+          <img src={winner.avatar} alt={winner.name} className="w-24 h-24" />
+          <div>
+            <div className="text-4xl font-bold">{winner.name}</div>
+            <div className="text-2xl font-semibold">
+              {winner.finalScore} points
+            </div>
+          </div>
         </div>
-        <p className="text-lg text-blue-800">
-          avec {winner.finalScore} points !
-        </p>
       </motion.div>
 
-      <div className="space-y-4">
-        {sortedTeams.slice(1).map((team, index) => (
-          <motion.div
-            key={team.teamId}
-            initial={{ x: -50, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: index * 0.1 }}
-            className="flex items-center justify-between p-4 bg-white rounded-lg border"
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-xl font-bold text-gray-500">
-                #{index + 2}
-              </span>
-              <img
-                src={team.avatar}
-                alt={team.name}
-                className="w-8 h-8 rounded-full"
-              />
-              <span className="font-medium">{team.name}</span>
-            </div>
-            <span className="text-lg font-bold">{team.finalScore} points</span>
-          </motion.div>
-        ))}
-      </div>
-
-      {isHost && (
-        <div className="mt-8 space-y-4">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <p className="text-lg font-semibold text-blue-800">
-              Félicitations à {sortedTeams[0]?.name} ! Tu as remporté la manche
-              précédente. C'est toi qui commenceras à tourner la roue pour le
-              jeu Tu te mets combien ?
-            </p>
+      {/* Autres équipes directement, sans container supplémentaire */}
+      {sortedTeams.slice(1).map((team, index) => (
+        <motion.div
+          key={team.teamId}
+          initial={{ x: -50, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: index * 0.1 }}
+          className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20"
+        >
+          <div className="flex items-center gap-4">
+            <span className="text-2xl font-bold text-white/80">
+              #{index + 2}
+            </span>
+            <img src={team.avatar} alt={team.name} className="w-12 h-12" />
+            <span className="text-xl font-medium text-white">{team.name}</span>
           </div>
-          <button
-            onClick={handleNextGame}
-            className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700"
-          >
-            Passer au jeu suivant : Tu te mets combien ?
-          </button>
+          <span className="text-xl font-bold text-white">
+            {team.finalScore} points
+          </span>
+        </motion.div>
+      ))}
+
+      {/* Section suivant */}
+      <div className="mt-12 space-y-4">
+        <div className="bg-blue-900/50 backdrop-blur-sm p-6 rounded-xl border border-blue-400">
+          <p className="text-xl text-white">
+            Félicitations à {winner.name} ! Vous commencerez la prochaine manche
+            de "Tu te mets combien ?"
+          </p>
         </div>
-      )}
+        <button
+          onClick={handleNextGame}
+          className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 px-8 rounded-xl font-bold text-xl hover:from-blue-500 hover:to-blue-600 transition-all"
+        >
+          Continuer vers "Tu te mets combien ?"
+        </button>
+      </div>
     </div>
   );
+
+  // Vue pour les joueurs
+  const PlayerView = () => {
+    const playerTeam = sortedTeams.find((team) => team.teamId === teamId);
+    const playerRank =
+      sortedTeams.findIndex((team) => team.teamId === teamId) + 1;
+    const teamMembers = teamId ? room.teams[teamId]?.members || [] : [];
+
+    return (
+      <div className="max-w-md mx-auto p-6 text-center space-y-8">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="bg-blue-900/50 backdrop-blur-sm p-8 rounded-xl border border-blue-400"
+        >
+          <h2 className="text-3xl font-bold text-white mb-6">
+            {playerTeam?.name}
+          </h2>
+          <div className="space-y-6">
+            <img
+              src={playerTeam?.avatar}
+              alt={playerTeam?.name}
+              className="w-20 h-20 mx-auto"
+            />
+            <div className="text-2xl font-bold text-white">
+              {playerTeam?.finalScore} points
+            </div>
+            <div className="text-xl text-white/80">
+              #{playerRank} au classement
+            </div>
+            <div className="space-y-2 pt-4 border-t border-white/20">
+              {teamMembers.map((member, index) => (
+                <div key={index} className="text-lg text-white/80">
+                  {member.name}
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    );
+  };
+
+  return isHost ? <HostView /> : <PlayerView />;
 }
 
 export default function MillionaireResultsPage() {
