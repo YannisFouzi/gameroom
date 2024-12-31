@@ -285,11 +285,25 @@ export default function QuestionDisplay({
               }
               whileHover={{ scale: isHost || !isCurrentTeam ? 1 : 1.02 }}
               whileTap={{ scale: isHost || !isCurrentTeam ? 1 : 0.98 }}
-              className={`p-4 rounded-lg text-left transition-colors ${getAnswerStyle(
-                index
-              )}`}
+              className={`p-6 rounded-xl flex items-center justify-center transition-all duration-200 border-2 shadow-lg ${
+                // État sélectionné
+                answerState === "selected" && index === selectedAnswer
+                  ? "bg-gradient-to-br from-orange-500 to-orange-600 border-orange-400 text-white"
+                  : // État correct
+                  answerState === "correct" && index === selectedAnswer
+                  ? "bg-gradient-to-br from-emerald-500 to-green-600 border-emerald-400 text-white"
+                  : // État incorrect
+                  answerState === "incorrect"
+                  ? index === selectedAnswer
+                    ? "bg-gradient-to-br from-rose-500 to-red-600 border-rose-400 text-white"
+                    : index === question.correctAnswer
+                    ? "bg-gradient-to-br from-emerald-500 to-green-600 border-emerald-400 text-white"
+                    : "bg-white/80 border-gray-200"
+                  : // État normal - même style pour tous
+                    "bg-gradient-to-br from-blue-500 to-blue-600 border-blue-400 text-white"
+              }`}
             >
-              <span className="font-medium">
+              <span className="font-medium text-lg">
                 {String.fromCharCode(65 + index)}. {answer}
               </span>
             </motion.button>
@@ -308,7 +322,7 @@ export default function QuestionDisplay({
         </motion.button>
       )}
 
-      {answerState === "correct" && (
+      {answerState === "correct" && !isHost && (
         <div className="space-y-4">
           {questionIndex === 14 ? (
             // Si c'est la dernière question (15ème)
