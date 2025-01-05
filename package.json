@@ -24,6 +24,7 @@
     "react-custom-roulette": "^1.4.1",
     "react-dom": "^18.2.0",
     "react-liquid-gauge": "^1.2.4",
+    "sass": "^1.83.1",
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
