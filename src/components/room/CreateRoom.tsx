@@ -2,9 +2,11 @@ import { baseRoomService } from "@/lib/firebase/services";
 import { generateUUID } from "@/lib/utils";
 import "@/styles/components/Bounce.scss";
 import "@/styles/components/ShinyButton.scss";
+import "@/styles/components/SnowButton.scss";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import SnowEffect from "../effects/SnowEffect";
 
 export default function CreateRoom() {
   const router = useRouter();
@@ -26,6 +28,7 @@ export default function CreateRoom() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6">
+      <SnowEffect />
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -87,7 +90,7 @@ export default function CreateRoom() {
         <motion.button
           onClick={handleCreateRoom}
           disabled={isLoading}
-          className="shiny-cta w-full"
+          className="snow-button w-full"
         >
           {isLoading ? (
             <span className="flex items-center justify-center">
