@@ -1,5 +1,6 @@
 import { baseRoomService } from "@/lib/firebase/services";
 import { generateUUID } from "@/lib/utils";
+import "@/styles/components/Bounce.scss";
 import "@/styles/components/ShinyButton.scss";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -31,20 +32,31 @@ export default function CreateRoom() {
         transition={{ duration: 0.5 }}
         className="space-y-12 w-full max-w-2xl"
       >
-        <motion.h1
-          className="text-7xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent text-center leading-tight"
-          animate={{
-            scale: [1, 1.02, 1],
-            rotate: [-1, 1, -1],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        >
-          Soirée du Nouvel An 2024
-        </motion.h1>
+        <h1>
+          <span>L</span>
+          <span>e</span>
+          <span>s</span>
+          <span>&nbsp;</span>
+          <span>b</span>
+          <span>r</span>
+          <span>o</span>
+          <span>n</span>
+          <span>z</span>
+          <span>é</span>
+          <span>s</span>
+          <br />
+          <span>f</span>
+          <span>o</span>
+          <span>n</span>
+          <span>t</span>
+          <span>&nbsp;</span>
+          <span>d</span>
+          <span>u</span>
+          <span>&nbsp;</span>
+          <span>s</span>
+          <span>k</span>
+          <span>i</span>
+        </h1>
 
         <AnimatePresence>
           <motion.div
