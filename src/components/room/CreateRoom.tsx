@@ -3,7 +3,7 @@ import { generateUUID } from "@/lib/utils";
 import "@/styles/components/Bounce.scss";
 import "@/styles/components/ShinyButton.scss";
 import "@/styles/components/SnowButton.scss";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import SnowEffect from "../effects/SnowEffect";
@@ -61,7 +61,7 @@ export default function CreateRoom() {
           <span>i</span>
         </h1>
 
-        <AnimatePresence>
+        {/* <AnimatePresence>
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -70,7 +70,7 @@ export default function CreateRoom() {
             <p className="text-2xl text-white mb-12 text-center">
               Prêt pour une soirée de folie ?
               <motion.span
-                animate={{
+                animate={{-
                   rotate: [0, 10, -10, 10, 0],
                   scale: [1, 1.2, 1.2, 1.2, 1],
                 }}
@@ -85,7 +85,7 @@ export default function CreateRoom() {
               </motion.span>
             </p>
           </motion.div>
-        </AnimatePresence>
+        </AnimatePresence> */}
 
         <motion.button
           onClick={handleCreateRoom}
@@ -118,20 +118,12 @@ export default function CreateRoom() {
             </span>
           ) : (
             <span className="flex items-center justify-center space-x-4">
-              <span>Lancer la soirée</span>
-              <span className="text-4xl">🎊</span>
+              <span className="snow-text" data-text="Lancer le jeu">
+                Lancer le jeu
+              </span>
             </span>
           )}
         </motion.button>
-
-        <motion.div
-          className="text-base text-white text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-        >
-          Créez une room et invitez vos amis à la rejoindre !
-        </motion.div>
       </motion.div>
     </div>
   );
