@@ -1,7 +1,14 @@
 import { ratDeStarService } from "@/lib/firebase/services/ratDeStarService";
 import { Room } from "@/types/room";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+// Ajout du type pour la reconnaissance vocale
+declare global {
+  interface Window {
+    webkitSpeechRecognition: any;
+  }
+}
 
 type GuessingPhaseProps = {
   isCurrentTeam: boolean;
@@ -23,6 +30,43 @@ export function GuessingPhase({
     type: "success" | "error";
     message: string;
   } | null>(null);
+  const [isListening, setIsListening] = useState(false);
+  const [recognition, setRecognition] = useState<any>(null);
+
+  useEffect(() => {
+    // Initialisation de la reconnaissance vocale
+    if (typeof window !== "undefined") {
+      const SpeechRecognition = window.webkitSpeechRecognition;
+      const newRecognition = new SpeechRecognition();
+      newRecognition.continuous = false;
+      newRecognition.lang = "fr-FR";
+
+      newRecognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        setGuess(transcript);
+        setIsListening(false);
+      };
+
+      newRecognition.onerror = () => {
+        setIsListening(false);
+      };
+
+      newRecognition.onend = () => {
+        setIsListening(false);
+      };
+
+      setRecognition(newRecognition);
+    }
+  }, []);
+
+  const toggleListening = () => {
+    if (isListening) {
+      recognition?.stop();
+    } else {
+      recognition?.start();
+    }
+    setIsListening(!isListening);
+  };
 
   const currentTeam = teamId ? room.teams[teamId] : null;
   const activeTeamId =
@@ -210,13 +254,30 @@ export function GuessingPhase({
                 C'est à vous !
               </h2>
               <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                  type="text"
-                  value={guess}
-                  onChange={(e) => setGuess(e.target.value)}
-                  className="w-full p-4 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50"
-                  placeholder="Nom de la célébrité"
-                />
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={guess}
+                    onChange={(e) => setGuess(e.target.value)}
+                    className="flex-1 p-4 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50"
+                    placeholder="Nom de la célébrité"
+                    inputMode="text"
+                    autoComplete="off"
+                  />
+                  <motion.button
+                    type="button"
+                    onClick={toggleListening}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`p-4 rounded-lg ${
+                      isListening
+                        ? "bg-red-500 text-white"
+                        : "bg-white/10 text-white hover:bg-white/20"
+                    }`}
+                  >
+                    {isListening ? "🎤" : "🎙️"}
+                  </motion.button>
+                </div>
                 <button
                   type="submit"
                   className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 rounded-lg font-bold text-lg hover:opacity-90 transition-opacity"
