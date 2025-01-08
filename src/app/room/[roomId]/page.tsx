@@ -48,7 +48,7 @@ function RoomContent() {
             <img
               src={currentTeam.avatar}
               alt={currentTeam.name}
-              className="w-40 h-40 mx-auto"
+              className="w-40 h-40 mx-auto rounded-full object-cover"
             />
           </motion.div>
 
@@ -121,10 +121,6 @@ function RoomContent() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black">
       <div className="container mx-auto p-4 min-h-screen flex flex-col items-center">
-        <h1 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent">
-          Soirée du Nouvel An 2024
-        </h1>
-
         <div className="flex-1 w-full flex items-center justify-center">
           <div className="max-w-2xl w-full space-y-8">
             {isHost ? (
