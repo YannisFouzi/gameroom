@@ -1,5 +1,7 @@
+import RoomQRCode from "@/components/room/RoomQRCode";
 import { Room } from "@/types/room";
 import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 type ExplanationPhaseProps = {
   isHost: boolean;
@@ -14,10 +16,12 @@ export function ExplanationPhase({
   room,
   teamId,
 }: ExplanationPhaseProps) {
+  const pathname = usePathname();
+  const currentUrl = `${window.location.origin}${pathname}`;
   const currentTeam = teamId ? room.teams[teamId] : null;
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto p-6 relative">
       {!isHost && currentTeam && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -141,15 +145,19 @@ export function ExplanationPhase({
       </div>
 
       {isHost && (
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          onClick={onStart}
-          className="w-full mt-12 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-8 rounded-xl font-bold text-xl shadow-lg hover:shadow-xl transition-all hover:opacity-90"
-        >
-          Lancer le jeu 🎮
-        </motion.button>
+        <>
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            onClick={onStart}
+            className="w-full mt-12 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-8 rounded-xl font-bold text-xl shadow-lg hover:shadow-xl transition-all hover:opacity-90"
+          >
+            Lancer le jeu 🎮
+          </motion.button>
+
+          <RoomQRCode roomId={room.id} fullUrl={currentUrl} showButton={true} />
+        </>
       )}
     </div>
   );

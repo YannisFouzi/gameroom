@@ -129,7 +129,7 @@ function RoomContent() {
                 <HostControls room={room} />
                 <ScoreBoard room={room} teamId={teamId} isHost={isHost} />
                 <div className="mt-8">
-                  <RoomQRCode roomId={roomId as string} />
+                  <RoomQRCode roomId={roomId as string} showButton={false} />
                 </div>
               </>
             ) : (
