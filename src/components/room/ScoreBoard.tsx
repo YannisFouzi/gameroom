@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 type ScoreBoardProps = {
   room: Room;
-  teamId?: string;
+  teamId: string | null;
   isHost: boolean;
 };
 
