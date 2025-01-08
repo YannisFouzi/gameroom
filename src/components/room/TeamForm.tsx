@@ -17,7 +17,7 @@ export default function TeamForm({
 }: TeamFormProps) {
   const [teamName, setTeamName] = useState("");
   const [members, setMembers] = useState<string[]>([""]);
-  const [avatar, setAvatar] = useState("/avatars/avatar1.png");
+  const [avatar, setAvatar] = useState("/images/avatar/bruno.jpg");
 
   const handleAddMember = () => {
     setMembers([...members, ""]);
