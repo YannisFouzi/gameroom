@@ -74,6 +74,8 @@ export default function QuestionDisplay({
   );
   const { play: playWrong } = useAudio("/sound/millionnaire/sounds_wrong.mp3");
   const [isBlinking, setIsBlinking] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(90); // 90 secondes = 1m30
+  const [timerActive, setTimerActive] = useState(true);
 
   useEffect(() => {
     setShowValidateButton(false);
@@ -91,6 +93,40 @@ export default function QuestionDisplay({
       setShowValidateButton(false);
     }
   }, [answerState, selectedAnswer, selectedAnswers]);
+
+  // Réinitialiser le timer à chaque nouvelle question
+  useEffect(() => {
+    setTimeLeft(90);
+    setTimerActive(true);
+  }, [questionIndex]);
+
+  // Gérer le décompte
+  useEffect(() => {
+    if (!timerActive || timeLeft <= 0) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((time) => {
+        if (time <= 1) {
+          clearInterval(timer);
+          handleTimeUp();
+          return 0;
+        }
+        return time - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timerActive, timeLeft]);
+
+  // Fonction appelée quand le temps est écoulé
+  const handleTimeUp = async () => {
+    setTimerActive(false);
+    playWrong();
+
+    await new Promise((resolve) => setTimeout(resolve, 700));
+
+    onUpdateAnswerState(selectedAnswer, "incorrect", selectedAnswers);
+  };
 
   const handleAnswerClick = (index: number) => {
     console.log("Click on answer", index); // Debug
@@ -129,6 +165,7 @@ export default function QuestionDisplay({
   };
 
   const handleValidate = async () => {
+    setTimerActive(false);
     setIsBlinking(true);
 
     // Attendre 1.3 secondes avant de jouer le son (2s - 700ms)
@@ -237,6 +274,13 @@ export default function QuestionDisplay({
     onUseDoubleAnswer();
   };
 
+  // Ajouter l'affichage du timer
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
   if (!isHost && !isCurrentTeam) {
     return (
       <div className="text-center p-6">
@@ -249,6 +293,16 @@ export default function QuestionDisplay({
 
   return (
     <div className="max-w-2xl mx-auto p-6">
+      {(isHost || isCurrentTeam) && (
+        <div
+          className={`text-center mb-4 text-2xl font-bold ${
+            timeLeft <= 30 ? "text-red-500" : "text-white"
+          }`}
+        >
+          {formatTime(timeLeft)}
+        </div>
+      )}
+
       {doubleAnswerActive && !isHost && isCurrentTeam && (
         <div className="mb-4 text-center text-sm text-gray-600">
           Sélectionnez jusqu'à 2 réponses ({2 - selectedAnswers.length} restante
