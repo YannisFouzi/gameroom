@@ -324,7 +324,13 @@ export default function QuestionDisplay({
         onUsePhoneCall={onUsePhoneCall}
         onUseFiftyFifty={handleUseFiftyFifty}
         onUseDoubleAnswer={handleUseDoubleAnswer}
-        disabled={!isCurrentTeam || isHost}
+        disabled={
+          !isCurrentTeam ||
+          isHost ||
+          isBlinking ||
+          answerState === "correct" ||
+          answerState === "incorrect"
+        }
         isHost={isHost}
         phoneCallModalOpen={phoneCallModalOpen}
         onPhoneCallModalChange={onPhoneCallModalChange}
