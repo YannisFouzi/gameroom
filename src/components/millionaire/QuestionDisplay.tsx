@@ -121,11 +121,20 @@ export default function QuestionDisplay({
   // Fonction appelée quand le temps est écoulé
   const handleTimeUp = async () => {
     setTimerActive(false);
-    playWrong();
+
+    // Ne jouer le son que pour l'équipe active
+    if (isCurrentTeam) {
+      playWrong();
+    }
 
     await new Promise((resolve) => setTimeout(resolve, 700));
 
-    onUpdateAnswerState(selectedAnswer, "incorrect", selectedAnswers);
+    // Ignorer la sélection du joueur et montrer juste la bonne réponse
+    onUpdateAnswerState(
+      null, // Pas de réponse sélectionnée
+      "incorrect",
+      [] // Pas de réponses sélectionnées pour le mode double réponse
+    );
   };
 
   const handleAnswerClick = (index: number) => {
