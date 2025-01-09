@@ -1,86 +1,67 @@
-import { millionaireQuestions } from "@/data/millionaireQuestions";
+import { useAudio } from "@/hooks/useAudio";
 import { MillionaireCategory } from "@/types/millionaire";
+import { motion } from "framer-motion";
 
 type CategorySelectorProps = {
   onSelectCategory: (category: MillionaireCategory) => void;
   usedCategories: MillionaireCategory[];
-  isHost: boolean;
-  isCurrentTeam: boolean;
 };
 
 export default function CategorySelector({
-  usedCategories,
   onSelectCategory,
-  isCurrentTeam,
-  isHost,
+  usedCategories,
 }: CategorySelectorProps) {
+  const { play: playSelect } = useAudio("/sound/millionnaire/sounds_play.mp3");
+
+  const handleCategorySelect = (category: MillionaireCategory) => {
+    playSelect();
+    onSelectCategory(category);
+  };
+
   const categories = [
     {
       id: "histoire" as MillionaireCategory,
-      name: "Histoire & Géographie",
-      icon: "🌍",
+      name: "Histoire",
+      icon: "🏛️",
     },
-    { id: "sport" as MillionaireCategory, name: "Sport", icon: "⚽" },
-    { id: "annees80" as MillionaireCategory, name: "Années 80", icon: "🕹️" },
-    { id: "television" as MillionaireCategory, name: "Télévision", icon: "📺" },
+    {
+      id: "sport" as MillionaireCategory,
+      name: "Sport",
+      icon: "⚽",
+    },
+    {
+      id: "annees80" as MillionaireCategory,
+      name: "Années 80",
+      icon: "🎵",
+    },
+    {
+      id: "television" as MillionaireCategory,
+      name: "Télévision",
+      icon: "📺",
+    },
   ];
 
-  if (!isCurrentTeam) {
-    return null;
-  }
-
   return (
-    <div className="max-w-2xl mx-auto">
-      {isCurrentTeam && (
-        <div className="text-center mb-4">
-          <h3 className="text-2xl font-bold text-white mb-2">
-            C'est votre tour !
-          </h3>
-          <p className="text-xl text-white/80">Choisissez une catégorie</p>
-        </div>
-      )}
-
-      <div className="grid grid-cols-2 gap-6">
-        {(Object.keys(millionaireQuestions) as MillionaireCategory[]).map(
-          (category) => {
-            const categoryInfo = categories.find((c) => c.id === category);
-            const isUsed = usedCategories.includes(category);
-
-            return (
-              <button
-                key={category}
-                onClick={() => onSelectCategory(category)}
-                disabled={isUsed}
-                className={`p-8 rounded-xl text-center transition-all duration-200 relative overflow-hidden ${
-                  isUsed
-                    ? "bg-gradient-to-br from-gray-700 to-gray-800 cursor-not-allowed border-2 border-gray-600"
-                    : "bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 border-2 border-blue-400 shadow-lg hover:shadow-xl"
-                }`}
-              >
-                {isUsed && (
-                  <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] flex items-center justify-center">
-                    <span className="text-2xl text-white/90 font-bold">
-                      Déjà utilisée
-                    </span>
-                  </div>
-                )}
-                <div
-                  className={`text-5xl mb-4 ${isUsed ? "text-gray-400" : ""}`}
-                >
-                  {categoryInfo?.icon}
-                </div>
-                <h3
-                  className={`text-xl font-bold ${
-                    isUsed ? "text-gray-400" : "text-white"
-                  }`}
-                >
-                  {categoryInfo?.name}
-                </h3>
-              </button>
-            );
-          }
-        )}
-      </div>
+    <div className="grid grid-cols-2 gap-4">
+      {categories.map((category) => (
+        <motion.button
+          key={category.id}
+          onClick={() => handleCategorySelect(category.id)}
+          disabled={usedCategories.includes(category.id)}
+          whileHover={{
+            scale: usedCategories.includes(category.id) ? 1 : 1.05,
+          }}
+          whileTap={{ scale: usedCategories.includes(category.id) ? 1 : 0.95 }}
+          className={`p-6 rounded-xl flex flex-col items-center justify-center gap-2 transition-all ${
+            usedCategories.includes(category.id)
+              ? "bg-gray-700/50 cursor-not-allowed"
+              : "bg-gradient-to-br from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800"
+          }`}
+        >
+          <span className="text-4xl">{category.icon}</span>
+          <span className="text-xl font-bold text-white">{category.name}</span>
+        </motion.button>
+      ))}
     </div>
   );
 }
