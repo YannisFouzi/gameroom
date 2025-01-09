@@ -14,14 +14,13 @@ type TeamWithTotalScore = {
   totalScore: number;
 };
 
-function WheelResultsContent() {
+function EvaluationResultsContent() {
   const { room } = useRoom();
   const { isHost, teamId } = usePlayer(room?.id || "");
 
   if (!room) return <div>Chargement...</div>;
 
   const scores = room.gameData?.scores || {};
-  const wheelScores = room.gameData?.wheelState?.scores || {};
   const teams = room.teams || {};
 
   // Calculer les scores totaux
@@ -31,8 +30,9 @@ function WheelResultsContent() {
       name: team.name,
       avatar: team.avatar,
       millionaireScore: scores.millionaire?.[id] || 0,
-      evaluationScore: wheelScores[id] || 0,
-      totalScore: (scores.millionaire?.[id] || 0) + (wheelScores[id] || 0),
+      evaluationScore: scores.evaluation?.[id] || 0,
+      totalScore:
+        (scores.millionaire?.[id] || 0) + (scores.evaluation?.[id] || 0),
     }))
     .sort((a, b) => b.totalScore - a.totalScore);
 
@@ -72,7 +72,7 @@ function WheelResultsContent() {
           initial={{ x: -50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: index * 0.1 }}
-          className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20"
+          className="flex items-center justify-between p-6 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20"
         >
           <div className="flex items-center gap-4">
             <span className="text-2xl font-bold text-white/80">
@@ -94,24 +94,14 @@ function WheelResultsContent() {
           </span>
         </motion.div>
       ))}
-
-      {/* Message de fin */}
-      <div className="mt-12">
-        <div className="bg-blue-900/50 backdrop-blur-sm p-6 rounded-xl border border-blue-400">
-          <p className="text-xl text-white text-center">
-            🎉 Félicitations à toutes les équipes pour cette belle partie ! 🎉
-          </p>
-        </div>
-      </div>
     </div>
   );
 
-  // Vue pour les joueurs
+  // Vue joueur
   const PlayerView = () => {
     const playerTeam = totalScores.find((team) => team.teamId === teamId);
     const playerRank =
       totalScores.findIndex((team) => team.teamId === teamId) + 1;
-    const teamMembers = teamId ? room.teams[teamId]?.members || [] : [];
 
     return (
       <div className="max-w-md mx-auto p-6 text-center space-y-8">
@@ -141,13 +131,6 @@ function WheelResultsContent() {
                 #{playerRank} au classement final
               </div>
             </div>
-            <div className="space-y-2 pt-4 border-t border-white/20">
-              {teamMembers.map((member, index) => (
-                <div key={index} className="text-lg text-white/80">
-                  {member.name}
-                </div>
-              ))}
-            </div>
           </div>
         </motion.div>
       </div>
@@ -161,12 +144,12 @@ function WheelResultsContent() {
   );
 }
 
-export default function WheelResultsPage() {
+export default function EvaluationResultsPage() {
   const { roomId } = useParams();
 
   return (
     <RoomProvider roomId={roomId as string}>
-      <WheelResultsContent />
+      <EvaluationResultsContent />
     </RoomProvider>
   );
 }
