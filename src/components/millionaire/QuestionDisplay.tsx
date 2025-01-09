@@ -1,3 +1,4 @@
+import { useAudio } from "@/hooks/useAudio";
 import { JokerType, MillionaireQuestion } from "@/types/millionaire";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -68,6 +69,9 @@ export default function QuestionDisplay({
   const [usedJokersForQuestion, setUsedJokersForQuestion] = useState<
     JokerType[]
   >([]);
+  const { play: playCorrect } = useAudio(
+    "/sound/millionnaire/sounds_correct.mp3"
+  );
 
   useEffect(() => {
     setShowValidateButton(false);
@@ -131,6 +135,10 @@ export default function QuestionDisplay({
         isCorrect ? "correct" : "incorrect",
         selectedAnswers
       );
+      // Jouer le son si la réponse est correcte
+      if (isCorrect) {
+        playCorrect();
+      }
     } else {
       // Logique pour le joker double réponse
       const hasCorrectAnswer = selectedAnswers.includes(question.correctAnswer);
@@ -139,6 +147,10 @@ export default function QuestionDisplay({
         hasCorrectAnswer ? "correct" : "incorrect",
         selectedAnswers
       );
+      // Jouer le son si la réponse est correcte
+      if (hasCorrectAnswer) {
+        playCorrect();
+      }
     }
   };
 
