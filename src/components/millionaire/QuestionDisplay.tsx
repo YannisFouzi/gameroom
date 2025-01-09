@@ -73,6 +73,9 @@ export default function QuestionDisplay({
     "/sound/millionnaire/sounds_correct.mp3"
   );
   const { play: playWrong } = useAudio("/sound/millionnaire/sounds_wrong.mp3");
+  const { play: playSuspens } = useAudio(
+    "/sound/millionnaire/sounds_suspens.mp3"
+  );
   const [isBlinking, setIsBlinking] = useState(false);
   const [timeLeft, setTimeLeft] = useState(90); // 90 secondes = 1m30
   const [timerActive, setTimerActive] = useState(true);
@@ -106,6 +109,11 @@ export default function QuestionDisplay({
 
     const timer = setInterval(() => {
       setTimeLeft((time) => {
+        // Jouer le son de suspense à 30 secondes
+        if (time === 31 && isCurrentTeam) {
+          playSuspens();
+        }
+
         if (time <= 1) {
           clearInterval(timer);
           handleTimeUp();
