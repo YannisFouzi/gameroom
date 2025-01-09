@@ -198,6 +198,10 @@ export const ratDeStarService = {
     } else {
       await this.setLastWrongCelebrity(roomId, guess);
 
+      await updateDoc(doc(db, "rooms", roomId), {
+        [`teams.${teamId}.wrongAnswer`]: guess,
+      });
+
       setTimeout(async () => {
         const remainingTeams = room.gameData!.remainingTeams.filter(
           (id) => id !== teamId

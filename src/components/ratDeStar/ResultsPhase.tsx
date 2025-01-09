@@ -110,6 +110,17 @@ export function ResultsPhase({
                   </div>
                 ))}
             </div>
+
+            {currentTeam?.wrongAnswer && (
+              <div className="mt-8 space-y-2">
+                <h3 className="text-2xl font-bold text-white">
+                  Mauvaise réponse :
+                </h3>
+                <div className="text-xl text-red-400 font-medium">
+                  "{currentTeam.wrongAnswer}"
+                </div>
+              </div>
+            )}
           </motion.div>
         </div>
       </div>

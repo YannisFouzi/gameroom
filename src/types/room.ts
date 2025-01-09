@@ -19,6 +19,7 @@ export type Team = {
   isOnline: boolean;
   lastSeen: Timestamp;
   deviceId: string;
+  wrongAnswer?: string;
 };
 
 export type Celebrity = {
