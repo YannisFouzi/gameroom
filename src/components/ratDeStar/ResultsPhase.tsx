@@ -128,8 +128,12 @@ export function ResultsPhase({
   }
 
   return (
-    <div className="h-screen flex flex-col p-2">
-      <div className="text-center space-y-2 mb-2">
+    <div className="h-screen flex flex-col p-2 gap-2">
+      <motion.div
+        className="text-center"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
         <div className="flex items-center justify-center gap-2 bg-gradient-to-r from-yellow-400 to-yellow-600 p-2 rounded-lg">
           <img
             src={teams[remainingTeams[0]]?.avatar}
@@ -140,40 +144,48 @@ export function ResultsPhase({
             🏆 L'équipe {teams[remainingTeams[0]]?.name} remporte la partie !
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="flex-1 grid grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-1 auto-rows-fr">
+      <div className="flex-1 grid grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-2 min-h-0">
         {Object.entries(celebrities).map(([id, celebrity]) => (
-          <div key={id} className="flex flex-col items-center p-0.5">
-            <div
-              className={`relative w-full h-full flex-1 ${
-                celebrity.foundBy
-                  ? "ring-2 ring-green-500 rounded-lg overflow-hidden"
-                  : ""
-              }`}
-            >
-              <img
-                src={celebrity.imageUrl}
-                alt={celebrity.name}
-                className="absolute inset-0 w-full h-full object-contain"
-              />
-            </div>
+          <motion.div
+            key={id}
+            className="relative w-40 h-40"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <img
+              src={celebrity.imageUrl}
+              alt={celebrity.name}
+              className="w-full h-full object-cover rounded-lg"
+            />
             {celebrity.foundBy && (
-              <div className="text-xs font-medium text-green-500 truncate w-full text-center mt-1">
-                {teams[celebrity.foundBy]?.name}
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 rounded-lg">
+                <img
+                  src={teams[celebrity.foundBy]?.avatar}
+                  alt={teams[celebrity.foundBy]?.name}
+                  className="w-12 h-12 rounded-full border-2 border-white"
+                />
+                <div className="text-sm font-bold text-white mt-1">
+                  {teams[celebrity.foundBy]?.name}
+                </div>
               </div>
             )}
-          </div>
+          </motion.div>
         ))}
       </div>
 
-      <div className="mt-2 text-center">
-        <button
+      <div className="text-center py-2">
+        <motion.button
           onClick={onNextGame}
-          className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 px-6 rounded-xl font-bold text-lg hover:opacity-90 transition-all"
+          className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 px-8 rounded-xl font-bold text-lg hover:opacity-90 transition-all"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
           Jeu suivant →
-        </button>
+        </motion.button>
       </div>
     </div>
   );
