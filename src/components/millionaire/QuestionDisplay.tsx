@@ -72,6 +72,7 @@ export default function QuestionDisplay({
   const { play: playCorrect } = useAudio(
     "/sound/millionnaire/sounds_correct.mp3"
   );
+  const [isBlinking, setIsBlinking] = useState(false);
 
   useEffect(() => {
     setShowValidateButton(false);
@@ -126,31 +127,39 @@ export default function QuestionDisplay({
     }
   };
 
-  const handleValidate = () => {
+  const handleValidate = async () => {
+    setIsBlinking(true);
+
+    // Attendre 1.3 secondes avant de jouer le son (2s - 700ms)
+    await new Promise((resolve) => setTimeout(resolve, 1300));
+
     if (!doubleAnswerActive) {
-      // Logique normale
       const isCorrect = selectedAnswer === question.correctAnswer;
+      // Jouer le son 700ms avant d'afficher le résultat
+      if (isCorrect) {
+        playCorrect();
+      }
+      await new Promise((resolve) => setTimeout(resolve, 700));
+
+      setIsBlinking(false);
       onUpdateAnswerState(
         selectedAnswer,
         isCorrect ? "correct" : "incorrect",
         selectedAnswers
       );
-      // Jouer le son si la réponse est correcte
-      if (isCorrect) {
+    } else {
+      const hasCorrectAnswer = selectedAnswers.includes(question.correctAnswer);
+      if (hasCorrectAnswer) {
         playCorrect();
       }
-    } else {
-      // Logique pour le joker double réponse
-      const hasCorrectAnswer = selectedAnswers.includes(question.correctAnswer);
+      await new Promise((resolve) => setTimeout(resolve, 700));
+
+      setIsBlinking(false);
       onUpdateAnswerState(
         null,
         hasCorrectAnswer ? "correct" : "incorrect",
         selectedAnswers
       );
-      // Jouer le son si la réponse est correcte
-      if (hasCorrectAnswer) {
-        playCorrect();
-      }
     }
   };
 
@@ -319,6 +328,11 @@ export default function QuestionDisplay({
                     : "bg-white/80 border-gray-200"
                   : // État normal - même style pour tous
                     "bg-gradient-to-br from-blue-500 to-blue-600 border-blue-400 text-white"
+              } ${
+                isBlinking &&
+                (selectedAnswer === index || selectedAnswers.includes(index))
+                  ? "animate-[flash_0.3s_ease-in-out_infinite]"
+                  : ""
               }`}
             >
               <span className="font-medium text-lg">
@@ -329,7 +343,7 @@ export default function QuestionDisplay({
         )}
       </div>
 
-      {showValidateButton && !isHost && isCurrentTeam && (
+      {showValidateButton && !isHost && isCurrentTeam && !isBlinking && (
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
