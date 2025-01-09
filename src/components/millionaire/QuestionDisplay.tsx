@@ -72,6 +72,7 @@ export default function QuestionDisplay({
   const { play: playCorrect } = useAudio(
     "/sound/millionnaire/sounds_correct.mp3"
   );
+  const { play: playWrong } = useAudio("/sound/millionnaire/sounds_wrong.mp3");
   const [isBlinking, setIsBlinking] = useState(false);
 
   useEffect(() => {
@@ -135,9 +136,11 @@ export default function QuestionDisplay({
 
     if (!doubleAnswerActive) {
       const isCorrect = selectedAnswer === question.correctAnswer;
-      // Jouer le son 700ms avant d'afficher le résultat
+      // Jouer le son approprié
       if (isCorrect) {
         playCorrect();
+      } else {
+        playWrong();
       }
       await new Promise((resolve) => setTimeout(resolve, 700));
 
@@ -151,6 +154,8 @@ export default function QuestionDisplay({
       const hasCorrectAnswer = selectedAnswers.includes(question.correctAnswer);
       if (hasCorrectAnswer) {
         playCorrect();
+      } else {
+        playWrong();
       }
       await new Promise((resolve) => setTimeout(resolve, 700));
 
