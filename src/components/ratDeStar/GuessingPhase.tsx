@@ -123,6 +123,21 @@ export function GuessingPhase({
             </motion.div>
           )}
 
+          {room.gameData.lastWrongCelebrity && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
+            >
+              <div className="bg-white/10 p-8 rounded-xl border border-white/20">
+                <h2 className="text-4xl font-bold text-red-400">
+                  {room.gameData.lastWrongCelebrity}
+                </h2>
+              </div>
+            </motion.div>
+          )}
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -193,6 +208,21 @@ export function GuessingPhase({
             <div className="bg-white/10 p-8 rounded-xl border border-white/20">
               <h2 className="text-4xl font-bold text-green-400">
                 {room.gameData.lastFoundCelebrity}
+              </h2>
+            </div>
+          </motion.div>
+        )}
+
+        {room.gameData.lastWrongCelebrity && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
+          >
+            <div className="bg-white/10 p-8 rounded-xl border border-white/20">
+              <h2 className="text-4xl font-bold text-red-400">
+                {room.gameData.lastWrongCelebrity}
               </h2>
             </div>
           </motion.div>

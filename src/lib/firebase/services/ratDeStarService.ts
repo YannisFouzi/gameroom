@@ -196,16 +196,21 @@ export const ratDeStarService = {
       });
       return true;
     } else {
-      const remainingTeams = room.gameData!.remainingTeams.filter(
-        (id) => id !== teamId
-      );
+      await this.setLastWrongCelebrity(roomId, guess);
 
-      await updateDoc(doc(db, "rooms", roomId), {
-        "gameData.remainingTeams": remainingTeams,
-        "gameData.currentTeamIndex": 0,
-        gamePhase: remainingTeams.length === 1 ? "results" : "guessing",
-        updatedAt: serverTimestamp(),
-      });
+      setTimeout(async () => {
+        const remainingTeams = room.gameData!.remainingTeams.filter(
+          (id) => id !== teamId
+        );
+
+        await updateDoc(doc(db, "rooms", roomId), {
+          "gameData.remainingTeams": remainingTeams,
+          "gameData.currentTeamIndex": 0,
+          "gameData.lastWrongCelebrity": null,
+          gamePhase: remainingTeams.length === 1 ? "results" : "guessing",
+        });
+      }, 3000);
+
       return false;
     }
   },
@@ -214,6 +219,13 @@ export const ratDeStarService = {
     const roomRef = doc(db, "rooms", roomId);
     await updateDoc(roomRef, {
       "gameData.lastFoundCelebrity": celebrityName,
+    });
+  },
+
+  async setLastWrongCelebrity(roomId: string, celebrityName: string | null) {
+    const roomRef = doc(db, "rooms", roomId);
+    await updateDoc(roomRef, {
+      "gameData.lastWrongCelebrity": celebrityName,
     });
   },
 };
