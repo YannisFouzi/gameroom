@@ -116,7 +116,7 @@ export function GuessingPhase({
               className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
             >
               <div className="bg-white/10 p-8 rounded-xl border border-white/20">
-                <h2 className="text-4xl font-bold text-white">
+                <h2 className="text-4xl font-bold text-green-400">
                   {room.gameData.lastFoundCelebrity}
                 </h2>
               </div>
@@ -191,7 +191,7 @@ export function GuessingPhase({
             className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
           >
             <div className="bg-white/10 p-8 rounded-xl border border-white/20">
-              <h2 className="text-4xl font-bold text-white">
+              <h2 className="text-4xl font-bold text-green-400">
                 {room.gameData.lastFoundCelebrity}
               </h2>
             </div>
