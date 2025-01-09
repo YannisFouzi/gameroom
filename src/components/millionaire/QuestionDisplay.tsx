@@ -321,22 +321,23 @@ export default function QuestionDisplay({
                     ? index === question.correctAnswer
                       ? "bg-gradient-to-br from-emerald-500 to-green-600 border-emerald-400 text-white" // Bonne réponse sélectionnée
                       : "bg-gradient-to-br from-rose-500 to-red-600 border-rose-400 text-white" // Mauvaise réponse sélectionnée
-                    : "bg-white/80 border-gray-200" // Réponses non sélectionnées
-                  : // État sélectionné normal (pendant la sélection)
+                    : index === question.correctAnswer
+                    ? "bg-gradient-to-br from-emerald-500 to-green-600 border-emerald-400 text-white" // Révéler la bonne réponse
+                    : "bg-gradient-to-br from-blue-500 to-blue-600 border-blue-400 text-white" // Garder la couleur normale
+                  : // État sélectionné normal
                   (answerState === "selected" && index === selectedAnswer) ||
                     (doubleAnswerActive && selectedAnswers.includes(index))
                   ? "bg-gradient-to-br from-orange-500 to-orange-600 border-orange-400 text-white"
-                  : // État correct
-                  answerState === "correct" && index === selectedAnswer
-                  ? "bg-gradient-to-br from-emerald-500 to-green-600 border-emerald-400 text-white"
-                  : // État incorrect
-                  answerState === "incorrect"
+                  : // État correct/incorrect
+                  answerState === "correct" || answerState === "incorrect"
                   ? index === selectedAnswer
-                    ? "bg-gradient-to-br from-rose-500 to-red-600 border-rose-400 text-white"
+                    ? index === question.correctAnswer
+                      ? "bg-gradient-to-br from-emerald-500 to-green-600 border-emerald-400 text-white"
+                      : "bg-gradient-to-br from-rose-500 to-red-600 border-rose-400 text-white"
                     : index === question.correctAnswer
                     ? "bg-gradient-to-br from-emerald-500 to-green-600 border-emerald-400 text-white"
-                    : "bg-white/80 border-gray-200"
-                  : // État normal - même style pour tous
+                    : "bg-gradient-to-br from-blue-500 to-blue-600 border-blue-400 text-white" // Garder la couleur normale
+                  : // État normal
                     "bg-gradient-to-br from-blue-500 to-blue-600 border-blue-400 text-white"
               } ${
                 isBlinking &&
