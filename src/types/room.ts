@@ -57,6 +57,11 @@ export type GameData = {
   winningTeamId?: string;
   wheelState?: WheelState;
   currentTeamId?: string;
+  scores?: {
+    millionaire?: Record<string, number>;
+    evaluation?: Record<string, number>;
+    total?: Record<string, number>;
+  };
 } & {
   [K in keyof MillionaireGameData]?: MillionaireGameData[K];
 };
