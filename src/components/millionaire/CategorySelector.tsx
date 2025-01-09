@@ -5,18 +5,34 @@ import { motion } from "framer-motion";
 type CategorySelectorProps = {
   onSelectCategory: (category: MillionaireCategory) => void;
   usedCategories: MillionaireCategory[];
+  isCurrentTeam: boolean;
+  isHost: boolean;
 };
 
 export default function CategorySelector({
   onSelectCategory,
   usedCategories,
+  isCurrentTeam,
+  isHost,
 }: CategorySelectorProps) {
   const { play: playSelect } = useAudio("/sound/millionnaire/sounds_play.mp3");
 
   const handleCategorySelect = (category: MillionaireCategory) => {
+    if (!isCurrentTeam) return;
+
     playSelect();
     onSelectCategory(category);
   };
+
+  if (!isCurrentTeam) {
+    return (
+      <div className="text-center p-6">
+        <p className="text-gray-600">
+          En attente de la sélection de l'équipe active...
+        </p>
+      </div>
+    );
+  }
 
   const categories = [
     {
@@ -47,7 +63,7 @@ export default function CategorySelector({
         <motion.button
           key={category.id}
           onClick={() => handleCategorySelect(category.id)}
-          disabled={usedCategories.includes(category.id)}
+          disabled={usedCategories.includes(category.id) || !isCurrentTeam}
           whileHover={{
             scale: usedCategories.includes(category.id) ? 1 : 1.05,
           }}

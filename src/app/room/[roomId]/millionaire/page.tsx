@@ -55,7 +55,8 @@ function MillionaireContent() {
   };
 
   const currentTeam = gameData.remainingTeams[gameData.currentTeamIndex];
-  const isCurrentTeam = currentTeam === teamId;
+  const isCurrentTeam =
+    teamId === room?.gameData?.remainingTeams[room?.gameData?.currentTeamIndex];
 
   // Vérifier si le jeu est terminé
   useEffect(() => {
@@ -337,9 +338,9 @@ function MillionaireContent() {
                 ) : (
                   <CategorySelector
                     onSelectCategory={handleCategorySelect}
-                    usedCategories={gameData?.usedCategories || []}
-                    isHost={isHost}
+                    usedCategories={room?.gameData?.usedCategories || []}
                     isCurrentTeam={isCurrentTeam}
+                    isHost={isHost}
                   />
                 )}
               </div>
