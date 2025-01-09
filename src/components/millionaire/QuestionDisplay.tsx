@@ -294,6 +294,11 @@ export default function QuestionDisplay({
           hiddenAnswers.includes(index) ? null : (
             <motion.button
               key={index}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{
+                delay: index * 1, // Un peu plus rapide : 0.3s entre chaque réponse
+              }}
               onClick={() => handleAnswerClick(index)}
               disabled={
                 isHost ||
