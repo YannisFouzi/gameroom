@@ -51,22 +51,23 @@ export default function ResultsPhase({
           </h2>
         </motion.div>
 
-        {/* Dernier joueur éliminé */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-red-500/20 backdrop-blur-sm p-6 rounded-xl border border-red-500/30"
-        >
-          <h3 className="text-xl font-bold text-white mb-2">
-            Joueur éliminé :
-          </h3>
-          <div className="text-2xl font-bold text-white mb-2">
-            {lastEliminated.name}
-          </div>
-          <div className="text-lg text-white/80">
-            Rôle : {lastEliminated.role}
-          </div>
-        </motion.div>
+        {lastEliminated && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-red-500/20 backdrop-blur-sm p-6 rounded-xl border border-red-500/30"
+          >
+            <h3 className="text-xl font-bold text-white mb-2">
+              Joueur éliminé :
+            </h3>
+            <div className="text-2xl font-bold text-white mb-2">
+              {lastEliminated.name}
+            </div>
+            <div className="text-lg text-white/80">
+              Rôle : {lastEliminated.role}
+            </div>
+          </motion.div>
+        )}
 
         {/* Liste des joueurs éliminés */}
         <motion.div

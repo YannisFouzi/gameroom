@@ -2,14 +2,29 @@
 
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
+import { undercoverService } from "@/lib/firebase/services/undercoverService";
 import { UndercoverGameData } from "@/types/undercover";
 import { motion } from "framer-motion";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 function UndercoverResultsContent() {
+  const router = useRouter();
   const { room } = useRoom();
   const { isHost, teamId } = usePlayer(room?.id || "");
   const gameData = room?.gameData?.undercover as UndercoverGameData;
+  const isTeamReady = teamId && gameData.teamsReady?.includes(teamId);
+
+  useEffect(() => {
+    if (room?.gamePhase === "undercover-playing") {
+      router.push(`/room/${room.id}/undercover`);
+    }
+  }, [room?.gamePhase, room?.id, router]);
+
+  const handleTeamReady = async () => {
+    if (!teamId || !room) return;
+    await undercoverService.teamReadyForNextGame(room.id, teamId);
+  };
 
   if (!room || !gameData) return <div>Chargement...</div>;
 
@@ -137,6 +152,27 @@ function UndercoverResultsContent() {
           ))}
         </div>
       </motion.div>
+
+      {!isHost && !isTeamReady && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center mt-8"
+        >
+          <button
+            onClick={handleTeamReady}
+            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-bold text-lg hover:opacity-90 transition-all"
+          >
+            Partie suivante
+          </button>
+        </motion.div>
+      )}
+
+      {!isHost && isTeamReady && (
+        <div className="text-center mt-8 text-white/80">
+          En attente des autres équipes...
+        </div>
+      )}
     </div>
   );
 

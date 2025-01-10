@@ -49,7 +49,7 @@ function assignRoles(teams: Record<string, Team>): UndercoverPlayer[] {
 }
 
 export const undercoverService = {
-  async initializeGame(roomId: string) {
+  async initializeGame(roomId: string, round: number = 0) {
     const room = await baseRoomService.getRoom(roomId);
     const players = assignRoles(room.teams);
 
@@ -89,9 +89,9 @@ export const undercoverService = {
       players,
       playOrder, // Ordre alterné
       currentPlayerIndex: 0,
-      currentRound: 0,
+      currentRound: round,
       eliminatedPlayers: [],
-      words: WORDS_BY_ROUND[0],
+      words: WORDS_BY_ROUND[round],
       teamsReady: [],
       votes: {},
     };
@@ -294,6 +294,32 @@ export const undercoverService = {
       },
       updatedAt: serverTimestamp(),
     });
+  },
+
+  async teamReadyForNextGame(roomId: string, teamId: string) {
+    const room = await baseRoomService.getRoom(roomId);
+    const gameData = room.gameData?.undercover as UndercoverGameData;
+
+    const updatedTeamsReady = [...(gameData.teamsReady || []), teamId];
+    const allTeamsReady =
+      updatedTeamsReady.length === Object.keys(room.teams).length;
+
+    if (allTeamsReady) {
+      // Initialiser une nouvelle partie avec les mots suivants
+      await this.initializeGame(roomId, (gameData.currentRound || 0) + 1);
+
+      // Changer directement la phase du jeu
+      await updateDoc(doc(db, "rooms", roomId), {
+        gamePhase: "undercover-playing",
+        updatedAt: serverTimestamp(),
+      });
+    } else {
+      // Juste enregistrer l'équipe comme prête
+      await updateDoc(doc(db, "rooms", roomId), {
+        "gameData.undercover.teamsReady": updatedTeamsReady,
+        updatedAt: serverTimestamp(),
+      });
+    }
   },
 
   // Autres méthodes à venir...
