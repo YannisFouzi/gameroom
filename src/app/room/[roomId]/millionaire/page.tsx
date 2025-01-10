@@ -322,6 +322,7 @@ function MillionaireContent() {
               onSetHiddenAnswers={handleSetHiddenAnswers}
               doubleAnswerActive={gameData.doubleAnswerActive}
               onSetDoubleAnswerActive={handleSetDoubleAnswerActive}
+              room={room}
             />
           ) : (
             <>

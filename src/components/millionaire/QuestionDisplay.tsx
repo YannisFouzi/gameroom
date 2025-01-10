@@ -1,5 +1,7 @@
 import { useAudio } from "@/hooks/useAudio";
+import { db } from "@/lib/firebase";
 import { JokerType, MillionaireQuestion } from "@/types/millionaire";
+import { doc, updateDoc } from "firebase/firestore";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Jokers from "./Jokers";
@@ -36,6 +38,7 @@ type QuestionDisplayProps = {
   onSetHiddenAnswers: (answers: number[]) => void;
   doubleAnswerActive: boolean;
   onSetDoubleAnswerActive: (isActive: boolean) => void;
+  room: any;
 };
 
 type AnswerState = "selected" | "correct" | "incorrect" | null;
@@ -64,6 +67,7 @@ export default function QuestionDisplay({
   onSetHiddenAnswers,
   doubleAnswerActive,
   onSetDoubleAnswerActive,
+  room,
 }: QuestionDisplayProps) {
   const [showValidateButton, setShowValidateButton] = useState(false);
   const [usedJokersForQuestion, setUsedJokersForQuestion] = useState<
@@ -77,7 +81,7 @@ export default function QuestionDisplay({
     "/sound/millionnaire/sounds_suspens.mp3"
   );
   const [isBlinking, setIsBlinking] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(90); // 90 secondes = 1m30
+  const [timeLeft, setTimeLeft] = useState(90);
   const [timerActive, setTimerActive] = useState(true);
 
   useEffect(() => {
@@ -97,52 +101,49 @@ export default function QuestionDisplay({
     }
   }, [answerState, selectedAnswer, selectedAnswers]);
 
-  // Réinitialiser le timer à chaque nouvelle question
   useEffect(() => {
-    setTimeLeft(90);
-    setTimerActive(true);
+    // Reset timer state when question changes
+    const roomRef = doc(db, "rooms", room.id);
+    updateDoc(roomRef, {
+      "gameData.timerStartedAt": Date.now(),
+      "gameData.timerPaused": false,
+      "gameData.timerDuration": 90,
+    });
   }, [questionIndex]);
 
-  // Gérer le décompte
   useEffect(() => {
-    if (!timerActive || timeLeft <= 0) return;
+    if (!room.gameData?.timerStartedAt || room.gameData?.timerPaused) return;
 
-    const timer = setInterval(() => {
-      setTimeLeft((time) => {
-        // Jouer le son de suspense à 30 secondes
-        if (time === 31 && isCurrentTeam) {
-          playSuspens();
-        }
+    const interval = setInterval(() => {
+      const elapsed = Math.floor(
+        (Date.now() - room.gameData.timerStartedAt) / 1000
+      );
+      const remaining = Math.max(0, room.gameData.timerDuration - elapsed);
 
-        if (time <= 1) {
-          clearInterval(timer);
-          handleTimeUp();
-          return 0;
-        }
-        return time - 1;
-      });
+      setTimeLeft(remaining);
+
+      if (remaining === 0) {
+        clearInterval(interval);
+        handleTimeUp();
+      }
     }, 1000);
 
-    return () => clearInterval(timer);
-  }, [timerActive, timeLeft]);
+    return () => clearInterval(interval);
+  }, [room.gameData?.timerStartedAt, room.gameData?.timerPaused]);
 
-  // Fonction appelée quand le temps est écoulé
   const handleTimeUp = async () => {
-    setTimerActive(false);
+    const roomRef = doc(db, "rooms", room.id);
+    await updateDoc(roomRef, {
+      "gameData.timerPaused": true,
+    });
 
-    // Ne jouer le son que pour l'équipe active
     if (isCurrentTeam) {
       playWrong();
     }
 
     await new Promise((resolve) => setTimeout(resolve, 700));
 
-    // Ignorer la sélection du joueur et montrer juste la bonne réponse
-    onUpdateAnswerState(
-      null, // Pas de réponse sélectionnée
-      "incorrect",
-      [] // Pas de réponses sélectionnées pour le mode double réponse
-    );
+    onUpdateAnswerState(null, "incorrect", []);
   };
 
   const handleAnswerClick = (index: number) => {
@@ -182,15 +183,17 @@ export default function QuestionDisplay({
   };
 
   const handleValidate = async () => {
-    setTimerActive(false);
-    setIsBlinking(true);
+    // Arrêter le timer dans Firebase
+    const roomRef = doc(db, "rooms", room.id);
+    await updateDoc(roomRef, {
+      "gameData.timerPaused": true,
+    });
 
-    // Attendre 1.3 secondes avant de jouer le son (2s - 700ms)
+    setIsBlinking(true);
     await new Promise((resolve) => setTimeout(resolve, 1300));
 
     if (!doubleAnswerActive) {
       const isCorrect = selectedAnswer === question.correctAnswer;
-      // Jouer le son approprié
       if (isCorrect) {
         playCorrect();
       } else {

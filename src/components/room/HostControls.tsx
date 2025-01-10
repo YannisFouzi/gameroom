@@ -1,5 +1,7 @@
+import { db } from "@/lib/firebase";
 import { roomService } from "@/lib/firebase/roomService";
 import { Room } from "@/types/room";
+import { doc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 
 type HostControlsProps = {
@@ -19,6 +21,12 @@ export default function HostControls({ room }: HostControlsProps) {
     try {
       setIsUpdating(true);
       await roomService.startGame(room.id);
+      const roomRef = doc(db, "rooms", room.id);
+      await updateDoc(roomRef, {
+        "gameData.timerStartedAt": Date.now(),
+        "gameData.timerPaused": false,
+        "gameData.timerDuration": 90,
+      });
     } catch (error) {
       console.error("Erreur lors du démarrage de la partie:", error);
     } finally {
