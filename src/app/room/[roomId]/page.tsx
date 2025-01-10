@@ -18,8 +18,11 @@ function RoomContent() {
   usePresence(roomId as string);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [volume, setVolume] = useState(0.5);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
+    if (!isHost || isInitialized) return;
+
     const audio = new Audio(
       "/sound/musique/Gilbert Montagné - Just Because of You.mp3"
     );
@@ -27,17 +30,32 @@ function RoomContent() {
     audio.volume = volume;
     audioRef.current = audio;
 
-    if (!loading && room) {
-      audio.play().catch((error) => {
-        console.log("Erreur de lecture audio:", error);
-      });
-    }
+    audio.addEventListener(
+      "canplaythrough",
+      () => {
+        if (!isInitialized) {
+          audio
+            .play()
+            .then(() => {
+              setIsInitialized(true);
+            })
+            .catch((error) => {
+              console.log("Erreur de lecture audio:", error);
+            });
+        }
+      },
+      { once: true }
+    );
 
     return () => {
-      audio.pause();
-      audio.currentTime = 0;
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        audioRef.current = null;
+      }
+      setIsInitialized(false);
     };
-  }, [loading, room]);
+  }, [isHost]);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -160,7 +178,6 @@ function RoomContent() {
         <div className="flex-1 w-full flex items-center justify-center">
           <div className="max-w-2xl w-full space-y-8">
             {isHost ? (
-              // Vue de l'hôte
               <>
                 <HostControls room={room} />
                 <ScoreBoard room={room} teamId={teamId} isHost={isHost} />
@@ -169,25 +186,26 @@ function RoomContent() {
                 </div>
               </>
             ) : (
-              // Vue des joueurs
               renderPlayerView()
             )}
           </div>
         </div>
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-gray-800/80 p-3 rounded-lg">
-          <span className="text-white text-sm font-medium">Volume</span>
-          <span className="text-white">🔈</span>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={volume}
-            onChange={handleVolumeChange}
-            className="w-48 h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-purple-500 hover:[&::-webkit-slider-thumb]:bg-purple-600"
-          />
-          <span className="text-white">🔊</span>
-        </div>
+        {isHost && (
+          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-gray-800/80 p-3 rounded-lg">
+            <span className="text-white text-sm font-medium">Volume</span>
+            <span className="text-white">🔈</span>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={volume}
+              onChange={handleVolumeChange}
+              className="w-48 h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-purple-500 hover:[&::-webkit-slider-thumb]:bg-purple-600"
+            />
+            <span className="text-white">🔊</span>
+          </div>
+        )}
       </div>
     </div>
   );

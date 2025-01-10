@@ -10,6 +10,11 @@ export default function HostControls({ room }: HostControlsProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const isWaiting = room.status === "waiting";
 
+  // Compte le nombre d'équipes qui ont au moins un membre
+  const validTeamsCount = Object.values(room.teams).filter(
+    (team) => team.members.length > 0
+  ).length;
+
   const handleStartGame = async () => {
     try {
       setIsUpdating(true);
@@ -27,7 +32,7 @@ export default function HostControls({ room }: HostControlsProps) {
         {isWaiting && (
           <button
             onClick={handleStartGame}
-            disabled={Object.keys(room.teams).length < 2 || isUpdating}
+            disabled={validTeamsCount < 2 || isUpdating}
             className="w-full bg-white/10 backdrop-blur-sm text-white py-2 px-4 rounded-md hover:bg-white/20 disabled:opacity-50 transition-all duration-200"
           >
             {isUpdating ? "Démarrage..." : "Démarrer la partie"}
