@@ -52,6 +52,7 @@ function MillionaireContent() {
     phoneCallModalOpen: room?.gameData?.phoneCallModalOpen || false,
     hiddenAnswers: room?.gameData?.hiddenAnswers || [],
     doubleAnswerActive: room?.gameData?.doubleAnswerActive || false,
+    isBlinking: room?.gameData?.isBlinking || false,
   };
 
   const currentTeam = gameData.remainingTeams[gameData.currentTeamIndex];

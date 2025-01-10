@@ -80,9 +80,10 @@ export default function QuestionDisplay({
   const { play: playSuspens, stop: stopSuspens } = useAudio(
     "/sound/millionnaire/sounds_suspens.mp3"
   );
-  const [isBlinking, setIsBlinking] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
   const [timerActive, setTimerActive] = useState(true);
+
+  const isBlinking = room.gameData?.isBlinking || false;
 
   useEffect(() => {
     setShowValidateButton(false);
@@ -187,17 +188,22 @@ export default function QuestionDisplay({
   };
 
   const handleValidate = async () => {
-    // Arrêter le timer dans Firebase
     const roomRef = doc(db, "rooms", room.id);
+
+    // Mettre à jour Firebase avec isBlinking: true et timer pausé
     await updateDoc(roomRef, {
+      "gameData.isBlinking": true,
       "gameData.timerPaused": true,
     });
 
-    // Arrêter la musique de suspense
     stopSuspens();
 
-    setIsBlinking(true);
     await new Promise((resolve) => setTimeout(resolve, 1300));
+
+    // Mettre isBlinking à false
+    await updateDoc(roomRef, {
+      "gameData.isBlinking": false,
+    });
 
     if (!doubleAnswerActive) {
       const isCorrect = selectedAnswer === question.correctAnswer;
@@ -208,7 +214,6 @@ export default function QuestionDisplay({
       }
       await new Promise((resolve) => setTimeout(resolve, 700));
 
-      setIsBlinking(false);
       onUpdateAnswerState(
         selectedAnswer,
         isCorrect ? "correct" : "incorrect",
@@ -223,7 +228,6 @@ export default function QuestionDisplay({
       }
       await new Promise((resolve) => setTimeout(resolve, 700));
 
-      setIsBlinking(false);
       onUpdateAnswerState(
         null,
         hasCorrectAnswer ? "correct" : "incorrect",

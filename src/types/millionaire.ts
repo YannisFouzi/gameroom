@@ -25,7 +25,7 @@ export type TeamJokers = {
 
 export type AnswerState = "selected" | "correct" | "incorrect" | null;
 
-export type MillionaireGameData = {
+export interface MillionaireGameData {
   currentTeamIndex: number;
   remainingTeams: string[];
   startingTeam: string;
@@ -40,4 +40,5 @@ export type MillionaireGameData = {
   phoneCallModalOpen: boolean; // Nouvel état pour la modal
   hiddenAnswers: number[]; // Ajouter ce champ pour les réponses masquées par le 50:50
   doubleAnswerActive: boolean;
-};
+  isBlinking: boolean;
+}
