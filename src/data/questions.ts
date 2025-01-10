@@ -87,7 +87,7 @@ export const questions: Record<Theme, Record<string, Question[]>> = {
         difficulty: 10,
       },
     ],
-    Ski: [
+    "Ski français": [
       {
         id: "ski1",
         text: "Quel athlète français a remporté deux médailles d'or en ski alpin aux JO de 1968 ?",
@@ -324,7 +324,7 @@ export const questions: Record<Theme, Record<string, Question[]>> = {
       },
     ],
   },
-  Télévision: {
+  "Télé / Ciné": {
     "Séries françaises de l'époque": [
       {
         id: "sfr1",

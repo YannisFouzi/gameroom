@@ -10,7 +10,7 @@ export const wheelData: WheelData[] = [
     style: { backgroundColor: "#4CAF50", textColor: "white" },
   },
   {
-    option: "Télévision",
+    option: "Télé / Ciné",
     style: { backgroundColor: "#2196F3", textColor: "white" },
   },
   {
@@ -24,7 +24,7 @@ export const subCategories: Record<Theme, string[]> = {
     "Cyclisme",
     "Football",
     "Jeux Olympiques",
-    "Ski",
+    "Ski français",
     "Rugby",
     "Natation",
   ],
@@ -36,7 +36,7 @@ export const subCategories: Record<Theme, string[]> = {
     "Mode et style vestimentaire",
     "Albums",
   ],
-  Télévision: [
+  "Télé / Ciné": [
     "Séries françaises de l'époque",
     "Séries françaises actuelles",
     "Jeux de l'époque",

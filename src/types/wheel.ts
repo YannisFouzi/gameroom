@@ -1,6 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 
-export type Theme = "Sport" | "Années 80" | "Télévision" | "Histoire / Géo";
+export type Theme = "Sport" | "Années 80" | "Télé / Ciné" | "Histoire / Géo";
 
 export type WheelData = {
   option: string;
