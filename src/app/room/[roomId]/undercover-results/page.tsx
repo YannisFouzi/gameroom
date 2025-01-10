@@ -40,9 +40,9 @@ function UndercoverResultsContent() {
       >
         <h3 className="text-3xl font-extrabold mb-6">
           🏆{" "}
-          {gameData.civilsWin
-            ? "Les Civils gagnent !"
-            : "Les Imposteurs gagnent !"}
+          {gameData.winningTeamId
+            ? `L'équipe ${room.teams[gameData.winningTeamId].name} gagne !`
+            : "Match nul"}
         </h3>
       </motion.div>
 
@@ -97,9 +97,9 @@ function UndercoverResultsContent() {
         className="bg-blue-900/50 backdrop-blur-sm p-8 rounded-xl border border-blue-400"
       >
         <h2 className="text-3xl font-bold text-white mb-6">
-          {gameData.civilsWin
-            ? "Les Civils l'emportent !"
-            : "Les Imposteurs l'emportent !"}
+          {gameData.winningTeamId
+            ? `L'équipe ${room.teams[gameData.winningTeamId].name} gagne !`
+            : "Match nul"}
         </h2>
         <div className="space-y-6">
           <div className="text-xl text-white/80">

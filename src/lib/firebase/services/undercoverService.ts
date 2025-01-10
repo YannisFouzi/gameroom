@@ -254,34 +254,28 @@ export const undercoverService = {
     const room = await baseRoomService.getRoom(roomId);
     const gameData = room.gameData?.undercover as UndercoverGameData;
 
-    const activePlayers = gameData.players.filter((p) => !p.isEliminated);
-    const civilsCount = activePlayers.filter((p) => p.role === "civil").length;
-    const impostorsCount = activePlayers.filter(
-      (p) => p.role === "undercover" || p.role === "mrwhite"
-    ).length;
+    // Vérifier les imposteurs par équipe
+    for (const teamId of Object.keys(room.teams)) {
+      const teamPlayers = gameData.players.filter((p) => p.teamId === teamId);
+      const activeImpostors = teamPlayers.filter(
+        (p) =>
+          !p.isEliminated && (p.role === "undercover" || p.role === "mrwhite")
+      );
 
-    let gameOver = false;
-    let civilsWin = false;
+      // Si une équipe n'a plus d'imposteurs, l'autre équipe gagne
+      if (activeImpostors.length === 0) {
+        const winningTeamId = Object.keys(room.teams).find(
+          (id) => id !== teamId
+        );
 
-    // Les civils gagnent si tous les imposteurs sont éliminés
-    if (impostorsCount === 0) {
-      gameOver = true;
-      civilsWin = true;
-    }
-    // Les imposteurs gagnent s'il ne reste qu'un civil
-    else if (civilsCount <= 1) {
-      gameOver = true;
-      civilsWin = false;
-    }
-
-    if (gameOver) {
-      await updateDoc(doc(db, "rooms", roomId), {
-        gamePhase: "undercover-results",
-        "gameData.undercover.gameOver": true,
-        "gameData.undercover.civilsWin": civilsWin,
-        updatedAt: serverTimestamp(),
-      });
-      return true;
+        await updateDoc(doc(db, "rooms", roomId), {
+          gamePhase: "undercover-results",
+          "gameData.undercover.gameOver": true,
+          "gameData.undercover.winningTeamId": winningTeamId,
+          updatedAt: serverTimestamp(),
+        });
+        return true;
+      }
     }
     return false;
   },
