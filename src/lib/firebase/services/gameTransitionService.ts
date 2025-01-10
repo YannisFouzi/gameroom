@@ -55,14 +55,21 @@ export const gameTransitionService = {
 
   async startEvaluationGame(roomId: string) {
     const room = await baseRoomService.getRoom(roomId);
+    if (!room?.gameData?.scores) return;
 
-    // Sauvegarder les scores du millionaire
-    const millionaireScores = room.gameData?.scores || {};
+    // Récupérer les scores du millionaire
+    const millionaireScores = room.gameData.scores.millionaire || {};
 
-    const sortedScores = Object.entries(millionaireScores).sort(
-      ([, a], [, b]) => (b as number) - (a as number)
+    // Trier les équipes par score pour trouver le gagnant
+    const sortedTeams = Object.entries(millionaireScores).sort(
+      ([, a], [, b]) => b - a
     );
 
+    // Vérifier qu'il y a au moins une équipe avec un score
+    const winningTeam = sortedTeams.length > 0 ? sortedTeams[0][0] : null;
+    const winningTeamName = winningTeam ? room.teams[winningTeam]?.name : "";
+
+    // Préparer la structure des scores
     const scores = {
       millionaire: millionaireScores,
       evaluation: {},
@@ -72,14 +79,10 @@ export const gameTransitionService = {
     await updateDoc(doc(db, "rooms", roomId), {
       gamePhase: "evaluation-rules",
       gameData: {
-        scores: {
-          millionaire: millionaireScores,
-          evaluation: {},
-          total: millionaireScores,
-        },
-        winningTeamName: room.teams[sortedScores[0][0]]?.name,
-        winningTeamId: sortedScores[0][0],
-        currentTeamId: sortedScores[0][0],
+        scores,
+        winningTeamName,
+        winningTeamId: winningTeam,
+        currentTeamId: winningTeam,
       },
       updatedAt: serverTimestamp(),
     });
