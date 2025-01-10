@@ -78,31 +78,60 @@ export default function CreateRoom() {
           <span>i</span>
         </h1>
 
-        {/* <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="text-center"
+        >
           <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            className="relative"
+            className="bg-gradient-to-r from-blue-900/40 to-blue-600/40 p-8 rounded-xl backdrop-blur-sm border-2 border-blue-300/20 shadow-[0_0_15px_rgba(147,197,253,0.3)] relative overflow-hidden"
+            initial={{ y: 20 }}
+            animate={{ y: 0 }}
+            transition={{
+              type: "spring",
+              stiffness: 260,
+              damping: 20,
+            }}
           >
-            <p className="text-2xl text-white mb-12 text-center">
-              Prêt pour une soirée de folie ?
-              <motion.span
-                animate={{-
-                  rotate: [0, 10, -10, 10, 0],
-                  scale: [1, 1.2, 1.2, 1.2, 1],
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  repeatDelay: 1,
-                }}
-                className="inline-block ml-2"
-              >
-                🎉
-              </motion.span>
-            </p>
+            <div className="absolute inset-0 opacity-20">
+              <SnowEffect />
+            </div>
+
+            <div className="relative z-10">
+              <p className="text-3xl font-bold flex items-center justify-center gap-3">
+                <motion.span
+                  animate={{
+                    scale: [1, 1.1, 1],
+                    rotate: [-5, 5, -5],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                  }}
+                  className="text-blue-200"
+                >
+                  ❄️
+                </motion.span>
+                <span className="bg-gradient-to-r from-blue-200 to-white text-transparent bg-clip-text font-extrabold">
+                  Montez le volume !
+                </span>
+                <motion.span
+                  animate={{
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{
+                    duration: 1,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                  }}
+                >
+                  🔊
+                </motion.span>
+              </p>
+            </div>
           </motion.div>
-        </AnimatePresence> */}
+        </motion.div>
 
         <motion.button
           onClick={handleCreateRoom}
