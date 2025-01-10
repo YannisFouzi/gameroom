@@ -77,7 +77,7 @@ export default function QuestionDisplay({
     "/sound/millionnaire/sounds_correct.mp3"
   );
   const { play: playWrong } = useAudio("/sound/millionnaire/sounds_wrong.mp3");
-  const { play: playSuspens } = useAudio(
+  const { play: playSuspens, stop: stopSuspens } = useAudio(
     "/sound/millionnaire/sounds_suspens.mp3"
   );
   const [isBlinking, setIsBlinking] = useState(false);
@@ -192,6 +192,9 @@ export default function QuestionDisplay({
     await updateDoc(roomRef, {
       "gameData.timerPaused": true,
     });
+
+    // Arrêter la musique de suspense
+    stopSuspens();
 
     setIsBlinking(true);
     await new Promise((resolve) => setTimeout(resolve, 1300));
