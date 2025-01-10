@@ -1,7 +1,7 @@
 "use client";
 
 import { useRoom } from "@/contexts/RoomContext";
-import { usePlayer } from "@/hooks/usePlayer";
+import { Team } from "@/types/room";
 import { UndercoverGameData } from "@/types/undercover";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -10,11 +10,23 @@ import PlayingPhase from "./PlayingPhase";
 import ResultsPhase from "./ResultsPhase";
 import VotingPhase from "./VotingPhase";
 
-export default function UndercoverGame() {
+type Props = {
+  gameData: UndercoverGameData;
+  isHost: boolean;
+  currentTeam: Team | null;
+  teamId: string | null;
+  roomId: string;
+};
+
+export default function UndercoverGame({
+  gameData,
+  isHost,
+  currentTeam,
+  teamId,
+  roomId,
+}: Props) {
   const router = useRouter();
   const { room } = useRoom();
-  const { isHost, teamId } = usePlayer(room?.id || "");
-  const gameData = room?.gameData?.undercover as UndercoverGameData;
 
   useEffect(() => {
     if (room?.gamePhase === "undercover-results") {
@@ -22,9 +34,7 @@ export default function UndercoverGame() {
     }
   }, [room?.gamePhase, room?.id, router]);
 
-  if (!room || !gameData) return null;
-
-  const currentTeam = teamId ? room.teams[teamId] : null;
+  if (!room) return null;
 
   // Afficher la phase appropriée
   switch (gameData.currentPhase) {
@@ -35,10 +45,9 @@ export default function UndercoverGame() {
           isHost={isHost}
           currentTeam={currentTeam}
           teamId={teamId}
-          roomId={room.id}
+          roomId={roomId}
         />
       );
-
     case "playing":
       return (
         <PlayingPhase
@@ -46,10 +55,9 @@ export default function UndercoverGame() {
           isHost={isHost}
           currentTeam={currentTeam}
           teamId={teamId}
-          roomId={room.id}
+          roomId={roomId}
         />
       );
-
     case "voting":
       return (
         <VotingPhase
@@ -57,11 +65,10 @@ export default function UndercoverGame() {
           isHost={isHost}
           currentTeam={currentTeam}
           teamId={teamId}
+          roomId={roomId}
           teams={room.teams}
-          roomId={room.id}
         />
       );
-
     case "results":
       return (
         <ResultsPhase
@@ -69,10 +76,9 @@ export default function UndercoverGame() {
           isHost={isHost}
           currentTeam={currentTeam}
           teamId={teamId}
-          roomId={room.id}
+          roomId={roomId}
         />
       );
-
     default:
       return null;
   }

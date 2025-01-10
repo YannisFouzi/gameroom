@@ -2,6 +2,7 @@ import { undercoverService } from "@/lib/firebase/services/undercoverService";
 import { Team } from "@/types/room";
 import { UndercoverGameData } from "@/types/undercover";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type ResultsPhaseProps = {
@@ -21,6 +22,7 @@ export default function ResultsPhase({
 }: ResultsPhaseProps) {
   const [isGameOver, setIsGameOver] = useState(false);
   const isTeamReady = teamId && gameData.teamsReady.includes(teamId);
+  const router = useRouter();
 
   useEffect(() => {
     const checkGameEnd = async () => {
@@ -37,6 +39,14 @@ export default function ResultsPhase({
 
   const lastEliminated =
     gameData.eliminatedPlayers[gameData.eliminatedPlayers.length - 1];
+
+  const handleNextGame = async () => {
+    if (gameData.isLastGame) {
+      router.push(`/room/${roomId}/final-scores`);
+    } else {
+      await undercoverService.startNextRound(roomId);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4">
@@ -113,25 +123,28 @@ export default function ResultsPhase({
           </div>
         </motion.div>
 
-        {!isHost && !isTeamReady && !isGameOver && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center mt-8"
-          >
-            <button
-              onClick={handleTeamReady}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-bold text-lg hover:opacity-90 transition-all"
-            >
-              Passer aux votes
-            </button>
-          </motion.div>
-        )}
-
-        {!isHost && isTeamReady && !isGameOver && (
-          <div className="text-center mt-8 text-white/80">
-            En attente des autres équipes...
-          </div>
+        {/* Boutons de contrôle uniquement pour les joueurs non-hôtes */}
+        {!isHost && !isGameOver && (
+          <>
+            {!isTeamReady ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center mt-8"
+              >
+                <button
+                  onClick={handleTeamReady}
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-bold text-lg"
+                >
+                  Passer aux votes
+                </button>
+              </motion.div>
+            ) : (
+              <div className="text-center mt-8 text-white/80">
+                En attente des autres équipes...
+              </div>
+            )}
+          </>
         )}
 
         {isGameOver && (
@@ -142,6 +155,16 @@ export default function ResultsPhase({
           >
             Partie terminée ! Les résultats s'afficheront dans un instant...
           </motion.div>
+        )}
+
+        {/* Bouton "Partie suivante" uniquement pour l'hôte */}
+        {isHost && isGameOver && (
+          <button
+            onClick={handleNextGame}
+            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-bold text-lg"
+          >
+            {gameData.isLastGame ? "Voir les scores finaux" : "Partie suivante"}
+          </button>
         )}
       </div>
     </div>

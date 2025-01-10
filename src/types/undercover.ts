@@ -25,4 +25,6 @@ export type UndercoverGameData = {
   votes: Record<string, string>;
   gameOver?: boolean;
   winningTeamId?: string;
+  scores: Record<string, number>;
+  isLastGame?: boolean;
 };

@@ -3,30 +3,31 @@
 import UndercoverGame from "@/components/undercover/UndercoverGame";
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { UndercoverGameData } from "@/types/undercover";
+import { useParams } from "next/navigation";
 
 function UndercoverContent() {
-  const router = useRouter();
   const { room } = useRoom();
-  const { isHost } = usePlayer(room?.id || "");
+  const { isHost, teamId } = usePlayer(room?.id || "");
+  const gameData = room?.gameData?.undercover as UndercoverGameData;
+  const currentTeam = teamId && room?.teams ? room.teams[teamId] : null;
 
-  useEffect(() => {
-    if (room?.gamePhase === "undercover-results") {
-      router.push(`/room/${room.id}/undercover-results`);
-    }
-  }, [room?.gamePhase, room?.id, router]);
-
-  if (!room) return <div>Chargement...</div>;
+  if (!room || !gameData) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black">
-      <UndercoverGame />
+      <UndercoverGame
+        gameData={gameData}
+        isHost={isHost}
+        currentTeam={currentTeam}
+        teamId={teamId}
+        roomId={room.id}
+      />
     </div>
   );
 }
 
-export default function UnderCoverPage() {
+export default function UndercoverPage() {
   const { roomId } = useParams();
 
   return (

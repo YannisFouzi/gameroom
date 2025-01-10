@@ -101,6 +101,8 @@ export const undercoverService = {
       words: WORDS_BY_ROUND[round],
       teamsReady: [],
       votes: {},
+      scores: {},
+      isLastGame: round === WORDS_BY_ROUND.length - 1,
     };
 
     await updateDoc(doc(db, "rooms", roomId), {
@@ -117,19 +119,17 @@ export const undercoverService = {
     const teamPlayers = gameData.players.filter((p) => p.teamId === teamId);
     const currentIndex = gameData.currentPlayerIndexByTeam[teamId];
     const nextIndex = currentIndex + 1;
-    const teamHasFinished = nextIndex >= teamPlayers.length;
+    const teamHasFinished = nextIndex > teamPlayers.length - 1;
 
     // Mettre à jour l'index de l'équipe
     const updatedIndexes = {
       ...gameData.currentPlayerIndexByTeam,
-      [teamId]: teamHasFinished ? -1 : nextIndex, // Mettre -1 quand l'équipe a fini
+      [teamId]: teamHasFinished ? -1 : nextIndex,
     };
 
     // Vérifier si toutes les équipes ont fini
     const allTeamsFinished = Object.entries(updatedIndexes).every(
-      ([tid, index]) =>
-        index === -1 ||
-        index >= gameData.players.filter((p) => p.teamId === tid).length - 1
+      ([tid, index]) => index === -1
     );
 
     await updateDoc(doc(db, "rooms", roomId), {
@@ -186,63 +186,88 @@ export const undercoverService = {
     const allTeamsReady =
       updatedTeamsReady.length === Object.keys(room.teams).length;
 
-    await updateDoc(doc(db, "rooms", roomId), {
-      "gameData.undercover.teamsReady": updatedTeamsReady,
-      "gameData.undercover.currentPhase": allTeamsReady ? "voting" : "results",
-      updatedAt: serverTimestamp(),
-    });
+    if (allTeamsReady) {
+      // Passer à la phase de vote et réinitialiser les votes
+      await updateDoc(doc(db, "rooms", roomId), {
+        "gameData.undercover.teamsReady": [],
+        "gameData.undercover.currentPhase": "voting",
+        "gameData.undercover.votes": {}, // Réinitialiser les votes
+        updatedAt: serverTimestamp(),
+      });
+    } else {
+      // Juste enregistrer l'équipe comme prête
+      await updateDoc(doc(db, "rooms", roomId), {
+        "gameData.undercover.teamsReady": updatedTeamsReady,
+        updatedAt: serverTimestamp(),
+      });
+    }
   },
 
   async submitVote(roomId: string, teamId: string, votedPlayerId: string) {
     const room = await baseRoomService.getRoom(roomId);
     const gameData = room.gameData?.undercover as UndercoverGameData;
 
-    const updatedVotes = {
-      ...gameData.votes,
-      [teamId]: votedPlayerId,
-    };
-
+    // Mettre à jour les votes
+    const updatedVotes = { ...gameData.votes, [teamId]: votedPlayerId };
     const allTeamsVoted =
-      Object.keys(updatedVotes).length === Object.keys(room.teams).length;
+      Object.keys(room.teams).length === Object.keys(updatedVotes).length;
 
     if (allTeamsVoted) {
       // Compter les votes
       const voteCount: Record<string, number> = {};
-      Object.values(updatedVotes).forEach((playerId) => {
-        voteCount[playerId] = (voteCount[playerId] || 0) + 1;
+      Object.values(updatedVotes).forEach((id) => {
+        voteCount[id] = (voteCount[id] || 0) + 1;
       });
 
-      // Trouver le(s) joueur(s) le(s) plus voté(s)
+      // Trouver le nombre maximum de votes
       const maxVotes = Math.max(...Object.values(voteCount));
-      const eliminatedPlayerIds = Object.entries(voteCount)
+
+      // Trouver tous les joueurs avec le maximum de votes
+      const eliminatedIds = Object.entries(voteCount)
         .filter(([, count]) => count === maxVotes)
         .map(([playerId]) => playerId);
 
-      // Mettre à jour les joueurs éliminés
-      const updatedPlayers = gameData.players.map((player) => ({
-        ...player,
-        isEliminated:
-          player.isEliminated || eliminatedPlayerIds.includes(player.memberId),
-      }));
-
-      // Ajouter les joueurs éliminés à la liste
-      const newEliminatedPlayers = updatedPlayers.filter((p) =>
-        eliminatedPlayerIds.includes(p.memberId)
+      // Trouver les joueurs correspondants
+      const eliminatedPlayers = gameData.players.filter((p) =>
+        eliminatedIds.includes(p.memberId)
       );
 
+      // Mettre à jour les scores pour chaque joueur éliminé
+      const updatedScores = { ...gameData.scores };
+      eliminatedPlayers.forEach((player) => {
+        if (player.role === "undercover") {
+          Object.entries(updatedVotes).forEach(([votingTeamId, votedId]) => {
+            if (votedId === player.memberId) {
+              updatedScores[votingTeamId] =
+                (updatedScores[votingTeamId] || 0) + 5;
+            }
+          });
+        } else if (player.role === "mrwhite") {
+          Object.entries(updatedVotes).forEach(([votingTeamId, votedId]) => {
+            if (votedId === player.memberId) {
+              updatedScores[votingTeamId] =
+                (updatedScores[votingTeamId] || 0) + 3;
+            }
+          });
+        }
+      });
+
+      // Mettre à jour les joueurs éliminés et les scores
       await updateDoc(doc(db, "rooms", roomId), {
-        "gameData.undercover.players": updatedPlayers,
+        "gameData.undercover.votes": updatedVotes,
+        "gameData.undercover.scores": updatedScores,
         "gameData.undercover.eliminatedPlayers": [
           ...gameData.eliminatedPlayers,
-          ...newEliminatedPlayers,
+          ...eliminatedPlayers,
         ],
+        "gameData.undercover.players": gameData.players.map((p) =>
+          eliminatedIds.includes(p.memberId) ? { ...p, isEliminated: true } : p
+        ),
         "gameData.undercover.currentPhase": "results",
-        "gameData.undercover.votes": {},
-        "gameData.undercover.teamsReady": [],
         updatedAt: serverTimestamp(),
       });
     } else {
-      // Juste enregistrer le vote
+      // Juste mettre à jour les votes
       await updateDoc(doc(db, "rooms", roomId), {
         "gameData.undercover.votes": updatedVotes,
         updatedAt: serverTimestamp(),
@@ -304,6 +329,7 @@ export const undercoverService = {
       "gameData.undercover": {
         ...gameData,
         currentRound: nextRound,
+        isLastGame: nextRound === WORDS_BY_ROUND.length - 1,
         words: WORDS_BY_ROUND[nextRound],
         currentPhase: "distribution",
         currentPlayerIndex: 0,

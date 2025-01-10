@@ -63,6 +63,12 @@ export const gameTransitionService = {
       ([, a], [, b]) => (b as number) - (a as number)
     );
 
+    const scores = {
+      millionaire: millionaireScores,
+      evaluation: {},
+      undercover: room.gameData?.undercover?.scores || {},
+    };
+
     await updateDoc(doc(db, "rooms", roomId), {
       gamePhase: "evaluation-rules",
       gameData: {
