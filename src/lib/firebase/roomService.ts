@@ -1,5 +1,5 @@
 import { GameType } from "@/types/room";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "./config";
 import {
   baseRoomService,
@@ -21,6 +21,19 @@ export const roomService = {
     const roomRef = doc(db, "rooms", roomId);
     await updateDoc(roomRef, {
       gameType: gameType,
+    });
+  },
+
+  async startUndercoverGame(roomId: string) {
+    const room = await baseRoomService.getRoom(roomId);
+    const roomRef = doc(db, "rooms", roomId);
+
+    await updateDoc(roomRef, {
+      gamePhase: "undercover-playing",
+      gameData: {
+        currentTeamId: room.gameData?.winningTeamId,
+      },
+      updatedAt: serverTimestamp(),
     });
   },
 };

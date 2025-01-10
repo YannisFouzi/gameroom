@@ -2,8 +2,9 @@
 
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
+import { gameTransitionService } from "@/lib/firebase/services";
 import { motion } from "framer-motion";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 type TeamWithTotalScore = {
   teamId: string;
@@ -17,6 +18,7 @@ type TeamWithTotalScore = {
 function WheelResultsContent() {
   const { room } = useRoom();
   const { isHost, teamId } = usePlayer(room?.id || "");
+  const router = useRouter();
 
   if (!room) return <div>Chargement...</div>;
 
@@ -96,12 +98,19 @@ function WheelResultsContent() {
       ))}
 
       {/* Message de fin */}
-      <div className="mt-12">
+      <div className="mt-12 space-y-4">
         <div className="bg-blue-900/50 backdrop-blur-sm p-6 rounded-xl border border-blue-400">
           <p className="text-xl text-white text-center">
-            🎉 Félicitations à toutes les équipes pour cette belle partie ! 🎉
+            🎉 Félicitations à toutes les équipes ! Place au dernier jeu :
+            Undercover !
           </p>
         </div>
+        <button
+          onClick={handleNextGame}
+          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-8 rounded-xl font-bold text-xl hover:opacity-90 transition-all"
+        >
+          Continuer vers "Undercover" →
+        </button>
       </div>
     </div>
   );
@@ -152,6 +161,16 @@ function WheelResultsContent() {
         </motion.div>
       </div>
     );
+  };
+
+  const handleNextGame = async () => {
+    if (!room) return;
+    try {
+      await gameTransitionService.startUndercoverGame(room.id);
+      router.push(`/room/${room.id}/undercover-rules`);
+    } catch (error) {
+      console.error("Erreur lors du passage au jeu suivant:", error);
+    }
   };
 
   return (

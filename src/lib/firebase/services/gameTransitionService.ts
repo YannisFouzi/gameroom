@@ -95,4 +95,16 @@ export const gameTransitionService = {
       "gameData.currentTeamId": nextTeamId,
     });
   },
+
+  async startUndercoverGame(roomId: string) {
+    const room = await baseRoomService.getRoom(roomId);
+
+    await updateDoc(doc(db, "rooms", roomId), {
+      gamePhase: "undercover-rules",
+      gameData: {
+        currentTeamId: room.gameData?.winningTeamId,
+      },
+      updatedAt: serverTimestamp(),
+    });
+  },
 };
