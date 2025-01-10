@@ -18,6 +18,24 @@ function RoomContent() {
   usePresence(roomId as string);
 
   useEffect(() => {
+    const audio = new Audio(
+      "/sound/musique/Gilbert Montagné - Just Because of You.mp3"
+    );
+    audio.loop = true;
+
+    if (!loading && room) {
+      audio.play().catch((error) => {
+        console.log("Erreur de lecture audio:", error);
+      });
+    }
+
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, [loading, room]);
+
+  useEffect(() => {
     if (room?.status === "playing") {
       router.push(`/room/${room.id}/game`);
     }

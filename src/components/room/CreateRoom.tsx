@@ -5,12 +5,26 @@ import "@/styles/components/ShinyButton.scss";
 import "@/styles/components/SnowButton.scss";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SnowEffect from "../effects/SnowEffect";
 
 export default function CreateRoom() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [audio] = useState(
+    typeof window !== "undefined"
+      ? new Audio("/sound/musique/Gilbert Montagné - Just Because of You.mp3")
+      : null
+  );
+
+  useEffect(() => {
+    return () => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    };
+  }, [audio]);
 
   const handleCreateRoom = async () => {
     try {
@@ -18,6 +32,9 @@ export default function CreateRoom() {
       const hostId = generateUUID();
       const roomId = await baseRoomService.createRoom(hostId);
       localStorage.setItem(`host_${roomId}`, hostId);
+      if (audio) {
+        audio.play();
+      }
       router.push(`/room/${roomId}`);
     } catch (error) {
       console.error("Erreur lors de la création de la room:", error);
