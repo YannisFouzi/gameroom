@@ -375,11 +375,11 @@ export default function QuestionDisplay({
         {question.answers.map((answer, index) =>
           hiddenAnswers.includes(index) ? null : (
             <motion.button
-              key={index}
+              key={`${questionIndex}-${index}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{
-                delay: index * 1, // Un peu plus rapide : 0.3s entre chaque réponse
+                delay: index * 1,
               }}
               onClick={() => handleAnswerClick(index)}
               disabled={
