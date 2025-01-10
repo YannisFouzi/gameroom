@@ -38,7 +38,11 @@ function UndercoverResultsContent() {
           initial={{ x: -50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: index * 0.1 }}
-          className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20"
+          className={`flex items-center justify-between p-4 rounded-lg border ${
+            player.isEliminated
+              ? "bg-red-900/20 border-red-500/30"
+              : "bg-white/10 border-white/20"
+          }`}
         >
           <div className="flex items-center gap-4">
             <span className="text-xl font-bold text-white/80">
@@ -48,17 +52,22 @@ function UndercoverResultsContent() {
               Équipe {room.teams[player.teamId]?.name}
             </span>
           </div>
-          <span
-            className={`text-lg font-bold ${
-              player.role === "civil"
-                ? "text-green-400"
-                : player.role === "undercover"
-                ? "text-red-400"
-                : "text-yellow-400"
-            }`}
-          >
-            {player.role}
-          </span>
+          <div className="flex items-center gap-4">
+            <span
+              className={`text-lg font-bold ${
+                player.role === "civil"
+                  ? "text-green-400"
+                  : player.role === "undercover"
+                  ? "text-red-400"
+                  : "text-yellow-400"
+              }`}
+            >
+              {player.role}
+            </span>
+            {player.isEliminated && (
+              <span className="text-red-400 font-medium">Éliminé</span>
+            )}
+          </div>
         </motion.div>
       ))}
     </div>
@@ -101,20 +110,29 @@ function UndercoverResultsContent() {
           {gameData.players.map((player) => (
             <div
               key={player.memberId}
-              className="flex justify-between items-center p-2 rounded bg-white/5"
+              className={`flex justify-between items-center p-2 rounded ${
+                player.isEliminated
+                  ? "bg-red-900/20 border border-red-500/30"
+                  : "bg-white/5"
+              }`}
             >
               <span className="text-white">{player.name}</span>
-              <span
-                className={`${
-                  player.role === "civil"
-                    ? "text-green-400"
-                    : player.role === "undercover"
-                    ? "text-red-400"
-                    : "text-yellow-400"
-                }`}
-              >
-                {player.role}
-              </span>
+              <div className="flex items-center gap-3">
+                <span
+                  className={`${
+                    player.role === "civil"
+                      ? "text-green-400"
+                      : player.role === "undercover"
+                      ? "text-red-400"
+                      : "text-yellow-400"
+                  }`}
+                >
+                  {player.role}
+                </span>
+                {player.isEliminated && (
+                  <span className="text-red-400">Éliminé</span>
+                )}
+              </div>
             </div>
           ))}
         </div>
