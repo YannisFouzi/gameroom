@@ -20,8 +20,16 @@ export default function DistributionPhase({
   roomId,
 }: DistributionPhaseProps) {
   const [showWord, setShowWord] = useState(false);
-  const currentPlayer = gameData.players[gameData.currentPlayerIndex];
-  const isCurrentPlayer = currentPlayer?.teamId === teamId;
+
+  if (!teamId || !currentTeam) return null;
+
+  const teamPlayers = gameData.players.filter((p) => p.teamId === teamId);
+  const currentIndex = gameData.currentPlayerIndexByTeam[teamId];
+  const currentPlayer = teamPlayers[currentIndex];
+
+  const isCurrentPlayer = currentTeam.members.some(
+    (member) => member.name === currentPlayer?.memberId
+  );
 
   const handleShowWord = async () => {
     if (!teamId) return;
@@ -63,9 +71,12 @@ export default function DistributionPhase({
               animate={{ opacity: 1, y: 0 }}
               className="bg-white/10 backdrop-blur-sm p-8 rounded-xl border border-white/20"
             >
-              <h2 className="text-2xl font-bold text-white mb-4">
-                {showWord ? "Ton mot secret" : "C'est ton tour !"}
+              <h2 className="text-2xl font-bold text-white/80 mb-2">
+                {currentPlayer.name}
               </h2>
+              <h3 className="text-2xl font-bold text-white mb-4">
+                {showWord ? "Ton mot secret" : "C'est ton tour !"}
+              </h3>
               {!showWord ? (
                 <button
                   onClick={handleShowWord}
@@ -76,7 +87,9 @@ export default function DistributionPhase({
               ) : (
                 <div className="space-y-6">
                   <div className="text-3xl font-bold text-white">
-                    {currentPlayer.word || "Tu es Mr White !"}
+                    {currentPlayer.role === "mrwhite"
+                      ? "Tu es Mr White !"
+                      : currentPlayer.word || "En attente du mot..."}
                   </div>
                   <button
                     onClick={handleNextPlayer}

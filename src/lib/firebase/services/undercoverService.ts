@@ -87,8 +87,15 @@ export const undercoverService = {
     const initialGameData: UndercoverGameData = {
       currentPhase: "distribution",
       players,
-      playOrder, // Ordre alterné
+      playOrder,
       currentPlayerIndex: 0,
+      currentPlayerIndexByTeam: Object.keys(room.teams).reduce(
+        (acc, teamId) => ({
+          ...acc,
+          [teamId]: 0,
+        }),
+        {}
+      ),
       currentRound: round,
       eliminatedPlayers: [],
       words: WORDS_BY_ROUND[round],
@@ -106,29 +113,42 @@ export const undercoverService = {
     const room = await baseRoomService.getRoom(roomId);
     const gameData = room.gameData?.undercover as UndercoverGameData;
 
-    const nextIndex = gameData.currentPlayerIndex + 1;
-    const allPlayersHaveSeenWord = nextIndex >= gameData.players.length;
+    // Obtenir les joueurs de cette équipe
+    const teamPlayers = gameData.players.filter((p) => p.teamId === teamId);
+    const currentIndex = gameData.currentPlayerIndexByTeam[teamId];
+    const nextIndex = currentIndex + 1;
+    const teamHasFinished = nextIndex >= teamPlayers.length;
 
-    if (allPlayersHaveSeenWord) {
-      // Si tous les joueurs ont vu leur mot, passer à la phase de jeu
-      await updateDoc(doc(db, "rooms", roomId), {
+    // Mettre à jour l'index de l'équipe
+    const updatedIndexes = {
+      ...gameData.currentPlayerIndexByTeam,
+      [teamId]: teamHasFinished ? -1 : nextIndex, // Mettre -1 quand l'équipe a fini
+    };
+
+    // Vérifier si toutes les équipes ont fini
+    const allTeamsFinished = Object.entries(updatedIndexes).every(
+      ([tid, index]) =>
+        index === -1 ||
+        index >= gameData.players.filter((p) => p.teamId === tid).length - 1
+    );
+
+    await updateDoc(doc(db, "rooms", roomId), {
+      "gameData.undercover.currentPlayerIndexByTeam": updatedIndexes,
+      ...(allTeamsFinished && {
         "gameData.undercover.currentPhase": "playing",
-        "gameData.undercover.currentPlayerIndex": 0,
-        updatedAt: serverTimestamp(),
-      });
-    } else {
-      // Sinon, passer au joueur suivant
-      await updateDoc(doc(db, "rooms", roomId), {
-        "gameData.undercover.currentPlayerIndex": nextIndex,
-        updatedAt: serverTimestamp(),
-      });
-    }
+      }),
+      updatedAt: serverTimestamp(),
+    });
   },
 
   async assignWordToCurrentPlayer(roomId: string, teamId: string) {
     const room = await baseRoomService.getRoom(roomId);
     const gameData = room.gameData?.undercover as UndercoverGameData;
-    const currentPlayer = gameData.players[gameData.currentPlayerIndex];
+
+    // Trouver le joueur actuel de cette équipe
+    const teamPlayers = gameData.players.filter((p) => p.teamId === teamId);
+    const currentIndex = gameData.currentPlayerIndexByTeam[teamId];
+    const currentPlayer = teamPlayers[currentIndex];
 
     // Assigner le mot selon le rôle
     let word = null;
@@ -137,11 +157,16 @@ export const undercoverService = {
     } else if (currentPlayer.role === "undercover") {
       word = gameData.words.undercover;
     }
-    // Mr White n'a pas de mot, mais on met null au lieu de undefined
+
+    // Trouver l'index global du joueur dans la liste complète
+    const globalPlayerIndex = gameData.players.findIndex(
+      (p) => p.memberId === currentPlayer.memberId
+    );
 
     // Mettre à jour le mot du joueur
     const updatedPlayers = gameData.players.map((p, index) => {
-      if (index === gameData.currentPlayerIndex) {
+      if (index === globalPlayerIndex) {
+        // Utiliser l'index global
         return { ...p, word };
       }
       return p;

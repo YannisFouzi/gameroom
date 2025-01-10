@@ -12,16 +12,17 @@ export type UndercoverPlayer = {
 export type UndercoverGameData = {
   currentPhase: "distribution" | "playing" | "voting" | "results";
   players: UndercoverPlayer[];
-  playOrder: string[]; // memberId[]
+  playOrder: string[];
   currentPlayerIndex: number;
+  currentPlayerIndexByTeam: Record<string, number>;
   currentRound: number;
   eliminatedPlayers: UndercoverPlayer[];
   words: {
     civil: string;
     undercover: string;
   };
-  teamsReady: string[]; // teamIds qui ont appuyé sur "Passer aux votes"
-  votes: Record<string, string>; // teamId -> memberId voté
+  teamsReady: string[];
+  votes: Record<string, string>;
   gameOver?: boolean;
   civilsWin?: boolean;
 };
