@@ -446,7 +446,7 @@ export default function QuestionDisplay({
       )}
 
       {answerState === "correct" && !isHost && (
-        <div className="space-y-4">
+        <div className="flex gap-4">
           {questionIndex === 14 ? (
             // Si c'est la dernière question (15ème)
             <button
@@ -460,13 +460,13 @@ export default function QuestionDisplay({
             <>
               <button
                 onClick={() => onNextQuestion(questionIndex + 1)}
-                className="w-full bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600"
+                className="w-1/2 bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600"
               >
                 Question suivante
               </button>
               <button
                 onClick={onQuitWithPoints}
-                className="w-full bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-600"
+                className="w-1/2 bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-600"
               >
                 Quitter avec {currentPoints} points
               </button>
