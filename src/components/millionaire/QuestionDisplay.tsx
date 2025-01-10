@@ -298,11 +298,9 @@ export default function QuestionDisplay({
     onUseDoubleAnswer();
   };
 
-  // Ajouter l'affichage du timer
+  // Modifier l'affichage du timer
   const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
+    return seconds.toString(); // Retourner simplement les secondes
   };
 
   if (!isHost && !isCurrentTeam) {
