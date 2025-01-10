@@ -81,7 +81,7 @@ export default function QuestionDisplay({
     "/sound/millionnaire/sounds_suspens.mp3"
   );
   const [isBlinking, setIsBlinking] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(90);
+  const [timeLeft, setTimeLeft] = useState(60);
   const [timerActive, setTimerActive] = useState(true);
 
   useEffect(() => {
@@ -107,7 +107,7 @@ export default function QuestionDisplay({
     updateDoc(roomRef, {
       "gameData.timerStartedAt": Date.now(),
       "gameData.timerPaused": false,
-      "gameData.timerDuration": 90,
+      "gameData.timerDuration": 60,
     });
   }, [questionIndex]);
 
@@ -119,6 +119,10 @@ export default function QuestionDisplay({
         (Date.now() - room.gameData.timerStartedAt) / 1000
       );
       const remaining = Math.max(0, room.gameData.timerDuration - elapsed);
+
+      if (remaining === 15 && isCurrentTeam) {
+        playSuspens();
+      }
 
       setTimeLeft(remaining);
 
@@ -316,7 +320,7 @@ export default function QuestionDisplay({
       {(isHost || isCurrentTeam) && (
         <div
           className={`text-center mb-2 text-2xl font-bold ${
-            timeLeft <= 30 ? "text-red-500" : "text-white"
+            timeLeft <= 15 ? "text-red-500" : "text-white"
           }`}
         >
           {formatTime(timeLeft)}
