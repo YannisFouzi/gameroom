@@ -127,6 +127,22 @@ function WheelContent() {
     }
   };
 
+  const handleStartTimer = async () => {
+    if (!room) return;
+    await wheelService.startTimer(room.id);
+  };
+
+  const handleTimeUp = async () => {
+    if (!room) return;
+    await wheelService.stopTimer(room.id);
+    handleAnswerQuestion(false);
+  };
+
+  const handleHideVraiButton = async () => {
+    if (!room) return;
+    await wheelService.hideVraiButton(room.id);
+  };
+
   return (
     <div className="min-h-screen">
       {isHost ? (
@@ -152,6 +168,11 @@ function WheelContent() {
           currentTeam={currentTeam}
           scores={localScores}
           teams={room?.teams || {}}
+          isTimerActive={wheelState?.isTimerActive || false}
+          onTimeUp={handleTimeUp}
+          onStartTimer={handleStartTimer}
+          onHideVraiButton={handleHideVraiButton}
+          wheelState={room?.gameData?.wheelState || null}
         />
       )}
     </div>

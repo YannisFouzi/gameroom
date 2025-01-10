@@ -1,9 +1,10 @@
 import { questions } from "@/data/questions";
 import { Team } from "@/types/room";
-import { Theme } from "@/types/wheel";
+import { Theme, WheelState } from "@/types/wheel";
 import { motion } from "framer-motion";
 import DifficultyButtons from "./DifficultyButtons";
 import QuestionDisplay from "./QuestionDisplay";
+import Timer from "./Timer";
 
 type PlayerWheelProps = {
   isCurrentTeam: boolean;
@@ -19,6 +20,11 @@ type PlayerWheelProps = {
   currentTeam: Team | null;
   scores: Record<string, number>;
   teams: Record<string, Team>;
+  isTimerActive: boolean;
+  onTimeUp: () => void;
+  onStartTimer: () => void;
+  onHideVraiButton: () => void;
+  wheelState: WheelState | null;
 };
 
 export default function PlayerWheel({
@@ -35,6 +41,11 @@ export default function PlayerWheel({
   currentTeam,
   scores,
   teams,
+  isTimerActive,
+  onTimeUp,
+  onStartTimer,
+  onHideVraiButton,
+  wheelState,
 }: PlayerWheelProps) {
   if (!isCurrentTeam && !subCategory) {
     return (
@@ -191,6 +202,7 @@ export default function PlayerWheel({
               questions={currentQuestions}
               onSelectDifficulty={onSelectDifficulty}
               isVisible={!selectedDifficulty}
+              onStartTimer={onStartTimer}
             />
           )}
 
@@ -199,9 +211,18 @@ export default function PlayerWheel({
               question={selectedQuestion}
               isVisible={showQuestion}
               onAnswer={onAnswerQuestion}
+              isVraiButtonVisible={wheelState?.isVraiButtonVisible ?? true}
             />
           )}
         </>
+      )}
+
+      {selectedDifficulty && (
+        <Timer
+          duration={40}
+          onTimeUp={onHideVraiButton}
+          isActive={isTimerActive}
+        />
       )}
     </motion.div>
   );

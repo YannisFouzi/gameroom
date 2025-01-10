@@ -75,7 +75,7 @@ export type Player = {
   lastSeen?: Timestamp;
 };
 
-export type Room = {
+export interface Room {
   id: string;
   hostId: string;
   currentGame: number;
@@ -91,6 +91,8 @@ export type Room = {
   };
   createdAt: Date;
   updatedAt: Date;
-};
+  timerStartedAt: Timestamp | null;
+  isTimerActive: boolean;
+}
 
 export type GameType = "undercover" | "millionaire";

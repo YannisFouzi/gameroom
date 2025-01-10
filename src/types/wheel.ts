@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export type Theme = "Sport" | "Années 80" | "Télévision" | "Histoire / Géo";
 
 export type WheelData = {
@@ -8,7 +10,7 @@ export type WheelData = {
   };
 };
 
-export type WheelState = {
+export interface WheelState {
   isSpinning: boolean;
   prizeNumber?: number;
   selectedTheme: Theme | null;
@@ -19,4 +21,7 @@ export type WheelState = {
   selectedDifficulty: 2 | 4 | 7 | 10 | null;
   scores: Record<string, number>;
   gameFinished: boolean;
-};
+  timerStartedAt: Timestamp | null;
+  isTimerActive: boolean;
+  isVraiButtonVisible: boolean;
+}

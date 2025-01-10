@@ -1,7 +1,7 @@
 import { subCategories } from "@/data/wheelData";
 import { db } from "@/lib/firebase/config";
 import { Theme } from "@/types/wheel";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 
 export const wheelService = {
   async startSpin(roomId: string, prizeNumber: number) {
@@ -113,6 +113,30 @@ export const wheelService = {
         isSpinning: false,
         scores: updatedScores,
       },
+    });
+  },
+
+  startTimer: async (roomId: string) => {
+    const roomRef = doc(db, "rooms", roomId);
+    await updateDoc(roomRef, {
+      "gameData.wheelState.timerStartedAt": serverTimestamp(),
+      "gameData.wheelState.isTimerActive": true,
+      "gameData.wheelState.isVraiButtonVisible": true,
+    });
+  },
+
+  stopTimer: async (roomId: string) => {
+    const roomRef = doc(db, "rooms", roomId);
+    await updateDoc(roomRef, {
+      "gameData.wheelState.timerStartedAt": null,
+      "gameData.wheelState.isTimerActive": false,
+    });
+  },
+
+  hideVraiButton: async (roomId: string) => {
+    const roomRef = doc(db, "rooms", roomId);
+    await updateDoc(roomRef, {
+      "gameData.wheelState.isVraiButtonVisible": false,
     });
   },
 };

@@ -5,19 +5,16 @@ type QuestionDisplayProps = {
   question: Question;
   isVisible: boolean;
   onAnswer: (isCorrect: boolean) => void;
-  onQuestionAnswered?: () => void;
+  isVraiButtonVisible: boolean;
 };
 
 export default function QuestionDisplay({
   question,
   isVisible,
   onAnswer,
+  isVraiButtonVisible,
 }: QuestionDisplayProps) {
   if (!isVisible) return null;
-
-  const handleAnswer = (isCorrect: boolean) => {
-    onAnswer(isCorrect);
-  };
 
   return (
     <motion.div
@@ -38,14 +35,16 @@ export default function QuestionDisplay({
       </div>
 
       <div className="flex gap-4">
+        {isVraiButtonVisible && (
+          <button
+            onClick={() => onAnswer(true)}
+            className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600"
+          >
+            VRAI
+          </button>
+        )}
         <button
-          onClick={() => handleAnswer(true)}
-          className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600"
-        >
-          VRAI
-        </button>
-        <button
-          onClick={() => handleAnswer(false)}
+          onClick={() => onAnswer(false)}
           className="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600"
         >
           FAUX
