@@ -3,6 +3,7 @@
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
 import { roomService } from "@/lib/firebase/roomService";
+import { undercoverService } from "@/lib/firebase/services/undercoverService";
 import { motion } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -21,7 +22,13 @@ function UndercoverRulesContent() {
 
   const handleStart = async () => {
     if (!room?.id) return;
-    await roomService.startUndercoverGame(room.id);
+    try {
+      await undercoverService.initializeGame(room.id);
+      await roomService.startUndercoverGame(room.id);
+      router.push(`/room/${room.id}/undercover`);
+    } catch (error) {
+      console.error("Erreur lors du démarrage du jeu:", error);
+    }
   };
 
   const MainContent = () => (

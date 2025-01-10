@@ -5,6 +5,7 @@ import { usePlayer } from "@/hooks/usePlayer";
 import { gameTransitionService } from "@/lib/firebase/services";
 import { motion } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 type TeamWithTotalScore = {
   teamId: string;
@@ -19,6 +20,17 @@ function WheelResultsContent() {
   const { room } = useRoom();
   const { isHost, teamId } = usePlayer(room?.id || "");
   const router = useRouter();
+
+  useEffect(() => {
+    // Rediriger vers les règles d'Undercover si c'est la phase suivante
+    if (room?.gamePhase === "undercover-rules") {
+      router.push(`/room/${room.id}/undercover-rules`);
+    }
+    // Rediriger vers le jeu si on est déjà en phase de jeu
+    if (room?.gamePhase === "undercover-playing") {
+      router.push(`/room/${room.id}/undercover`);
+    }
+  }, [room?.gamePhase, room?.id, router]);
 
   if (!room) return <div>Chargement...</div>;
 

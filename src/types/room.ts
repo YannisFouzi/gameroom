@@ -1,5 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 import { MillionaireGameData } from "./millionaire";
+import { UndercoverGameData } from "./undercover";
 import { WheelState } from "./wheel";
 
 export type RoomStatus = "waiting" | "playing" | "finished";
@@ -45,7 +46,8 @@ export type GamePhase =
   | "wheel"
   | "wheel-results"
   | "undercover-rules"
-  | "undercover-playing";
+  | "undercover-playing"
+  | "undercover-results";
 
 export type GameData = {
   celebrities?: Record<string, Celebrity>;
@@ -64,6 +66,7 @@ export type GameData = {
     evaluation?: Record<string, number>;
     total?: Record<string, number>;
   };
+  undercover?: UndercoverGameData;
 } & {
   [K in keyof MillionaireGameData]?: MillionaireGameData[K];
 };

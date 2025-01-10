@@ -25,14 +25,8 @@ export const roomService = {
   },
 
   async startUndercoverGame(roomId: string) {
-    const room = await baseRoomService.getRoom(roomId);
-    const roomRef = doc(db, "rooms", roomId);
-
-    await updateDoc(roomRef, {
+    await updateDoc(doc(db, "rooms", roomId), {
       gamePhase: "undercover-playing",
-      gameData: {
-        currentTeamId: room.gameData?.winningTeamId,
-      },
       updatedAt: serverTimestamp(),
     });
   },
