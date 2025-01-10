@@ -49,8 +49,11 @@ function assignRoles(teams: Record<string, Team>): UndercoverPlayer[] {
 }
 
 export const undercoverService = {
-  async initializeGame(roomId: string, round: number = 0) {
+  async initializeGame(roomId: string, round: number = 1) {
     const room = await baseRoomService.getRoom(roomId);
+    if (!room) return;
+
+    // Assigner les rôles aux joueurs
     const players = assignRoles(room.teams);
 
     // 1. Grouper les joueurs par équipe
@@ -84,7 +87,14 @@ export const undercoverService = {
       });
     }
 
-    const initialGameData: UndercoverGameData = {
+    // Récupérer les scores existants
+    const existingScores = room.gameData?.undercover?.scores || {};
+    const initialScores: Record<string, number> = {};
+    Object.keys(room.teams).forEach((teamId) => {
+      initialScores[teamId] = existingScores[teamId] || 0;
+    });
+
+    const gameData: UndercoverGameData = {
       currentPhase: "distribution",
       players,
       playOrder,
@@ -98,15 +108,16 @@ export const undercoverService = {
       ),
       currentRound: round,
       eliminatedPlayers: [],
-      words: WORDS_BY_ROUND[round],
+      words: WORDS_BY_ROUND[round - 1], // Utiliser les mots du round actuel
       teamsReady: [],
       votes: {},
-      scores: {},
-      isLastGame: round === WORDS_BY_ROUND.length - 1,
+      scores: initialScores,
+      gameOver: false,
+      isLastGame: round === WORDS_BY_ROUND.length, // Vrai si c'est le dernier round
     };
 
     await updateDoc(doc(db, "rooms", roomId), {
-      "gameData.undercover": initialGameData,
+      "gameData.undercover": gameData,
       updatedAt: serverTimestamp(),
     });
   },
@@ -350,14 +361,23 @@ export const undercoverService = {
       updatedTeamsReady.length === Object.keys(room.teams).length;
 
     if (allTeamsReady) {
-      // Initialiser une nouvelle partie avec les mots suivants
-      await this.initializeGame(roomId, (gameData.currentRound || 0) + 1);
+      const nextRound = (gameData.currentRound || 1) + 1;
 
-      // Changer directement la phase du jeu
-      await updateDoc(doc(db, "rooms", roomId), {
-        gamePhase: "undercover-playing",
-        updatedAt: serverTimestamp(),
-      });
+      if (nextRound > WORDS_BY_ROUND.length) {
+        // Fin du jeu Undercover, passer au jeu suivant
+        await updateDoc(doc(db, "rooms", roomId), {
+          gamePhase: "undercover-results",
+          "gameData.undercover.gameOver": true,
+          updatedAt: serverTimestamp(),
+        });
+      } else {
+        // Initialiser la partie suivante avec le prochain round
+        await this.initializeGame(roomId, nextRound);
+        await updateDoc(doc(db, "rooms", roomId), {
+          gamePhase: "undercover-playing",
+          updatedAt: serverTimestamp(),
+        });
+      }
     } else {
       // Juste enregistrer l'équipe comme prête
       await updateDoc(doc(db, "rooms", roomId), {

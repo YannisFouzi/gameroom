@@ -1,5 +1,6 @@
 "use client";
 
+import ScoreDisplay from "@/components/undercover/ScoreDisplay";
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
 import { undercoverService } from "@/lib/firebase/services/undercoverService";
@@ -177,7 +178,11 @@ function UndercoverResultsContent() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4">
+      {isHost && room.teams && (
+        <ScoreDisplay scores={gameData.scores} teams={room.teams} />
+      )}
+
       {isHost ? <HostView /> : <PlayerView />}
     </div>
   );

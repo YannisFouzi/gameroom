@@ -1,9 +1,11 @@
 "use client";
 
+import ScoreDisplay from "@/components/undercover/ScoreDisplay";
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
 import { roomService } from "@/lib/firebase/roomService";
 import { undercoverService } from "@/lib/firebase/services/undercoverService";
+import { UndercoverGameData } from "@/types/undercover";
 import { motion } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -13,6 +15,7 @@ function UndercoverRulesContent() {
   const { room } = useRoom();
   const { isHost, teamId } = usePlayer(room?.id || "");
   const currentTeam = teamId ? room?.teams[teamId] : null;
+  const gameData = room?.gameData?.undercover as UndercoverGameData;
 
   useEffect(() => {
     if (room?.gamePhase === "undercover-playing") {
@@ -166,8 +169,14 @@ function UndercoverRulesContent() {
     </div>
   );
 
+  if (!room) return <div>Chargement...</div>;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4">
+      {isHost && room.teams && gameData?.scores && (
+        <ScoreDisplay scores={gameData.scores} teams={room.teams} />
+      )}
+
       <MainContent />
     </div>
   );

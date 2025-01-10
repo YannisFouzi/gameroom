@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import DistributionPhase from "./DistributionPhase";
 import PlayingPhase from "./PlayingPhase";
 import ResultsPhase from "./ResultsPhase";
+import ScoreDisplay from "./ScoreDisplay";
 import VotingPhase from "./VotingPhase";
 
 type Props = {
@@ -36,50 +37,59 @@ export default function UndercoverGame({
 
   if (!room) return null;
 
-  // Afficher la phase appropriée
-  switch (gameData.currentPhase) {
-    case "distribution":
-      return (
-        <DistributionPhase
-          gameData={gameData}
-          isHost={isHost}
-          currentTeam={currentTeam}
-          teamId={teamId}
-          roomId={roomId}
-        />
-      );
-    case "playing":
-      return (
-        <PlayingPhase
-          gameData={gameData}
-          isHost={isHost}
-          currentTeam={currentTeam}
-          teamId={teamId}
-          roomId={roomId}
-        />
-      );
-    case "voting":
-      return (
-        <VotingPhase
-          gameData={gameData}
-          isHost={isHost}
-          currentTeam={currentTeam}
-          teamId={teamId}
-          roomId={roomId}
-          teams={room.teams}
-        />
-      );
-    case "results":
-      return (
-        <ResultsPhase
-          gameData={gameData}
-          isHost={isHost}
-          currentTeam={currentTeam}
-          teamId={teamId}
-          roomId={roomId}
-        />
-      );
-    default:
-      return null;
-  }
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black">
+      {isHost && room.teams && (
+        <ScoreDisplay scores={gameData.scores} teams={room.teams} />
+      )}
+
+      {(() => {
+        switch (gameData.currentPhase) {
+          case "distribution":
+            return (
+              <DistributionPhase
+                gameData={gameData}
+                isHost={isHost}
+                currentTeam={currentTeam}
+                teamId={teamId}
+                roomId={roomId}
+              />
+            );
+          case "playing":
+            return (
+              <PlayingPhase
+                gameData={gameData}
+                isHost={isHost}
+                currentTeam={currentTeam}
+                teamId={teamId}
+                roomId={roomId}
+              />
+            );
+          case "voting":
+            return (
+              <VotingPhase
+                gameData={gameData}
+                isHost={isHost}
+                currentTeam={currentTeam}
+                teamId={teamId}
+                roomId={roomId}
+                teams={room.teams}
+              />
+            );
+          case "results":
+            return (
+              <ResultsPhase
+                gameData={gameData}
+                isHost={isHost}
+                currentTeam={currentTeam}
+                teamId={teamId}
+                roomId={roomId}
+              />
+            );
+          default:
+            return null;
+        }
+      })()}
+    </div>
+  );
 }
