@@ -221,7 +221,7 @@ function MillionaireContent() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-center space-y-8 mb-12"
+              className="text-center space-y-8 mb-1"
             >
               <motion.div
                 animate={{

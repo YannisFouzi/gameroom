@@ -315,7 +315,7 @@ export default function QuestionDisplay({
     <div className="max-w-2xl mx-auto p-6">
       {(isHost || isCurrentTeam) && (
         <div
-          className={`text-center mb-4 text-2xl font-bold ${
+          className={`text-center mb-2 text-2xl font-bold ${
             timeLeft <= 30 ? "text-red-500" : "text-white"
           }`}
         >
@@ -324,7 +324,7 @@ export default function QuestionDisplay({
       )}
 
       {doubleAnswerActive && !isHost && isCurrentTeam && (
-        <div className="mb-4 text-center text-sm text-gray-600">
+        <div className="mb-2 text-center text-sm text-gray-600">
           Sélectionnez jusqu'à 2 réponses ({2 - selectedAnswers.length} restante
           {2 - selectedAnswers.length > 1 ? "s" : ""})
         </div>
