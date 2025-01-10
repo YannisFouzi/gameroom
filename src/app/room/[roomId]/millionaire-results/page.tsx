@@ -27,14 +27,22 @@ function MillionaireResultsContent() {
 
   if (!room?.gameData?.scores) return <div>Chargement...</div>;
 
+  // Ajouter ces logs avant le tri des équipes
+  console.log("Room data:", room);
+  console.log("Scores:", room.gameData?.scores);
+
   // Trier les équipes par score
   const sortedTeams: TeamWithScore[] = Object.entries(room.teams)
-    .map(([teamId, team]) => ({
-      teamId,
-      name: team.name,
-      avatar: team.avatar,
-      finalScore: room.gameData?.scores?.[teamId] || 0,
-    }))
+    .map(([teamId, team]) => {
+      const score = room.gameData?.scores?.millionaire?.[teamId] || 0;
+      console.log(`Score for team ${team.name}:`, score);
+      return {
+        teamId,
+        name: team.name,
+        avatar: team.avatar,
+        finalScore: score,
+      };
+    })
     .sort((a, b) => b.finalScore - a.finalScore);
 
   const winner = sortedTeams[0];

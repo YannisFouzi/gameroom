@@ -3,7 +3,6 @@ import { Room } from "@/types/room";
 import {
   arrayUnion,
   doc,
-  increment,
   runTransaction,
   serverTimestamp,
   updateDoc,
@@ -70,40 +69,42 @@ export const millionaireService = {
   async submitMillionaireAnswer(
     roomId: string,
     isCorrect: boolean,
-    currentQuestionIndex: number,
+    questionIndex: number,
     points: number
   ) {
-    const room = await baseRoomService.getRoom(roomId);
-    const currentTeamIndex = room.gameData?.currentTeamIndex || 0;
-    const currentTeam = room.gameData?.remainingTeams[currentTeamIndex];
+    const roomRef = doc(db, "rooms", roomId);
 
-    if (!currentTeam || !room.gameData?.remainingTeams) return;
+    await runTransaction(db, async (transaction) => {
+      const roomDoc = await transaction.get(roomRef);
+      if (!roomDoc.exists()) return;
 
-    if (isCorrect) {
-      // Si c'est la dernière question (index 14 = question 15)
-      if (currentQuestionIndex === 14) {
-        // Ajouter les points et rediriger vers les résultats
-        await updateDoc(doc(db, "rooms", roomId), {
-          [`gameData.scores.${currentTeam}`]: increment(points),
-          gamePhase: "millionaire-results", // Redirection vers les résultats
-          updatedAt: serverTimestamp(),
+      const room = roomDoc.data() as Room;
+      if (!room.gameData) return;
+
+      const currentTeam =
+        room.gameData.remainingTeams[room.gameData.currentTeamIndex];
+
+      if (isCorrect) {
+        // Initialiser la structure des scores si elle n'existe pas
+        const currentScores = room.gameData.scores || {};
+        const millionaireScores = currentScores.millionaire || {};
+
+        // Mettre à jour le score
+        const currentScore = millionaireScores[currentTeam] || 0;
+        const newMillionaireScores = {
+          ...millionaireScores,
+          [currentTeam]: currentScore + points,
+        };
+
+        // Mettre à jour avec la bonne structure
+        transaction.update(roomRef, {
+          "gameData.scores": {
+            ...currentScores,
+            millionaire: newMillionaireScores,
+          },
         });
-        return;
       }
-    }
-
-    if (!isCorrect) {
-      const securePoints = this.calculateSecurePoints(currentQuestionIndex);
-      const nextTeamIndex =
-        (currentTeamIndex + 1) % room.gameData.remainingTeams.length;
-
-      await updateDoc(doc(db, "rooms", roomId), {
-        [`gameData.scores.${currentTeam}`]: increment(securePoints),
-        "gameData.currentTeamIndex": nextTeamIndex,
-        "gameData.currentCategory": null,
-        updatedAt: serverTimestamp(),
-      });
-    }
+    });
   },
 
   async moveToNextQuestion(roomId: string, nextQuestionIndex: number) {
@@ -144,26 +145,32 @@ export const millionaireService = {
 
       const currentTeam =
         room.gameData.remainingTeams[room.gameData.currentTeamIndex];
-      const nextTeamIndex =
-        (room.gameData.currentTeamIndex + 1) %
-        room.gameData.remainingTeams.length;
+
+      // Initialiser la structure des scores si elle n'existe pas
+      const currentScores = room.gameData.scores || {};
+      const millionaireScores = currentScores.millionaire || {};
 
       // Mettre à jour le score
-      const currentScore = (room.gameData.scores || {})[currentTeam] || 0;
-      const newScores = {
-        ...(room.gameData.scores || {}),
+      const currentScore = millionaireScores[currentTeam] || 0;
+      const newMillionaireScores = {
+        ...millionaireScores,
         [currentTeam]: currentScore + points,
       };
 
-      // Réinitialiser les états pour l'équipe suivante
+      // Mettre à jour avec la bonne structure
       transaction.update(roomRef, {
-        "gameData.scores": newScores,
-        "gameData.currentTeamIndex": nextTeamIndex,
+        "gameData.scores": {
+          ...currentScores,
+          millionaire: newMillionaireScores,
+        },
+        "gameData.currentTeamIndex":
+          (room.gameData.currentTeamIndex + 1) %
+          room.gameData.remainingTeams.length,
         "gameData.currentCategory": null,
         "gameData.currentQuestionIndex": 0,
-        "gameData.answerState": null, // Réinitialisation
-        "gameData.selectedAnswer": null, // Réinitialisation
-        "gameData.selectedAnswers": [], // Réinitialisation
+        "gameData.answerState": null,
+        "gameData.selectedAnswer": null,
+        "gameData.selectedAnswers": [],
       });
     });
   },
