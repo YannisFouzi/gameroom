@@ -1,5 +1,6 @@
 import { useAudio } from "@/hooks/useAudio";
 import { db } from "@/lib/firebase";
+import { timerService } from "@/lib/firebase/services/millionaireService";
 import { JokerType, MillionaireQuestion } from "@/types/millionaire";
 import { doc, updateDoc } from "firebase/firestore";
 import { motion } from "framer-motion";
@@ -81,8 +82,7 @@ export default function QuestionDisplay({
   const { play: playSuspens, stop: stopSuspens } = useAudio(
     "/sound/millionnaire/sounds_suspens.mp3"
   );
-  const [timeLeft, setTimeLeft] = useState(60);
-  const [timerActive, setTimerActive] = useState(true);
+  const [syncInterval, setSyncInterval] = useState<NodeJS.Timeout | null>(null);
   const { play: playSelect, isLoaded } = useAudio(
     "/sound/millionnaire/sounds_play.mp3"
   );
@@ -108,38 +108,48 @@ export default function QuestionDisplay({
   }, [answerState, selectedAnswer, selectedAnswers, isBlinking]);
 
   useEffect(() => {
-    // Reset timer state when question changes
-    const roomRef = doc(db, "rooms", room.id);
-    updateDoc(roomRef, {
-      "gameData.timerStartedAt": Date.now(),
-      "gameData.timerPaused": false,
-      "gameData.timerDuration": 60,
-    });
-  }, [questionIndex]);
+    // Démarrer le timer quand la question change
+    if (isHost && questionIndex >= 0) {
+      timerService.startTimer(room.id);
+    }
+  }, [questionIndex, isHost]);
 
   useEffect(() => {
-    if (!room.gameData?.timerStartedAt || room.gameData?.timerPaused) return;
-
-    const interval = setInterval(() => {
-      const elapsed = Math.floor(
-        (Date.now() - room.gameData.timerStartedAt) / 1000
-      );
-      const remaining = Math.max(0, room.gameData.timerDuration - elapsed);
-
-      if (remaining === 15 && isCurrentTeam) {
-        playSuspens();
+    if (!room.gameData?.timer || room.gameData.timer.isPaused) {
+      if (syncInterval) {
+        clearInterval(syncInterval);
+        setSyncInterval(null);
       }
+      return;
+    }
 
-      setTimeLeft(remaining);
+    // Si c'est l'hôte, mettre à jour le temps restant toutes les secondes
+    if (isHost) {
+      const interval = setInterval(async () => {
+        const newRemainingTime = Math.max(
+          0,
+          room.gameData.timer.remainingTime - 1
+        );
 
-      if (remaining === 0) {
+        if (newRemainingTime === 15) {
+          playSuspens();
+        }
+
+        if (newRemainingTime === 0) {
+          await handleTimeUp();
+          return;
+        }
+
+        await timerService.updateRemainingTime(room.id, newRemainingTime);
+      }, 1000);
+
+      setSyncInterval(interval);
+
+      return () => {
         clearInterval(interval);
-        handleTimeUp();
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [room.gameData?.timerStartedAt, room.gameData?.timerPaused]);
+      };
+    }
+  }, [room.gameData?.timer, isHost]);
 
   useEffect(() => {
     if (questionIndex === 0 && isLoaded && isCurrentTeam) {
@@ -148,17 +158,13 @@ export default function QuestionDisplay({
   }, [questionIndex, isLoaded, isCurrentTeam]);
 
   const handleTimeUp = async () => {
-    const roomRef = doc(db, "rooms", room.id);
-    await updateDoc(roomRef, {
-      "gameData.timerPaused": true,
-    });
+    await timerService.pauseTimer(room.id);
 
     if (isCurrentTeam) {
       playWrong();
     }
 
     await new Promise((resolve) => setTimeout(resolve, 700));
-
     onUpdateAnswerState(null, "incorrect", []);
   };
 
@@ -344,10 +350,12 @@ export default function QuestionDisplay({
       {(isHost || isCurrentTeam) && (
         <div
           className={`text-center mb-2 text-2xl font-bold ${
-            timeLeft <= 15 ? "text-red-500" : "text-white"
+            (room.gameData?.timer?.remainingTime || 0) <= 15
+              ? "text-red-500"
+              : "text-white"
           }`}
         >
-          {formatTime(timeLeft)}
+          {room.gameData?.timer?.remainingTime || 0}
         </div>
       )}
 

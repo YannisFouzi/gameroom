@@ -175,3 +175,31 @@ export const millionaireService = {
     });
   },
 };
+
+export const timerService = {
+  async startTimer(roomId: string) {
+    const roomRef = doc(db, "rooms", roomId);
+    await updateDoc(roomRef, {
+      "gameData.timer": {
+        startedAt: serverTimestamp(),
+        duration: 60,
+        isPaused: false,
+        remainingTime: 60,
+      },
+    });
+  },
+
+  async updateRemainingTime(roomId: string, remainingTime: number) {
+    const roomRef = doc(db, "rooms", roomId);
+    await updateDoc(roomRef, {
+      "gameData.timer.remainingTime": remainingTime,
+    });
+  },
+
+  async pauseTimer(roomId: string) {
+    const roomRef = doc(db, "rooms", roomId);
+    await updateDoc(roomRef, {
+      "gameData.timer.isPaused": true,
+    });
+  },
+};

@@ -67,6 +67,12 @@ export type GameData = {
     total?: Record<string, number>;
   };
   undercover?: UndercoverGameData;
+  timer?: {
+    startedAt: number;
+    duration: number;
+    isPaused: boolean;
+    remainingTime: number;
+  };
 } & {
   [K in keyof MillionaireGameData]?: MillionaireGameData[K];
 };
