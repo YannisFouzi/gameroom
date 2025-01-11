@@ -12,47 +12,11 @@ function normalizeString(str: string): string {
 }
 
 const CELEBRITIES: Record<string, Celebrity> = {
-  sarkozy: {
-    id: "sarkozy",
-    name: "Nicolas Sarkozy",
-    validAnswers: ["sarkozy", "nicolas sarkozy"],
-    imageUrl: "/ratDeStar/Nicolas_Sarkozy.png",
-  },
-  zidane: {
-    id: "zidane",
-    name: "Zinédine Zidane",
-    validAnswers: ["zidane", "zinedine zidane", "zinédine zidane"],
-    imageUrl: "/ratDeStar/Zinedine_Zidane.png",
-  },
-  alainDelon: {
-    id: "alainDelon",
-    name: "Alain Delon",
-    validAnswers: ["delon", "alain delon"],
-    imageUrl: "/ratDeStar/Alain_Delon.jpg",
-  },
-  angelinaJolie: {
-    id: "angelinaJolie",
-    name: "Angelina Jolie",
-    validAnswers: ["jolie", "angelina jolie"],
-    imageUrl: "/ratDeStar/Angelina_Jolie.jpg",
-  },
-  bernardHinault: {
-    id: "bernardHinault",
-    name: "Bernard Hinault",
-    validAnswers: ["hinault", "bernard hinault"],
-    imageUrl: "/ratDeStar/Bernard_Hinault.jpg",
-  },
-  barackObama: {
-    id: "barackObama",
-    name: "Barack Obama",
-    validAnswers: ["obama", "barack obama"],
-    imageUrl: "/ratDeStar/Barack_Obama.jpg",
-  },
-  bradPitt: {
-    id: "bradPitt",
-    name: "Brad Pitt",
-    validAnswers: ["pitt", "brad pitt"],
-    imageUrl: "/ratDeStar/Brad_Pitt.jpg",
+  alCapone: {
+    id: "alCapone",
+    name: "Al Capone",
+    validAnswers: ["capone", "al capone"],
+    imageUrl: "/ratDeStar/Al_Capone.jpg",
   },
   catherineDeneuve: {
     id: "catherineDeneuve",
@@ -60,23 +24,11 @@ const CELEBRITIES: Record<string, Celebrity> = {
     validAnswers: ["deneuve", "catherine deneuve"],
     imageUrl: "/ratDeStar/Catherine_Deneuve.jpg",
   },
-  cristianoRonaldo: {
-    id: "cristianoRonaldo",
-    name: "Cristiano Ronaldo",
-    validAnswers: ["ronaldo", "cristiano ronaldo", "cr7"],
-    imageUrl: "/ratDeStar/Cristiano_Ronaldo.png",
-  },
-  davidBeckham: {
-    id: "davidBeckham",
-    name: "David Beckham",
-    validAnswers: ["beckham", "david beckham"],
-    imageUrl: "/ratDeStar/David_Beckham.jpg",
-  },
-  dorothee: {
-    id: "dorothee",
-    name: "Dorothée",
-    validAnswers: ["dorothee", "dorothée"],
-    imageUrl: "/ratDeStar/Dorothée.jpg",
+  davidBowie: {
+    id: "davidBowie",
+    name: "David Bowie",
+    validAnswers: ["bowie", "david bowie"],
+    imageUrl: "/ratDeStar/David_Bowie.jpg",
   },
   elonMusk: {
     id: "elonMusk",
@@ -84,41 +36,94 @@ const CELEBRITIES: Record<string, Celebrity> = {
     validAnswers: ["musk", "elon musk"],
     imageUrl: "/ratDeStar/Elon_Musk.jpg",
   },
-  francoisMitterrand: {
-    id: "francoisMitterrand",
-    name: "François Mitterrand",
-    validAnswers: ["mitterrand", "francois mitterrand", "françois mitterrand"],
-    imageUrl: "/ratDeStar/François_Mitterrand.jpg",
+  fernandoAlonso: {
+    id: "fernandoAlonso",
+    name: "Fernando Alonso",
+    validAnswers: ["alonso", "fernando alonso"],
+    imageUrl: "/ratDeStar/Fernando_Alonso.jpg",
   },
-  lebronJames: {
-    id: "lebronJames",
-    name: "LeBron James",
-    validAnswers: ["lebron", "james", "lebron james"],
-    imageUrl: "/ratDeStar/LeBron_James.png",
+  gregoryCoupet: {
+    id: "gregoryCoupet",
+    name: "Grégory Coupet",
+    validAnswers: ["coupet", "gregory coupet", "grégory coupet"],
+    imageUrl: "/ratDeStar/Gregory_Coupet.jpg",
   },
-  lionelMessi: {
-    id: "lionelMessi",
-    name: "Lionel Messi",
-    validAnswers: ["messi", "lionel messi"],
-    imageUrl: "/ratDeStar/Lionel_Messi.png",
+  jaysonTatum: {
+    id: "jaysonTatum",
+    name: "Jayson Tatum",
+    validAnswers: ["tatum", "jayson tatum"],
+    imageUrl: "/ratDeStar/Jayson_Tatum.jpg",
   },
-  michaelJackson: {
-    id: "michaelJackson",
-    name: "Michael Jackson",
-    validAnswers: ["jackson", "michael jackson"],
-    imageUrl: "/ratDeStar/Michael_Jackson.jpg",
+  lanceArmstrong: {
+    id: "lanceArmstrong",
+    name: "Lance Armstrong",
+    validAnswers: ["armstrong", "lance armstrong"],
+    imageUrl: "/ratDeStar/Lance_Armstrong.jpg",
   },
-  rogerFederer: {
-    id: "rogerFederer",
-    name: "Roger Federer",
-    validAnswers: ["federer", "roger federer"],
-    imageUrl: "/ratDeStar/Roger_Federer.jpg",
+  lewisHamilton: {
+    id: "lewisHamilton",
+    name: "Lewis Hamilton",
+    validAnswers: ["hamilton", "lewis hamilton"],
+    imageUrl: "/ratDeStar/Lewis_Hamilton.jpg",
+  },
+  marieCurie: {
+    id: "marieCurie",
+    name: "Marie Curie",
+    validAnswers: ["curie", "marie curie"],
+    imageUrl: "/ratDeStar/Marie_Curie.jpg",
+  },
+  marilynMonroe: {
+    id: "marilynMonroe",
+    name: "Marilyn Monroe",
+    validAnswers: ["monroe", "marilyn monroe"],
+    imageUrl: "/ratDeStar/Marilyn_Monroe.jpg",
+  },
+  napoleonBonaparte: {
+    id: "napoleonBonaparte",
+    name: "Napoléon Bonaparte",
+    validAnswers: [
+      "napoleon",
+      "bonaparte",
+      "napoléon bonaparte",
+      "napoleon bonaparte",
+    ],
+    imageUrl: "/ratDeStar/Napoleon_Bonaparte.jpg",
+  },
+  nicolasSarkozy: {
+    id: "nicolasSarkozy",
+    name: "Nicolas Sarkozy",
+    validAnswers: ["sarkozy", "nicolas sarkozy"],
+    imageUrl: "/ratDeStar/Nicolas_Sarkozy.png",
+  },
+  pabloPicasso: {
+    id: "pabloPicasso",
+    name: "Pablo Picasso",
+    validAnswers: ["picasso", "pablo picasso"],
+    imageUrl: "/ratDeStar/Pablo_Picasso.jpg",
+  },
+  patrickFiori: {
+    id: "patrickFiori",
+    name: "Patrick Fiori",
+    validAnswers: ["fiori", "patrick fiori"],
+    imageUrl: "/ratDeStar/Patrick_Fiori.jpg",
+  },
+  rihanna: {
+    id: "rihanna",
+    name: "Rihanna",
+    validAnswers: ["rihanna"],
+    imageUrl: "/ratDeStar/Rihanna.jpg",
   },
   sophieMarceau: {
     id: "sophieMarceau",
     name: "Sophie Marceau",
     validAnswers: ["marceau", "sophie marceau"],
     imageUrl: "/ratDeStar/Sophie_Marceau.jpg",
+  },
+  steveJobs: {
+    id: "steveJobs",
+    name: "Steve Jobs",
+    validAnswers: ["jobs", "steve jobs"],
+    imageUrl: "/ratDeStar/Steve_Jobs.jpg",
   },
   thierryArdisson: {
     id: "thierryArdisson",
@@ -132,11 +137,11 @@ const CELEBRITIES: Record<string, Celebrity> = {
     validAnswers: ["cruise", "tom cruise"],
     imageUrl: "/ratDeStar/Tom_Cruise.jpg",
   },
-  vladimirPoutine: {
-    id: "vladimirPoutine",
-    name: "Vladimir Poutine",
-    validAnswers: ["poutine", "vladimir poutine"],
-    imageUrl: "/ratDeStar/Vladimir_Poutine.jpg",
+  winstonChurchill: {
+    id: "winstonChurchill",
+    name: "Winston Churchill",
+    validAnswers: ["churchill", "winston churchill"],
+    imageUrl: "/ratDeStar/Winston_Churchill.jpg",
   },
 };
 

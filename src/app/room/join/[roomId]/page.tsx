@@ -43,20 +43,6 @@ export default function JoinRoomPage() {
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-xl"
         >
-          <motion.h1
-            className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent"
-            animate={{
-              scale: [1, 1.02, 1],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            Rejoindre la Soirée du Nouvel An
-          </motion.h1>
-
           {error && (
             <motion.div
               initial={{ opacity: 0 }}

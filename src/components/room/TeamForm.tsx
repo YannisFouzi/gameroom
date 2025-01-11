@@ -71,7 +71,7 @@ export default function TeamForm({
           value={teamName}
           onChange={(e) => setTeamName(e.target.value)}
           className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-          placeholder="Les Fêtards du Nouvel An..."
+          placeholder="Les Rois de la Glisse..."
           required
           minLength={2}
           maxLength={30}
