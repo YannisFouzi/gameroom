@@ -305,7 +305,7 @@ export function GuessingPhase({
                         : "bg-white/10 text-white hover:bg-white/20"
                     }`}
                   >
-                    {isListening ? "🎤" : "🎙️"}
+                    {isListening ? "🎤" : "Activer la reconnaissance vocale"}
                   </motion.button>
                 </div>
                 <button

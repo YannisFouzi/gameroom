@@ -46,7 +46,7 @@ const CELEBRITIES: Record<string, Celebrity> = {
     id: "gregoryCoupet",
     name: "Grégory Coupet",
     validAnswers: ["coupet", "gregory coupet", "grégory coupet"],
-    imageUrl: "/ratDeStar/Gregory_Coupet.jpg",
+    imageUrl: "/ratDeStar/Grégory_Coupet.jpg",
   },
   jaysonTatum: {
     id: "jaysonTatum",
@@ -87,7 +87,7 @@ const CELEBRITIES: Record<string, Celebrity> = {
       "napoléon bonaparte",
       "napoleon bonaparte",
     ],
-    imageUrl: "/ratDeStar/Napoleon_Bonaparte.jpg",
+    imageUrl: "/ratDeStar/Napoléon_Bonaparte.jpg",
   },
   nicolasSarkozy: {
     id: "nicolasSarkozy",
