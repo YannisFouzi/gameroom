@@ -32,7 +32,7 @@ export default function CategorySelector({
   const categories = [
     {
       id: "histoire" as MillionaireCategory,
-      name: "Histoire",
+      name: "Histoire / Géo",
       icon: "🏛️",
     },
     {
@@ -47,7 +47,7 @@ export default function CategorySelector({
     },
     {
       id: "television" as MillionaireCategory,
-      name: "Télévision",
+      name: "Télé / Ciné",
       icon: "📺",
     },
   ];

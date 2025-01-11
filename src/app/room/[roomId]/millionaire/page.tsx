@@ -34,7 +34,11 @@ function MillionaireContent() {
     },
     { id: "sport" as MillionaireCategory, name: "Sport", icon: "⚽" },
     { id: "annees80" as MillionaireCategory, name: "Années 80", icon: "🕹️" },
-    { id: "television" as MillionaireCategory, name: "Télévision", icon: "📺" },
+    {
+      id: "television" as MillionaireCategory,
+      name: "Télévision & Cinéma",
+      icon: "📺",
+    },
   ];
 
   const gameData: MillionaireGameData = {
