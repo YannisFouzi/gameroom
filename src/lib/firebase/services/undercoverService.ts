@@ -277,7 +277,18 @@ export const undercoverService = {
         }
       });
 
-      // Mettre à jour les joueurs éliminés et les scores
+      // Vérifier si tous les joueurs sont éliminés après ce vote
+      const updatedGameData = {
+        ...gameData,
+        players: gameData.players.map((p) =>
+          eliminatedIds.includes(p.memberId) ? { ...p, isEliminated: true } : p
+        ),
+      };
+
+      const allPlayersEliminated = updatedGameData.players.every(
+        (p) => p.isEliminated
+      );
+
       await updateDoc(doc(db, "rooms", roomId), {
         "gameData.undercover.votes": updatedVotes,
         "gameData.undercover.scores": updatedScores,
@@ -286,10 +297,12 @@ export const undercoverService = {
           ...eliminatedPlayers,
         ],
         "gameData.undercover.lastEliminatedPlayers": eliminatedPlayers,
-        "gameData.undercover.players": gameData.players.map((p) =>
-          eliminatedIds.includes(p.memberId) ? { ...p, isEliminated: true } : p
-        ),
+        "gameData.undercover.players": updatedGameData.players,
         "gameData.undercover.currentPhase": "results",
+        ...(allPlayersEliminated && {
+          gamePhase: "undercover-results",
+          "gameData.undercover.gameOver": true,
+        }),
         updatedAt: serverTimestamp(),
       });
     } else {
@@ -304,6 +317,18 @@ export const undercoverService = {
   async checkGameEnd(roomId: string) {
     const room = await baseRoomService.getRoom(roomId);
     const gameData = room.gameData?.undercover as UndercoverGameData;
+
+    // Vérifier si tous les joueurs sont éliminés
+    const allPlayersEliminated = gameData.players.every((p) => p.isEliminated);
+    if (allPlayersEliminated) {
+      await updateDoc(doc(db, "rooms", roomId), {
+        gamePhase: "undercover-results",
+        "gameData.undercover.gameOver": true,
+        // Pas de winningTeamId -> match nul
+        updatedAt: serverTimestamp(),
+      });
+      return true;
+    }
 
     // Vérifier les imposteurs par équipe
     for (const teamId of Object.keys(room.teams)) {
@@ -388,11 +413,19 @@ export const undercoverService = {
       const nextRound = (gameData.currentRound || 1) + 1;
 
       if (nextRound > WORDS_BY_ROUND.length) {
-        // Fin du jeu Undercover, passer au jeu suivant
+        // Vérifier si tous les joueurs sont éliminés pour le match nul
+        const allPlayersEliminated = gameData.players.every(
+          (p) => p.isEliminated
+        );
+
         await updateDoc(doc(db, "rooms", roomId), {
           gamePhase: "undercover-results",
           "gameData.undercover.gameOver": true,
           "gameData.undercover.isLastGame": true,
+          // Ne pas définir winningTeamId si tous les joueurs sont éliminés
+          ...(!allPlayersEliminated && {
+            "gameData.undercover.winningTeamId": gameData.winningTeamId,
+          }),
           "gameData.scores": {
             ...room.gameData?.scores,
             undercover: gameData.scores,

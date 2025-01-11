@@ -99,9 +99,11 @@ function FinalScoresContent() {
                   </span>
                 </div>
                 <div className="mt-2 grid grid-cols-3 gap-4 text-sm text-white/70">
-                  <div>Millionaire: {team.millionaireScore} pts</div>
-                  <div>Evaluation: {team.evaluationScore} pts</div>
-                  <div>Undercover: {team.undercoverScore} pts</div>
+                  <div>
+                    Qui veut gagner des millions : {team.millionaireScore} pts
+                  </div>
+                  <div>Tu te mets combien ? : {team.evaluationScore} pts</div>
+                  <div>Undercover : {team.undercoverScore} pts</div>
                 </div>
               </div>
             ))}

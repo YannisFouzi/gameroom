@@ -127,6 +127,16 @@ function UndercoverResultsContent() {
           </motion.div>
         ))}
       </div>
+
+      {/* Ajouter le bouton des scores finaux pour l'hôte */}
+      {gameData.isLastGame && (
+        <button
+          onClick={handleNextGame}
+          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-8 rounded-xl font-bold text-xl hover:opacity-90 transition-all"
+        >
+          Voir les scores finaux →
+        </button>
+      )}
     </div>
   );
 
@@ -191,7 +201,8 @@ function UndercoverResultsContent() {
         </div>
       </motion.div>
 
-      {!isHost && !isTeamReady && (
+      {/* Ne pas afficher le bouton "Partie suivante" si c'est la dernière partie */}
+      {!isHost && !isTeamReady && !gameData.isLastGame && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -206,7 +217,7 @@ function UndercoverResultsContent() {
         </motion.div>
       )}
 
-      {!isHost && isTeamReady && (
+      {!isHost && isTeamReady && !gameData.isLastGame && (
         <div className="text-center mt-8 text-white/80">
           En attente des autres équipes...
         </div>
@@ -225,20 +236,7 @@ function UndercoverResultsContent() {
         )}
 
         {/* Contenu principal */}
-        <div className="w-full">
-          {isHost ? <HostView /> : <PlayerView />}
-
-          {isHost && (
-            <button
-              onClick={handleNextGame}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-8 rounded-xl font-bold text-xl hover:opacity-90 transition-all"
-            >
-              {gameData.isLastGame
-                ? "Voir les scores finaux →"
-                : "Partie suivante →"}
-            </button>
-          )}
-        </div>
+        <div className="w-full">{isHost ? <HostView /> : <PlayerView />}</div>
       </div>
     </div>
   );
