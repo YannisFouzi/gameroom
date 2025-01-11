@@ -11,17 +11,17 @@ export default function ScoreDisplay({ scores, teams }: ScoreDisplayProps) {
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-black/40 backdrop-blur-sm p-3 rounded-xl border border-white/10 shadow-lg max-w-xs mx-auto"
+      className="bg-black/40 backdrop-blur-sm p-3 rounded-xl border border-white/10 shadow-lg max-w-xl mx-auto"
     >
-      <h3 className="text-lg font-bold text-white mb-3">Scores en direct</h3>
-      <div className="space-y-2">
+      <div className="flex items-center justify-center gap-8">
         {Object.entries(teams).map(([teamId, team]) => (
-          <div
-            key={teamId}
-            className="flex items-center justify-between gap-4 text-white/90"
-          >
+          <div key={teamId} className="flex items-center gap-4 text-white/90">
             <div className="flex items-center gap-2">
-              <img src={team.avatar} alt="" className="w-6 h-6" />
+              <img
+                src={team.avatar}
+                alt=""
+                className="w-16 h-16 rounded-full"
+              />
               <span>{team.name}</span>
             </div>
             <span className="font-bold text-lg">{scores[teamId] || 0} pts</span>
