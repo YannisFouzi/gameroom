@@ -83,6 +83,9 @@ export default function QuestionDisplay({
   );
   const [timeLeft, setTimeLeft] = useState(60);
   const [timerActive, setTimerActive] = useState(true);
+  const { play: playSelect, isLoaded } = useAudio(
+    "/sound/millionnaire/sounds_play.mp3"
+  );
 
   const isBlinking = room.gameData?.isBlinking || false;
 
@@ -137,6 +140,12 @@ export default function QuestionDisplay({
 
     return () => clearInterval(interval);
   }, [room.gameData?.timerStartedAt, room.gameData?.timerPaused]);
+
+  useEffect(() => {
+    if (questionIndex === 0 && isLoaded && isCurrentTeam) {
+      playSelect();
+    }
+  }, [questionIndex, isLoaded, isCurrentTeam]);
 
   const handleTimeUp = async () => {
     const roomRef = doc(db, "rooms", room.id);

@@ -1,4 +1,3 @@
-import { useAudio } from "@/hooks/useAudio";
 import { MillionaireCategory } from "@/types/millionaire";
 import { motion } from "framer-motion";
 
@@ -15,12 +14,8 @@ export default function CategorySelector({
   isCurrentTeam,
   isHost,
 }: CategorySelectorProps) {
-  const { play: playSelect } = useAudio("/sound/millionnaire/sounds_play.mp3");
-
-  const handleCategorySelect = (category: MillionaireCategory) => {
+  const handleCategorySelect = async (category: MillionaireCategory) => {
     if (!isCurrentTeam) return;
-
-    playSelect();
     onSelectCategory(category);
   };
 
