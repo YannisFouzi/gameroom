@@ -54,7 +54,7 @@ function UndercoverResultsContent() {
 
   // Vue pour l'hôte
   const HostView = () => (
-    <div className="max-w-4xl mx-auto p-6 space-y-8">
+    <div className="max-w-7xl mx-auto p-6 space-y-8">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -68,45 +68,65 @@ function UndercoverResultsContent() {
         </h3>
       </motion.div>
 
-      {/* Liste des joueurs avec leurs rôles */}
-      {gameData.players.map((player, index) => (
-        <motion.div
-          key={player.memberId}
-          initial={{ x: -50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: index * 0.1 }}
-          className={`flex items-center justify-between p-4 rounded-lg border ${
-            player.isEliminated
-              ? "bg-red-900/20 border-red-500/30"
-              : "bg-white/10 border-white/20"
-          }`}
-        >
-          <div className="flex items-center gap-4">
-            <span className="text-xl font-bold text-white/80">
-              {player.name}
-            </span>
-            <span className="text-white/60">
-              Équipe {room.teams[player.teamId]?.name}
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <span
-              className={`text-lg font-bold ${
-                player.role === "civil"
-                  ? "text-green-400"
-                  : player.role === "undercover"
-                  ? "text-red-400"
-                  : "text-yellow-400"
-              }`}
-            >
-              {player.role}
-            </span>
-            {player.isEliminated && (
-              <span className="text-red-400 font-medium">Éliminé</span>
-            )}
-          </div>
-        </motion.div>
-      ))}
+      {/* Liste des équipes et leurs joueurs */}
+      <div className="grid grid-cols-2 gap-6">
+        {Object.entries(room.teams).map(([teamId, team], teamIndex) => (
+          <motion.div
+            key={teamId}
+            initial={{ x: -50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: teamIndex * 0.2 }}
+            className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20"
+          >
+            <div className="flex items-center gap-4 mb-4">
+              <img src={team.avatar} alt="" className="w-12 h-12" />
+              <h3 className="text-2xl font-bold text-white">{team.name}</h3>
+            </div>
+
+            <div className="space-y-3">
+              {gameData.players
+                .filter((player) => player.teamId === teamId)
+                .map((player, index) => (
+                  <motion.div
+                    key={player.memberId}
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: index * 0.1 }}
+                    className={`flex items-center justify-between p-4 rounded-lg ${
+                      player.isEliminated
+                        ? "bg-red-900/20 border border-red-500/30"
+                        : "bg-white/5"
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <span className="text-xl font-bold text-white/80">
+                        {player.name}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span
+                        className={`text-lg font-bold ${
+                          player.role === "civil"
+                            ? "text-green-400"
+                            : player.role === "undercover"
+                            ? "text-red-400"
+                            : "text-yellow-400"
+                        }`}
+                      >
+                        {player.role}
+                      </span>
+                      {player.isEliminated && (
+                        <span className="text-red-400 font-medium">
+                          Éliminé
+                        </span>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+            </div>
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 
