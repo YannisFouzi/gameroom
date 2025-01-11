@@ -70,6 +70,7 @@ export default function QuestionDisplay({
   room,
 }: QuestionDisplayProps) {
   const [showValidateButton, setShowValidateButton] = useState(false);
+  const [showPostAnswerButtons, setShowPostAnswerButtons] = useState(false);
   const [usedJokersForQuestion, setUsedJokersForQuestion] = useState<
     JokerType[]
   >([]);
@@ -94,13 +95,14 @@ export default function QuestionDisplay({
   useEffect(() => {
     if (
       answerState === "selected" &&
-      (selectedAnswer !== null || selectedAnswers.length > 0)
+      (selectedAnswer !== null || selectedAnswers.length > 0) &&
+      !isBlinking
     ) {
       setShowValidateButton(true);
     } else {
       setShowValidateButton(false);
     }
-  }, [answerState, selectedAnswer, selectedAnswers]);
+  }, [answerState, selectedAnswer, selectedAnswers, isBlinking]);
 
   useEffect(() => {
     // Reset timer state when question changes
@@ -189,8 +191,9 @@ export default function QuestionDisplay({
 
   const handleValidate = async () => {
     const roomRef = doc(db, "rooms", room.id);
+    setShowValidateButton(false);
+    setShowPostAnswerButtons(false);
 
-    // Mettre à jour Firebase avec isBlinking: true et timer pausé
     await updateDoc(roomRef, {
       "gameData.isBlinking": true,
       "gameData.timerPaused": true,
@@ -198,42 +201,44 @@ export default function QuestionDisplay({
 
     stopSuspens();
 
+    // Déterminer si la réponse est correcte mais ne pas mettre à jour l'état tout de suite
+    let isCorrect;
+    if (!doubleAnswerActive) {
+      isCorrect = selectedAnswer === question.correctAnswer;
+    } else {
+      isCorrect = selectedAnswers.includes(question.correctAnswer);
+    }
+
+    // Jouer le son approprié
+    if (isCorrect) {
+      playCorrect();
+    } else {
+      playWrong();
+    }
+
+    // Attendre la fin du clignotement
     await new Promise((resolve) => setTimeout(resolve, 1300));
 
-    // Mettre isBlinking à false
-    await updateDoc(roomRef, {
-      "gameData.isBlinking": false,
-    });
-
+    // Mettre à jour l'état de la réponse APRÈS le clignotement
     if (!doubleAnswerActive) {
-      const isCorrect = selectedAnswer === question.correctAnswer;
-      if (isCorrect) {
-        playCorrect();
-      } else {
-        playWrong();
-      }
-      await new Promise((resolve) => setTimeout(resolve, 700));
-
       onUpdateAnswerState(
         selectedAnswer,
         isCorrect ? "correct" : "incorrect",
         selectedAnswers
       );
     } else {
-      const hasCorrectAnswer = selectedAnswers.includes(question.correctAnswer);
-      if (hasCorrectAnswer) {
-        playCorrect();
-      } else {
-        playWrong();
-      }
-      await new Promise((resolve) => setTimeout(resolve, 700));
-
       onUpdateAnswerState(
         null,
-        hasCorrectAnswer ? "correct" : "incorrect",
+        isCorrect ? "correct" : "incorrect",
         selectedAnswers
       );
     }
+
+    await updateDoc(roomRef, {
+      "gameData.isBlinking": false,
+    });
+
+    setShowPostAnswerButtons(true);
   };
 
   const handleQuit = () => {
@@ -246,12 +251,17 @@ export default function QuestionDisplay({
   };
 
   const getAnswerStyle = (index: number) => {
-    console.log("getAnswerStyle", {
-      index,
-      selectedAnswer,
-      answerState,
-      doubleAnswerActive,
-    });
+    // Si on est en train de clignoter, garder la couleur de sélection
+    if (isBlinking) {
+      if (doubleAnswerActive) {
+        return selectedAnswers.includes(index)
+          ? "bg-orange-500 text-white"
+          : "bg-blue-50 hover:bg-blue-100 text-black";
+      }
+      return index === selectedAnswer
+        ? "bg-orange-500 text-white"
+        : "bg-blue-50 hover:bg-blue-100 text-black";
+    }
 
     // Si le joker Double réponse est actif
     if (doubleAnswerActive) {
@@ -454,7 +464,7 @@ export default function QuestionDisplay({
         </motion.button>
       )}
 
-      {answerState === "correct" && !isHost && (
+      {answerState === "correct" && !isHost && showPostAnswerButtons && (
         <div className="flex gap-4">
           {questionIndex === 14 ? (
             // Si c'est la dernière question (15ème)
@@ -484,7 +494,7 @@ export default function QuestionDisplay({
         </div>
       )}
 
-      {answerState === "incorrect" && !isHost && (
+      {answerState === "incorrect" && !isHost && showPostAnswerButtons && (
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
