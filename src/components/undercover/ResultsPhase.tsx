@@ -37,8 +37,7 @@ export default function ResultsPhase({
     await undercoverService.teamReady(roomId, teamId);
   };
 
-  const lastEliminated =
-    gameData.eliminatedPlayers[gameData.eliminatedPlayers.length - 1];
+  const lastEliminated = gameData.lastEliminatedPlayers?.[0];
 
   const handleNextGame = async () => {
     if (gameData.isLastGame) {
@@ -51,75 +50,75 @@ export default function ResultsPhase({
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4">
       <div className="max-w-4xl mx-auto space-y-8">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center"
-        >
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Résultats du vote
-          </h2>
-        </motion.div>
-
-        {lastEliminated && (
+        {gameData.lastEliminatedPlayers?.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="bg-red-500/20 backdrop-blur-sm p-6 rounded-xl border border-red-500/30"
           >
-            <h3 className="text-xl font-bold text-white mb-2">
-              Joueur éliminé :
+            <h3 className="text-xl font-bold text-white mb-4 text-center">
+              {gameData.lastEliminatedPlayers.length > 1
+                ? "Joueurs éliminés :"
+                : "Joueur éliminé :"}
             </h3>
-            <div className="text-2xl font-bold text-white mb-2">
-              {lastEliminated.name}
-            </div>
-            <div className="text-lg text-white/80">
-              Rôle : {lastEliminated.role}
+            <div className="flex justify-center gap-8">
+              {gameData.lastEliminatedPlayers.map((player) => (
+                <div key={player.memberId} className="text-center">
+                  <div className="text-2xl font-bold text-white mb-2">
+                    {player.name}
+                  </div>
+                  <div className="text-lg text-white/80">
+                    Rôle : {player.role}
+                  </div>
+                </div>
+              ))}
             </div>
           </motion.div>
         )}
 
-        {/* Liste des joueurs éliminés */}
+        {/* Ordre de passage */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
           className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20"
         >
-          <h3 className="text-xl font-bold text-white mb-4">
-            Joueurs éliminés :
-          </h3>
-          <div className="space-y-2">
-            {gameData.eliminatedPlayers.map((player) => (
-              <div
-                key={player.memberId}
-                className="flex justify-between items-center p-2 rounded bg-white/5"
-              >
-                <span className="text-white">{player.name}</span>
-                <span className="text-white/60">{player.role}</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
+          <div className="space-y-4">
+            {gameData.playOrder.map((playerId, index) => {
+              const player = gameData.players.find(
+                (p) => p.memberId === playerId
+              );
+              if (!player) return null;
 
-        {/* Joueurs restants */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20"
-        >
-          <h3 className="text-xl font-bold text-white mb-4">
-            Joueurs restants :
-          </h3>
-          <div className="space-y-2">
-            {gameData.players
-              .filter((p) => !p.isEliminated)
-              .map((player) => (
-                <div key={player.memberId} className="p-2 rounded bg-white/5">
-                  <span className="text-white">{player.name}</span>
-                </div>
-              ))}
+              const isEliminated = player.isEliminated;
+
+              return (
+                <motion.div
+                  key={playerId}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className={`flex items-center gap-4 p-3 rounded-lg ${
+                    isEliminated ? "bg-white/5" : "bg-white/10"
+                  }`}
+                >
+                  {!isEliminated && (
+                    <span className="text-xl font-bold text-white/80">
+                      {index + 1}
+                    </span>
+                  )}
+                  <div className="flex-1">
+                    <span
+                      className={`text-lg font-medium ${
+                        isEliminated ? "text-white/50" : "text-white"
+                      }`}
+                    >
+                      {player.name}
+                      {isEliminated && ` (Éliminé : ${player.role})`}
+                    </span>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </motion.div>
 

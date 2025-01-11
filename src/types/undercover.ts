@@ -17,6 +17,7 @@ export type UndercoverGameData = {
   currentPlayerIndexByTeam: Record<string, number>;
   currentRound: number;
   eliminatedPlayers: UndercoverPlayer[];
+  lastEliminatedPlayers: UndercoverPlayer[];
   words: {
     civil: string;
     undercover: string;

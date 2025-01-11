@@ -4,7 +4,7 @@ import {
   UndercoverPlayer,
   UndercoverRole,
 } from "@/types/undercover";
-import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../config";
 import { baseRoomService } from "./baseRoomService";
 
@@ -120,12 +120,13 @@ export const undercoverService = {
       ),
       currentRound: round,
       eliminatedPlayers: [],
-      words: WORDS_BY_ROUND[round - 1], // Utiliser les mots du round actuel
+      lastEliminatedPlayers: [],
+      words: WORDS_BY_ROUND[round - 1],
       teamsReady: [],
       votes: {},
       scores: teamScores,
       gameOver: false,
-      isLastGame: round === WORDS_BY_ROUND.length, // Vrai si c'est le dernier round
+      isLastGame: round === WORDS_BY_ROUND.length,
     };
 
     await updateDoc(doc(db, "rooms", roomId), {
@@ -214,7 +215,8 @@ export const undercoverService = {
       await updateDoc(doc(db, "rooms", roomId), {
         "gameData.undercover.teamsReady": [],
         "gameData.undercover.currentPhase": "voting",
-        "gameData.undercover.votes": {}, // Réinitialiser les votes
+        "gameData.undercover.votes": {},
+        "gameData.undercover.lastEliminatedPlayers": [],
         updatedAt: serverTimestamp(),
       });
     } else {
@@ -283,6 +285,7 @@ export const undercoverService = {
           ...gameData.eliminatedPlayers,
           ...eliminatedPlayers,
         ],
+        "gameData.undercover.lastEliminatedPlayers": eliminatedPlayers,
         "gameData.undercover.players": gameData.players.map((p) =>
           eliminatedIds.includes(p.memberId) ? { ...p, isEliminated: true } : p
         ),
@@ -411,6 +414,60 @@ export const undercoverService = {
         updatedAt: serverTimestamp(),
       });
     }
+  },
+
+  async eliminatePlayer(roomId: string, playerId: string) {
+    const roomRef = doc(db, "rooms", roomId);
+    const roomSnap = await getDoc(roomRef);
+    const gameData = roomSnap.data()?.gameData
+      ?.undercover as UndercoverGameData;
+
+    if (!gameData) return;
+
+    // Mettre à jour le joueur éliminé
+    const updatedPlayers = gameData.players.map((player) =>
+      player.memberId === playerId ? { ...player, isEliminated: true } : player
+    );
+
+    // Trouver le joueur éliminé
+    const eliminatedPlayer = gameData.players.find(
+      (p) => p.memberId === playerId
+    );
+    if (!eliminatedPlayer) return;
+
+    // Mettre à jour les listes d'éliminés
+    const lastEliminatedPlayers = [eliminatedPlayer];
+    const eliminatedPlayers = [
+      ...(gameData.eliminatedPlayers || []),
+      eliminatedPlayer,
+    ];
+
+    // Mettre à jour le jeu
+    await updateDoc(roomRef, {
+      "gameData.undercover": {
+        ...gameData,
+        players: updatedPlayers,
+        eliminatedPlayers,
+        lastEliminatedPlayers,
+      },
+    });
+  },
+
+  // Réinitialiser lastEliminatedPlayers au début d'un nouveau tour
+  async startNewRound(roomId: string) {
+    const roomRef = doc(db, "rooms", roomId);
+    const roomSnap = await getDoc(roomRef);
+    const gameData = roomSnap.data()?.gameData
+      ?.undercover as UndercoverGameData;
+
+    if (!gameData) return;
+
+    await updateDoc(roomRef, {
+      "gameData.undercover": {
+        ...gameData,
+        lastEliminatedPlayers: [], // Vider la liste des derniers éliminés
+      },
+    });
   },
 
   // Autres méthodes à venir...
