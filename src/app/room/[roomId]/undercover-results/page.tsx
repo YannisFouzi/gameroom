@@ -145,43 +145,49 @@ function UndercoverResultsContent() {
         </h2>
       </motion.div>
 
-      {/* Afficher tous les rôles */}
+      {/* Afficher les rôles de l'équipe */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
         className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20"
       >
-        <h3 className="text-xl font-bold text-white mb-4">Tous les rôles :</h3>
+        <div className="flex items-center gap-4 mb-4">
+          <img src={currentTeam?.avatar} alt="" className="w-12 h-12" />
+          <h3 className="text-2xl font-bold text-white">{currentTeam?.name}</h3>
+        </div>
+
         <div className="space-y-2">
-          {gameData.players.map((player) => (
-            <div
-              key={player.memberId}
-              className={`flex justify-between items-center p-2 rounded ${
-                player.isEliminated
-                  ? "bg-red-900/20 border border-red-500/30"
-                  : "bg-white/5"
-              }`}
-            >
-              <span className="text-white">{player.name}</span>
-              <div className="flex items-center gap-3">
-                <span
-                  className={`${
-                    player.role === "civil"
-                      ? "text-green-400"
-                      : player.role === "undercover"
-                      ? "text-red-400"
-                      : "text-yellow-400"
-                  }`}
-                >
-                  {player.role}
-                </span>
-                {player.isEliminated && (
-                  <span className="text-red-400">Éliminé</span>
-                )}
+          {gameData.players
+            .filter((player) => player.teamId === teamId)
+            .map((player) => (
+              <div
+                key={player.memberId}
+                className={`flex justify-between items-center p-2 rounded ${
+                  player.isEliminated
+                    ? "bg-red-900/20 border border-red-500/30"
+                    : "bg-white/5"
+                }`}
+              >
+                <span className="text-white">{player.name}</span>
+                <div className="flex items-center gap-3">
+                  <span
+                    className={`${
+                      player.role === "civil"
+                        ? "text-green-400"
+                        : player.role === "undercover"
+                        ? "text-red-400"
+                        : "text-yellow-400"
+                    }`}
+                  >
+                    {player.role}
+                  </span>
+                  {player.isEliminated && (
+                    <span className="text-red-400">Éliminé</span>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </motion.div>
 
