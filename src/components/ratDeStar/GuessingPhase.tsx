@@ -294,20 +294,20 @@ export function GuessingPhase({
                     inputMode="text"
                     autoComplete="off"
                   />
-                  <motion.button
-                    type="button"
-                    onClick={toggleListening}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`p-4 rounded-lg ${
-                      isListening
-                        ? "bg-red-500 text-white"
-                        : "bg-white/10 text-white hover:bg-white/20"
-                    }`}
-                  >
-                    {isListening ? "🎤" : "Activer la reconnaissance vocale"}
-                  </motion.button>
                 </div>
+                <motion.button
+                  type="button"
+                  onClick={toggleListening}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`w-full p-4 rounded-lg ${
+                    isListening
+                      ? "bg-red-500 text-white"
+                      : "bg-white/10 text-white hover:bg-white/20"
+                  }`}
+                >
+                  {isListening ? "Parler" : "Activer la reconnaissance vocale"}
+                </motion.button>
                 <button
                   type="submit"
                   className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 rounded-lg font-bold text-lg hover:opacity-90 transition-opacity"
