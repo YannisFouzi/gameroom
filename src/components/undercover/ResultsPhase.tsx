@@ -54,20 +54,20 @@ export default function ResultsPhase({
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-red-500/20 backdrop-blur-sm p-6 rounded-xl border border-red-500/30"
+            className="bg-red-500/20 backdrop-blur-sm p-4 rounded-xl border border-red-500/30"
           >
-            <h3 className="text-xl font-bold text-white mb-4 text-center">
+            <h3 className="text-xl font-bold text-white mb-2 text-center">
               {gameData.lastEliminatedPlayers.length > 1
                 ? "Joueurs éliminés :"
                 : "Joueur éliminé :"}
             </h3>
-            <div className="flex justify-center gap-8">
+            <div className="flex justify-center gap-6">
               {gameData.lastEliminatedPlayers.map((player) => (
                 <div key={player.memberId} className="text-center">
-                  <div className="text-2xl font-bold text-white mb-2">
+                  <div className="text-xl font-bold text-white mb-1">
                     {player.name}
                   </div>
-                  <div className="text-lg text-white/80">
+                  <div className="text-base text-white/80">
                     Rôle : {player.role}
                   </div>
                 </div>
@@ -80,9 +80,9 @@ export default function ResultsPhase({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20"
+          className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/20"
         >
-          <div className="space-y-4">
+          <div className="space-y-2">
             {gameData.playOrder.map((playerId, index) => {
               const player = gameData.players.find(
                 (p) => p.memberId === playerId
