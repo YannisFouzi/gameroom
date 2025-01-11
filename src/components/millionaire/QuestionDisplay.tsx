@@ -209,9 +209,11 @@ export default function QuestionDisplay({
     setShowValidateButton(false);
     setShowPostAnswerButtons(false);
 
+    // Arrêter le timer immédiatement
+    await timerService.pauseTimer(room.id);
+
     await updateDoc(roomRef, {
       "gameData.isBlinking": true,
-      "gameData.timerPaused": true,
     });
 
     stopSuspens();
