@@ -138,21 +138,11 @@ function UndercoverResultsContent() {
         animate={{ scale: 1, opacity: 1 }}
         className="bg-blue-900/50 backdrop-blur-sm p-8 rounded-xl border border-blue-400"
       >
-        <h2 className="text-3xl font-bold text-white mb-6">
+        <h2 className="text-3xl font-bold text-white">
           {gameData.winningTeamId
             ? `L'équipe ${room.teams[gameData.winningTeamId].name} gagne !`
             : "Match nul"}
         </h2>
-        <div className="space-y-6">
-          <div className="text-xl text-white/80">
-            Ton rôle était :{" "}
-            {
-              gameData.players.find(
-                (p) => p.memberId === currentTeam?.members[0].name
-              )?.role
-            }
-          </div>
-        </div>
       </motion.div>
 
       {/* Afficher tous les rôles */}
