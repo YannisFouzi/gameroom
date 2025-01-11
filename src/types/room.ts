@@ -47,7 +47,9 @@ export type GamePhase =
   | "wheel-results"
   | "undercover-rules"
   | "undercover-playing"
-  | "undercover-results";
+  | "undercover-results"
+  | "final-scores"
+  | null;
 
 export type GameData = {
   celebrities?: Record<string, Celebrity>;

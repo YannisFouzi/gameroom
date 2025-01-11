@@ -24,6 +24,12 @@ function UndercoverResultsContent() {
     }
   }, [room?.gamePhase, room?.id, router]);
 
+  useEffect(() => {
+    if (room?.gamePhase === "final-scores") {
+      router.push(`/room/${room.id}/final-scores`);
+    }
+  }, [room?.gamePhase, room?.id, router]);
+
   const handleTeamReady = async () => {
     if (!teamId || !room) return;
     await undercoverService.teamReadyForNextGame(room.id, teamId);
@@ -35,6 +41,7 @@ function UndercoverResultsContent() {
     // Si c'est la dernière partie, mettre à jour les scores et rediriger
     if (gameData.isLastGame) {
       await updateDoc(doc(db, "rooms", room.id), {
+        gamePhase: "final-scores",
         "gameData.scores": {
           ...room.gameData?.scores,
           undercover: gameData.scores,
