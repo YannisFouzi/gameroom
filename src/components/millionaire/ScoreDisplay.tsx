@@ -8,7 +8,7 @@ type ScoreDisplayProps = {
 };
 
 export default function ScoreDisplay({ room, currentTeam }: ScoreDisplayProps) {
-  const scores = room.gameData?.scores || {};
+  const scores = room.gameData?.scores?.millionaire || {};
 
   return (
     <div className="bg-gray-50 p-3 rounded-lg mb-4">
