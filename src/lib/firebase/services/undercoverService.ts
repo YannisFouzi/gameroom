@@ -53,6 +53,18 @@ export const undercoverService = {
     const room = await baseRoomService.getRoom(roomId);
     if (!room) return;
 
+    // Initialiser les scores si nécessaire
+    const initialScores = room.gameData?.scores || {
+      millionaire: {},
+      evaluation: {},
+      undercover: {},
+    };
+
+    await updateDoc(doc(db, "rooms", roomId), {
+      "gameData.scores": initialScores,
+      updatedAt: serverTimestamp(),
+    });
+
     // Assigner les rôles aux joueurs
     const players = assignRoles(room.teams);
 
@@ -88,10 +100,10 @@ export const undercoverService = {
     }
 
     // Récupérer les scores existants
-    const existingScores = room.gameData?.undercover?.scores || {};
-    const initialScores: Record<string, number> = {};
+    const undercoverScores = room.gameData?.undercover?.scores || {};
+    const teamScores: Record<string, number> = {};
     Object.keys(room.teams).forEach((teamId) => {
-      initialScores[teamId] = existingScores[teamId] || 0;
+      teamScores[teamId] = undercoverScores[teamId] || 0;
     });
 
     const gameData: UndercoverGameData = {
@@ -111,7 +123,7 @@ export const undercoverService = {
       words: WORDS_BY_ROUND[round - 1], // Utiliser les mots du round actuel
       teamsReady: [],
       votes: {},
-      scores: initialScores,
+      scores: teamScores,
       gameOver: false,
       isLastGame: round === WORDS_BY_ROUND.length, // Vrai si c'est le dernier round
     };
@@ -321,10 +333,19 @@ export const undercoverService = {
     const gameData = room.gameData?.undercover as UndercoverGameData;
     const nextRound = gameData.currentRound + 1;
 
-    if (nextRound >= WORDS_BY_ROUND.length) {
+    // Vérifier si c'est la dernière partie
+    const isLastGame = nextRound >= WORDS_BY_ROUND.length;
+
+    if (isLastGame) {
       // Fin du jeu si plus de mots disponibles
       await updateDoc(doc(db, "rooms", roomId), {
         gamePhase: "undercover-results",
+        "gameData.undercover.isLastGame": true,
+        "gameData.undercover.gameOver": true,
+        "gameData.scores": {
+          ...room.gameData?.scores,
+          undercover: gameData.scores,
+        },
         updatedAt: serverTimestamp(),
       });
       return;
@@ -368,6 +389,11 @@ export const undercoverService = {
         await updateDoc(doc(db, "rooms", roomId), {
           gamePhase: "undercover-results",
           "gameData.undercover.gameOver": true,
+          "gameData.undercover.isLastGame": true,
+          "gameData.scores": {
+            ...room.gameData?.scores,
+            undercover: gameData.scores,
+          },
           updatedAt: serverTimestamp(),
         });
       } else {

@@ -107,11 +107,19 @@ export const gameTransitionService = {
 
   async startUndercoverGame(roomId: string) {
     const room = await baseRoomService.getRoom(roomId);
+    if (!room) return;
+
+    // Préserver les scores existants et ajouter les scores d'évaluation
+    const existingScores = {
+      ...room.gameData?.scores,
+      evaluation: room.gameData?.wheelState?.scores || {},
+    };
 
     await updateDoc(doc(db, "rooms", roomId), {
       gamePhase: "undercover-rules",
       gameData: {
-        currentTeamId: room.gameData?.winningTeamId,
+        ...room.gameData,
+        scores: existingScores,
       },
       updatedAt: serverTimestamp(),
     });

@@ -101,3 +101,9 @@ export interface Room {
 }
 
 export type GameType = "undercover" | "millionaire";
+
+export type GameScores = {
+  millionaire?: Record<string, number>;
+  evaluation?: Record<string, number>;
+  undercover?: Record<string, number>;
+};

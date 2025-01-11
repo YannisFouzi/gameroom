@@ -3,8 +3,10 @@
 import ScoreDisplay from "@/components/undercover/ScoreDisplay";
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
+import { db } from "@/lib/firebase/config";
 import { undercoverService } from "@/lib/firebase/services/undercoverService";
 import { UndercoverGameData } from "@/types/undercover";
+import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { motion } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -25,6 +27,25 @@ function UndercoverResultsContent() {
   const handleTeamReady = async () => {
     if (!teamId || !room) return;
     await undercoverService.teamReadyForNextGame(room.id, teamId);
+  };
+
+  const handleNextGame = async () => {
+    if (!room) return;
+
+    // Si c'est la dernière partie, mettre à jour les scores et rediriger
+    if (gameData.isLastGame) {
+      await updateDoc(doc(db, "rooms", room.id), {
+        "gameData.scores": {
+          ...room.gameData?.scores,
+          undercover: gameData.scores,
+        },
+        updatedAt: serverTimestamp(),
+      });
+      router.push(`/room/${room.id}/final-scores`);
+    } else {
+      // Sinon démarrer une nouvelle partie
+      await undercoverService.startNextRound(room.id);
+    }
   };
 
   if (!room || !gameData) return <div>Chargement...</div>;
@@ -184,6 +205,17 @@ function UndercoverResultsContent() {
       )}
 
       {isHost ? <HostView /> : <PlayerView />}
+
+      {isHost && (
+        <button
+          onClick={handleNextGame}
+          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-8 rounded-xl font-bold text-xl hover:opacity-90 transition-all"
+        >
+          {gameData.isLastGame
+            ? "Voir les scores finaux →"
+            : "Partie suivante →"}
+        </button>
+      )}
     </div>
   );
 }
