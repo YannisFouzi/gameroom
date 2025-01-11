@@ -173,11 +173,19 @@ function UndercoverRulesContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4">
-      {isHost && room.teams && gameData?.scores && (
-        <ScoreDisplay scores={gameData.scores} teams={room.teams} />
-      )}
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Scores en haut */}
+        {isHost && room.teams && gameData?.scores && (
+          <div className="w-full">
+            <ScoreDisplay scores={gameData.scores} teams={room.teams} />
+          </div>
+        )}
 
-      <MainContent />
+        {/* Contenu principal */}
+        <div className="w-full">
+          <MainContent />
+        </div>
+      </div>
     </div>
   );
 }

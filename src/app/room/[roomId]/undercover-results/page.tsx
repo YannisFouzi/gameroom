@@ -200,22 +200,30 @@ function UndercoverResultsContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4">
-      {isHost && room.teams && (
-        <ScoreDisplay scores={gameData.scores} teams={room.teams} />
-      )}
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Scores en haut */}
+        {isHost && room.teams && (
+          <div className="w-full">
+            <ScoreDisplay scores={gameData.scores} teams={room.teams} />
+          </div>
+        )}
 
-      {isHost ? <HostView /> : <PlayerView />}
+        {/* Contenu principal */}
+        <div className="w-full">
+          {isHost ? <HostView /> : <PlayerView />}
 
-      {isHost && (
-        <button
-          onClick={handleNextGame}
-          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-8 rounded-xl font-bold text-xl hover:opacity-90 transition-all"
-        >
-          {gameData.isLastGame
-            ? "Voir les scores finaux →"
-            : "Partie suivante →"}
-        </button>
-      )}
+          {isHost && (
+            <button
+              onClick={handleNextGame}
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-8 rounded-xl font-bold text-xl hover:opacity-90 transition-all"
+            >
+              {gameData.isLastGame
+                ? "Voir les scores finaux →"
+                : "Partie suivante →"}
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

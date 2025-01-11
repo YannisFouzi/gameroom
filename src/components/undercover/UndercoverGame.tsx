@@ -39,57 +39,65 @@ export default function UndercoverGame({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black">
-      {isHost && room.teams && (
-        <ScoreDisplay scores={gameData.scores} teams={room.teams} />
-      )}
+      <div className="max-w-7xl mx-auto p-4 space-y-6">
+        {/* Scores en haut */}
+        {isHost && room.teams && (
+          <div className="w-full">
+            <ScoreDisplay scores={gameData.scores} teams={room.teams} />
+          </div>
+        )}
 
-      {(() => {
-        switch (gameData.currentPhase) {
-          case "distribution":
-            return (
-              <DistributionPhase
-                gameData={gameData}
-                isHost={isHost}
-                currentTeam={currentTeam}
-                teamId={teamId}
-                roomId={roomId}
-              />
-            );
-          case "playing":
-            return (
-              <PlayingPhase
-                gameData={gameData}
-                isHost={isHost}
-                currentTeam={currentTeam}
-                teamId={teamId}
-                roomId={roomId}
-              />
-            );
-          case "voting":
-            return (
-              <VotingPhase
-                gameData={gameData}
-                isHost={isHost}
-                currentTeam={currentTeam}
-                teamId={teamId}
-                roomId={roomId}
-                teams={room.teams}
-              />
-            );
-          case "results":
-            return (
-              <ResultsPhase
-                gameData={gameData}
-                isHost={isHost}
-                currentTeam={currentTeam}
-                teamId={teamId}
-                roomId={roomId}
-              />
-            );
-          default:
-            return null;
-        }
-      })()}
+        {/* Contenu principal du jeu */}
+        <div className="w-full">
+          {(() => {
+            switch (gameData.currentPhase) {
+              case "distribution":
+                return (
+                  <DistributionPhase
+                    gameData={gameData}
+                    isHost={isHost}
+                    currentTeam={currentTeam}
+                    teamId={teamId}
+                    roomId={roomId}
+                  />
+                );
+              case "playing":
+                return (
+                  <PlayingPhase
+                    gameData={gameData}
+                    isHost={isHost}
+                    currentTeam={currentTeam}
+                    teamId={teamId}
+                    roomId={roomId}
+                  />
+                );
+              case "voting":
+                return (
+                  <VotingPhase
+                    gameData={gameData}
+                    isHost={isHost}
+                    currentTeam={currentTeam}
+                    teamId={teamId}
+                    roomId={roomId}
+                    teams={room.teams}
+                  />
+                );
+              case "results":
+                return (
+                  <ResultsPhase
+                    gameData={gameData}
+                    isHost={isHost}
+                    currentTeam={currentTeam}
+                    teamId={teamId}
+                    roomId={roomId}
+                  />
+                );
+              default:
+                return null;
+            }
+          })()}
+        </div>
+      </div>
     </div>
   );
 }
