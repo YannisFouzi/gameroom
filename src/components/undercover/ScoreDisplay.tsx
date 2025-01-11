@@ -11,7 +11,7 @@ export default function ScoreDisplay({ scores, teams }: ScoreDisplayProps) {
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-black/40 backdrop-blur-sm p-4 rounded-xl border border-white/10 shadow-lg"
+      className="bg-black/40 backdrop-blur-sm p-3 rounded-xl border border-white/10 shadow-lg max-w-xs mx-auto"
     >
       <h3 className="text-lg font-bold text-white mb-3">Scores en direct</h3>
       <div className="space-y-2">
