@@ -187,7 +187,9 @@ function RoomContent() {
                   </div>
                   <div className="relative z-10">
                     <HostControls room={room} />
-                    <ScoreBoard room={room} teamId={teamId} isHost={isHost} />
+                    <div className="mt-12">
+                      <ScoreBoard room={room} teamId={teamId} isHost={isHost} />
+                    </div>
                     <div className="mt-8">
                       <RoomQRCode
                         roomId={roomId as string}
