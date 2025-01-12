@@ -79,8 +79,8 @@ export function ResultsPhase({
                 <h2 className="text-3xl font-bold text-white mb-4">
                   🏆 Félicitations ! Vous avez gagné ! 🏆
                 </h2>
-                <p className="text-xl text-white/80">
-                  Vous commencerez le prochain jeu en premier ! 🎲
+                <p className="text-2xl font-bold text-white/90">
+                  Vous commencerez le prochain jeu en premier ! 🎮
                 </p>
               </>
             ) : (

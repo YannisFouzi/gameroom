@@ -4,9 +4,64 @@ import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { GameScores } from "@/types/room";
 import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 function FinalScoresContent() {
   const { room } = useRoom();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [volume, setVolume] = useState(0.5);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    if (isInitialized) return;
+
+    const audio = new Audio(
+      "/sound/musique/Gilbert Montagné - Just Because of You.mp3"
+    );
+    audio.loop = true;
+    audio.volume = volume;
+    audioRef.current = audio;
+
+    audio.addEventListener(
+      "canplaythrough",
+      () => {
+        if (!isInitialized) {
+          audio
+            .play()
+            .then(() => {
+              setIsInitialized(true);
+            })
+            .catch((error) => {
+              console.log("Erreur de lecture audio:", error);
+            });
+        }
+      },
+      { once: true }
+    );
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        audioRef.current = null;
+      }
+      setIsInitialized(false);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+  }, [volume]);
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume;
+    }
+  };
 
   console.log("Room data:", room);
   console.log("Scores data:", room?.gameData?.scores);
@@ -109,6 +164,21 @@ function FinalScoresContent() {
             ))}
           </div>
         </motion.div>
+      </div>
+
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-gray-800/80 p-3 rounded-lg">
+        <span className="text-white text-sm font-medium">Volume</span>
+        <span className="text-white">🔈</span>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value={volume}
+          onChange={handleVolumeChange}
+          className="w-48 h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-purple-500 hover:[&::-webkit-slider-thumb]:bg-purple-600"
+        />
+        <span className="text-white">🔊</span>
       </div>
     </div>
   );

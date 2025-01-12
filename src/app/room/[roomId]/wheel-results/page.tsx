@@ -98,8 +98,8 @@ function WheelResultsContent() {
                 {team.name}
               </span>
               <span className="text-sm text-white/70">
-                Millions: {team.millionaireScore} pts • Évaluation:{" "}
-                {team.evaluationScore} pts
+                Qui veut gagner des millions : {team.millionaireScore} pts • Tu
+                te mets combien : {team.evaluationScore} pts
               </span>
             </div>
           </div>
@@ -155,8 +155,13 @@ function WheelResultsContent() {
                 {playerTeam?.totalScore} points au total
               </div>
               <div className="space-y-2 text-lg text-white/80">
-                <div>Millions : {playerTeam?.millionaireScore} pts</div>
-                <div>Évaluation : {playerTeam?.evaluationScore} pts</div>
+                <div>
+                  Qui veut gagner des millions : {playerTeam?.millionaireScore}{" "}
+                  pts
+                </div>
+                <div>
+                  Tu te mets combien : {playerTeam?.evaluationScore} pts
+                </div>
               </div>
               <div className="text-xl text-white/80">
                 #{playerRank} au classement final
