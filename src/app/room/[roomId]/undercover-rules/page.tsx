@@ -35,7 +35,7 @@ function UndercoverRulesContent() {
   };
 
   const MainContent = () => (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-1xl mx-auto space-y-6">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
