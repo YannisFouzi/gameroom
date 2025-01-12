@@ -1,6 +1,7 @@
 "use client";
 
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
+import { usePlayer } from "@/hooks/usePlayer";
 import { GameScores } from "@/types/room";
 import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
@@ -8,12 +9,13 @@ import { useEffect, useRef, useState } from "react";
 
 function FinalScoresContent() {
   const { room } = useRoom();
+  const { isHost } = usePlayer(room?.id || "");
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [volume, setVolume] = useState(0.5);
+  const [volume, setVolume] = useState(0.2);
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    if (isInitialized) return;
+    if (!isHost || isInitialized) return;
 
     const audio = new Audio(
       "/sound/musique/Gilbert Montagné - Just Because of You.mp3"
@@ -47,7 +49,7 @@ function FinalScoresContent() {
       }
       setIsInitialized(false);
     };
-  }, []);
+  }, [isHost]);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -166,20 +168,22 @@ function FinalScoresContent() {
         </motion.div>
       </div>
 
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-gray-800/80 p-3 rounded-lg">
-        <span className="text-white text-sm font-medium">Volume</span>
-        <span className="text-white">🔈</span>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={volume}
-          onChange={handleVolumeChange}
-          className="w-48 h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-purple-500 hover:[&::-webkit-slider-thumb]:bg-purple-600"
-        />
-        <span className="text-white">🔊</span>
-      </div>
+      {isHost && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-gray-800/80 p-3 rounded-lg">
+          <span className="text-white text-sm font-medium">Volume</span>
+          <span className="text-white">🔈</span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={volume}
+            onChange={handleVolumeChange}
+            className="w-48 h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-purple-500 hover:[&::-webkit-slider-thumb]:bg-purple-600"
+          />
+          <span className="text-white">🔊</span>
+        </div>
+      )}
     </div>
   );
 }
