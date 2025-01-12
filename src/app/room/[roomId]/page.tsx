@@ -1,5 +1,6 @@
 "use client";
 
+import SnowEffect from "@/components/effects/SnowEffect";
 import HostControls from "@/components/room/HostControls";
 import RoomQRCode from "@/components/room/RoomQRCode";
 import ScoreBoard from "@/components/room/ScoreBoard";
@@ -173,20 +174,36 @@ function RoomContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black relative">
+      <SnowEffect />
       <div className="container mx-auto p-4 min-h-screen flex flex-col items-center">
         <div className="flex-1 w-full flex items-center justify-center">
           <div className="max-w-2xl w-full space-y-8">
             {isHost ? (
               <>
-                <HostControls room={room} />
-                <ScoreBoard room={room} teamId={teamId} isHost={isHost} />
-                <div className="mt-8">
-                  <RoomQRCode roomId={roomId as string} showButton={false} />
+                <div className="relative">
+                  <div className="absolute inset-0 opacity-20">
+                    <SnowEffect />
+                  </div>
+                  <div className="relative z-10">
+                    <HostControls room={room} />
+                    <ScoreBoard room={room} teamId={teamId} isHost={isHost} />
+                    <div className="mt-8">
+                      <RoomQRCode
+                        roomId={roomId as string}
+                        showButton={false}
+                      />
+                    </div>
+                  </div>
                 </div>
               </>
             ) : (
-              renderPlayerView()
+              <div className="relative">
+                <div className="absolute inset-0 opacity-20">
+                  <SnowEffect />
+                </div>
+                {renderPlayerView()}
+              </div>
             )}
           </div>
         </div>
