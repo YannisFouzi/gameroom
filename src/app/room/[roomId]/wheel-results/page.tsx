@@ -61,17 +61,17 @@ function WheelResultsContent() {
         animate={{ scale: 1, opacity: 1 }}
         className="bg-gradient-to-br from-yellow-400 to-amber-500 rounded-xl p-8 text-center shadow-[0_0_30px_rgba(251,191,36,0.3)]"
       >
-        <h3 className="text-3xl font-extrabold mb-6">🏆 Grand Gagnant 🏆</h3>
-        <div className="flex items-center justify-center gap-6 mb-4">
-          <img src={winner.avatar} alt={winner.name} className="w-24 h-24" />
+        <h3 className="text-5xl font-extrabold mb-8">🏆 Équipe en tête 🏆</h3>
+        <div className="flex items-center justify-center gap-8 mb-6">
+          <img src={winner.avatar} alt={winner.name} className="w-32 h-32" />
           <div>
-            <div className="text-4xl font-bold">{winner.name}</div>
-            <div className="text-2xl font-semibold">
+            <div className="text-6xl font-bold">{winner.name}</div>
+            <div className="text-4xl font-semibold">
               {winner.totalScore} points
             </div>
           </div>
         </div>
-        <div className="mt-4 space-y-2 text-lg">
+        <div className="mt-6 space-y-4 text-2xl">
           <div>
             Qui veut gagner des millions : {winner.millionaireScore} pts
           </div>
@@ -86,24 +86,24 @@ function WheelResultsContent() {
           initial={{ x: -50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: index * 0.1 }}
-          className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20"
+          className="flex items-center justify-between p-6 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20"
         >
-          <div className="flex items-center gap-4">
-            <span className="text-2xl font-bold text-white/80">
+          <div className="flex items-center gap-6">
+            <span className="text-3xl font-bold text-white/80">
               #{index + 2}
             </span>
-            <img src={team.avatar} alt={team.name} className="w-12 h-12" />
+            <img src={team.avatar} alt={team.name} className="w-16 h-16" />
             <div>
-              <span className="text-xl font-medium text-white block">
+              <span className="text-2xl font-medium text-white block">
                 {team.name}
               </span>
-              <span className="text-sm text-white/70">
+              <span className="text-lg text-white/70">
                 Qui veut gagner des millions : {team.millionaireScore} pts • Tu
                 te mets combien : {team.evaluationScore} pts
               </span>
             </div>
           </div>
-          <span className="text-xl font-bold text-white">
+          <span className="text-2xl font-bold text-white">
             {team.totalScore} points
           </span>
         </motion.div>
@@ -113,8 +113,7 @@ function WheelResultsContent() {
       <div className="mt-12 space-y-4">
         <div className="bg-blue-900/50 backdrop-blur-sm p-6 rounded-xl border border-blue-400">
           <p className="text-xl text-white text-center">
-            🎉 Félicitations à toutes les équipes ! Place au dernier jeu :
-            Undercover !
+            Place au dernier jeu : Undercover !
           </p>
         </div>
         <button
