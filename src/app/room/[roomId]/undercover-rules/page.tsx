@@ -69,25 +69,6 @@ function UndercoverRulesContent() {
               className="w-24 h-24 mx-auto"
             />
           </motion.div>
-
-          <div className="space-y-4">
-            <h1 className="text-4xl font-bold text-white">
-              {currentTeam.name}
-            </h1>
-            <div className="space-y-2">
-              {currentTeam.members.map((member, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="text-xl text-white/80"
-                >
-                  {member.name}
-                </motion.div>
-              ))}
-            </div>
-          </div>
         </motion.div>
       )}
 
@@ -98,12 +79,14 @@ function UndercoverRulesContent() {
           transition={{ delay: 0.1 }}
           className="bg-white/5 p-4 rounded-xl backdrop-blur-sm border border-white/10"
         >
-          <div className="text-2xl mb-2">🕵️</div>
-          <h3 className="text-lg font-bold text-white mb-1">Concept du jeu</h3>
-          <p className="text-sm text-white/80">
-            Chaque joueur reçoit un mot secret. Un joueur reçoit un mot
-            différent : c'est l'Undercover ! À vous de le démasquer sans vous
-            faire repérer.
+          <div className="text-3xl mb-2">🕵️</div>
+          <h3 className="text-xl font-bold text-white mb-1">Concept du jeu</h3>
+          <p className="text-lg text-white/80">
+            Chaque joueur reçoit un mot secret sur le télépone de l'équipe.
+            <br />
+            Par équipe :<br />• Un joueur reçoit un mot différent : c'est
+            l'Undercover <br />• Un autre n'aura pas de mot attribué : c'est le
+            Mr White
           </p>
         </motion.div>
 
@@ -113,9 +96,9 @@ function UndercoverRulesContent() {
           transition={{ delay: 0.2 }}
           className="bg-white/5 p-4 rounded-xl backdrop-blur-sm border border-white/10"
         >
-          <div className="text-2xl mb-2">🎯</div>
-          <h3 className="text-lg font-bold text-white mb-1">Tour par tour</h3>
-          <p className="text-sm text-white/80">
+          <div className="text-3xl mb-2">🎯</div>
+          <h3 className="text-xl font-bold text-white mb-1">Tour par tour</h3>
+          <p className="text-lg text-white/80">
             À tour de rôle, chaque joueur doit donner un mot qui décrit son mot
             secret, sans le révéler directement. Soyez subtils pour ne pas vous
             faire démasquer !
@@ -128,12 +111,11 @@ function UndercoverRulesContent() {
           transition={{ delay: 0.3 }}
           className="bg-white/5 p-4 rounded-xl backdrop-blur-sm border border-white/10"
         >
-          <div className="text-2xl mb-2">🗳️</div>
-          <h3 className="text-lg font-bold text-white mb-1">Phase de vote</h3>
-          <p className="text-sm text-white/80">
-            Après chaque tour, les joueurs votent pour éliminer celui qu'ils
-            soupçonnent d'être l'Undercover. Le joueur avec le plus de votes est
-            éliminé !
+          <div className="text-3xl mb-2">🗳️</div>
+          <h3 className="text-xl font-bold text-white mb-1">Phase de vote</h3>
+          <p className="text-lg text-white/80">
+            Après chaque tour, chaque équipe votent pour éliminer celui qu'ils
+            soupçonnent dans l'autre équipe.
           </p>
         </motion.div>
 
@@ -143,28 +125,43 @@ function UndercoverRulesContent() {
           transition={{ delay: 0.4 }}
           className="bg-white/5 p-4 rounded-xl backdrop-blur-sm border border-white/10"
         >
-          <div className="text-2xl mb-2">👑</div>
-          <h3 className="text-lg font-bold text-white mb-1">Victoire</h3>
-          <p className="text-sm text-white/80">
-            Les joueurs gagnent s'ils éliminent l'Undercover. L'Undercover gagne
-            s'il survit jusqu'à ce qu'il ne reste que 2 joueurs en jeu !
+          <div className="text-3xl mb-2">👑</div>
+          <h3 className="text-xl font-bold text-white mb-1">Victoire</h3>
+          <p className="text-lg text-white/80">
+            La première équipe à éliminer l'Undercover et le Mr White adverse
+            gagne !
           </p>
         </motion.div>
       </div>
 
       {isHost && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center mt-8"
-        >
-          <button
-            onClick={handleStart}
-            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-bold text-lg shadow-lg hover:opacity-90 transition-all"
+        <>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="bg-white/5 p-4 rounded-xl backdrop-blur-sm border border-white/10 text-center w-full"
           >
-            Commencer le jeu →
-          </button>
-        </motion.div>
+            <p className="text-lg text-white/80">
+              Undercover éliminé = 5 points, Mr White = 3 points.
+              <br />
+              Ce jeu possède 3 parties.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center mt-8"
+          >
+            <button
+              onClick={handleStart}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-bold text-lg shadow-lg hover:opacity-90 transition-all"
+            >
+              Commencer le jeu →
+            </button>
+          </motion.div>
+        </>
       )}
     </div>
   );
