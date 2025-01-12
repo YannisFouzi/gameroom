@@ -43,19 +43,6 @@ function MillionaireRulesContent() {
             <p className="text-2xl text-white/80">Testez vos connaissances !</p>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4"
-          >
-            <div className="text-center">
-              <div className="text-4xl mb-2">👑</div>
-              <div className="text-3xl font-bold text-white">
-                L'équipe "{startingTeamName}" commence !
-              </div>
-            </div>
-          </motion.div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -91,7 +78,7 @@ function MillionaireRulesContent() {
                 </p>
                 <p className="text-white/90 font-medium">
                   ⚠️ Vous pouvez vous arrêter après chaque bonne réponse pour
-                  garder vos points !
+                  garder vos points ! Gardez un oeil sur les paliers.
                 </p>
               </div>
             </motion.div>
@@ -100,7 +87,7 @@ function MillionaireRulesContent() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="bg-white/5 p-4 rounded-xl backdrop-blur-sm border border-white/10"
+              className="bg-white/5 p-4 rounded-xl backdrop-blur-sm border border-white/10 md:col-span-2"
             >
               <div className="text-4xl mb-2">🃏</div>
               <h3 className="text-2xl font-bold text-white mb-1">
@@ -144,6 +131,19 @@ function MillionaireRulesContent() {
             Qui veut gagner des millions
           </h2>
           <p className="text-2xl text-white/80">Testez vos connaissances !</p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-yellow-500/10 backdrop-blur-sm rounded-xl border border-yellow-500/20 p-4"
+        >
+          <div className="text-center">
+            <div className="text-xl font-bold text-yellow-500">
+              À partir de maintenant, tous les points gagnés compteront pour le
+              score final !
+            </div>
+          </div>
         </motion.div>
 
         <motion.div
@@ -194,7 +194,7 @@ function MillionaireRulesContent() {
               </p>
               <p className="text-white/90 font-medium">
                 ⚠️ Vous pouvez vous arrêter après chaque bonne réponse pour
-                garder vos points !
+                garder vos points ! Gardez un oeil sur les paliers.
               </p>
             </div>
           </motion.div>
@@ -203,7 +203,7 @@ function MillionaireRulesContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-white/5 p-4 rounded-xl backdrop-blur-sm border border-white/10"
+            className="bg-white/5 p-4 rounded-xl backdrop-blur-sm border border-white/10 md:col-span-2"
           >
             <div className="text-4xl mb-2">🃏</div>
             <h3 className="text-2xl font-bold text-white mb-1">
