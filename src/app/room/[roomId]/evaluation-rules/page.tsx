@@ -61,25 +61,6 @@ function EvaluationRulesContent() {
                 className="w-24 h-24 mx-auto"
               />
             </motion.div>
-
-            <div className="space-y-4">
-              <h1 className="text-4xl font-bold text-white">
-                {currentTeam.name}
-              </h1>
-              <div className="space-y-2">
-                {currentTeam.members.map((member, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="text-xl text-white/80"
-                  >
-                    {member.name}
-                  </motion.div>
-                ))}
-              </div>
-            </div>
           </motion.div>
         )}
 
@@ -94,18 +75,20 @@ function EvaluationRulesContent() {
           <p className="text-xl text-white/80">Testez vos connaissances !</p>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6"
-        >
-          <div className="text-center">
-            <div className="text-3xl mb-4">👑</div>
-            <div className="text-2xl font-bold text-white">
-              L&apos;équipe &quot;{winningTeamName}&quot; commence !
+        {isHost && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6"
+          >
+            <div className="text-center">
+              <div className="text-3xl mb-4">👑</div>
+              <div className="text-2xl font-bold text-white">
+                L&apos;équipe &quot;{winningTeamName}&quot; commence !
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <motion.div
@@ -128,39 +111,31 @@ function EvaluationRulesContent() {
             className="bg-white/5 p-6 rounded-xl backdrop-blur-sm border border-white/10"
           >
             <div className="text-3xl mb-4">🎯</div>
-            <h3 className="text-xl font-bold text-white mb-2">Tour de jeu</h3>
+            <h3 className="text-xl font-bold text-white mb-2">
+              Comment jouer ?
+            </h3>
             <p className="text-white/80">
-              L'équipe qui joue tourne une roue pour déterminer le thème. Une
-              équipe adverse pose ensuite les questions.
+              Tourner la roue, et choisissez un palier de difficulté suivant le
+              thème affiché.
+            </p>
+            <p className="text-white/80">
+              L'équipe adverse pose ensuite les questions et valide ou non les
+              réponses.
             </p>
           </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-white/5 p-6 rounded-xl backdrop-blur-sm border border-white/10"
-          >
-            <div className="text-3xl mb-4">⭐</div>
-            <h3 className="text-xl font-bold text-white mb-2">Difficulté</h3>
-            <p className="text-white/80">
-              L'équipe qui répond choisit un niveau de difficulté parmi 4
-              paliers : 2, 4, 7 ou 10 points. Plus c'est difficile, plus vous
-              avancez !
-            </p>
-          </motion.div>
-
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-white/5 p-6 rounded-xl backdrop-blur-sm border border-white/10"
+            className="bg-white/5 p-6 rounded-xl backdrop-blur-sm border border-white/10 md:col-span-2"
           >
             <div className="text-3xl mb-4">🔄</div>
             <h3 className="text-xl font-bold text-white mb-2">Progression</h3>
             <p className="text-white/80">
-              Après chaque tour, la main passe à l'équipe suivante. Stratégie et
-              connaissances sont les clés !
+              Vous avancez au rythme des paliers choisit.
+            </p>
+            <p className="text-white/80">
+              ⚠️ Attention si vous répondez faux vous ne gagnez pas de points.
             </p>
           </motion.div>
         </div>
