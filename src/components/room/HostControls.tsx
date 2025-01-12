@@ -1,7 +1,6 @@
-import { baseRoomService } from "@/lib/firebase/services";
+import { roomService } from "@/lib/firebase/roomService";
 import { Room } from "@/types/room";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type HostControlsProps = {
@@ -9,14 +8,26 @@ type HostControlsProps = {
 };
 
 export default function HostControls({ room }: HostControlsProps) {
-  const router = useRouter();
-  const [isStarting, setIsStarting] = useState(false);
-
+  const [isUpdating, setIsUpdating] = useState(false);
+  const isWaiting = room.status === "waiting";
   const numberOfTeams = Object.keys(room.teams).length;
   const teamsNeeded = 2 - numberOfTeams;
 
+  const handleStartGame = async () => {
+    try {
+      setIsUpdating(true);
+      console.log("Démarrage de la partie...");
+      await roomService.startGame(room.id);
+      console.log("Partie démarrée avec succès");
+    } catch (error) {
+      console.error("Erreur lors du démarrage de la partie:", error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
   const getButtonContent = () => {
-    if (isStarting) {
+    if (isUpdating) {
       return (
         <span className="flex items-center justify-center">
           <svg
@@ -117,18 +128,6 @@ export default function HostControls({ room }: HostControlsProps) {
     );
   };
 
-  const handleStartGame = async () => {
-    if (teamsNeeded > 0 || isStarting) return;
-
-    try {
-      setIsStarting(true);
-      await baseRoomService.updateRoomStatus(room.id, "playing");
-    } catch (error) {
-      console.error("Erreur lors du démarrage de la partie:", error);
-      setIsStarting(false);
-    }
-  };
-
   return (
     <div className="space-y-6">
       <div className="relative group">
@@ -136,7 +135,7 @@ export default function HostControls({ room }: HostControlsProps) {
         <div className="absolute inset-0.5 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur-md opacity-20 group-hover:opacity-40 transition duration-1000" />
         <button
           onClick={handleStartGame}
-          disabled={teamsNeeded > 0 || isStarting}
+          disabled={teamsNeeded > 0 || isUpdating}
           className={`
             relative w-full py-8 px-8 rounded-lg font-bold text-xl
             transition-all duration-300 backdrop-blur-sm

@@ -66,9 +66,10 @@ function RoomContent() {
 
   useEffect(() => {
     if (room?.status === "playing") {
-      router.push(`/room/${room.id}/game`);
+      console.log("Redirection vers la page de jeu...");
+      router.push(`/room/${roomId}/game`);
     }
-  }, [room?.status, room?.id, router]);
+  }, [room?.status, roomId, router]);
 
   const renderPlayerView = () => {
     if (!room) return null;
