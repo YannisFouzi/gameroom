@@ -56,7 +56,7 @@ export const questions: Record<Theme, Record<string, Question[]>> = {
       },
       {
         id: "foot4",
-        text: "Quelle était l'affiche et le score de la finale du championnat d'Europe des nations 1996 ?",
+        text: "Queles étaient l'affiche et le score de la finale du championnat d'Europe des nations 1996 ?",
         answer: "Dannemark 2 - 0 Allemagne",
         difficulty: 10,
       },
@@ -524,7 +524,7 @@ export const questions: Record<Theme, Record<string, Question[]>> = {
       },
       {
         id: "ren3",
-        text: 'Quel roi de France, avant son accession au trône, était surnommé "le Dauphin" et a été couronné en 1559 ?',
+        text: 'Quel roi de France, avant son accession au trône, était surnommé "le Dauphin" ?',
         answer: "Charles IX",
         difficulty: 7,
       },
