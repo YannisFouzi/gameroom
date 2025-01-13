@@ -279,11 +279,13 @@ function RoomContent() {
                       )}
 
                       {getConnectedTeamsCount(room) === 2 && (
-                        <ScoreBoard
-                          room={room}
-                          teamId={teamId}
-                          isHost={isHost}
-                        />
+                        <div className="mt-7 mb-7">
+                          <ScoreBoard
+                            room={room}
+                            teamId={teamId}
+                            isHost={isHost}
+                          />
+                        </div>
                       )}
                     </div>
                   </div>
