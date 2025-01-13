@@ -14,8 +14,15 @@ export const useAudio = (url: string) => {
     });
 
     // Gérer les erreurs
-    audio.current.addEventListener("error", (e) => {
-      console.error("Error loading audio:", e);
+    audio.current.addEventListener("error", () => {
+      const error = audio.current?.error;
+      if (error) {
+        console.error("Error loading audio:", {
+          code: error.code,
+          message: error.message,
+          url: url,
+        });
+      }
     });
 
     // Charger l'audio
