@@ -177,6 +177,74 @@ function RoomContent() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black relative">
       <SnowEffect />
+      <motion.img
+        src="/images/bronze/christian.png"
+        alt="Bronze 1"
+        className="absolute top-24 left-24 w-32 h-32 object-contain"
+        animate={{ rotate: [-15, 15, -15] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.img
+        src="/images/bronze/gerard.png"
+        alt="Bronze 2"
+        className="absolute top-1/2 -translate-y-1/2 left-24 w-32 h-32 object-contain"
+        animate={{ rotate: [-15, 15, -15] }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 0.3,
+        }}
+      />
+      <motion.img
+        src="/images/bronze/josiane.png"
+        alt="Bronze 3"
+        className="absolute bottom-24 left-24 w-32 h-32 object-contain"
+        animate={{ rotate: [-15, 15, -15] }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 0.6,
+        }}
+      />
+      <motion.img
+        src="/images/bronze/marie.png"
+        alt="Bronze 4"
+        className="absolute top-24 right-24 w-32 h-32 object-contain"
+        animate={{ rotate: [-15, 15, -15] }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 0.9,
+        }}
+      />
+      <motion.img
+        src="/images/bronze/michel.png"
+        alt="Bronze 5"
+        className="absolute top-1/2 -translate-y-1/2 right-24 w-32 h-32 object-contain"
+        animate={{ rotate: [-15, 15, -15] }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 1.2,
+        }}
+      />
+      <motion.img
+        src="/images/bronze/thierry.png"
+        alt="Bronze 6"
+        className="absolute bottom-24 right-24 w-32 h-32 object-contain"
+        animate={{ rotate: [-15, 15, -15] }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 1.5,
+        }}
+      />
+
       <div className="container mx-auto p-4 min-h-screen flex flex-col items-center">
         <div className="flex-1 w-full flex items-center justify-center">
           <div className="max-w-2xl w-full space-y-8">
