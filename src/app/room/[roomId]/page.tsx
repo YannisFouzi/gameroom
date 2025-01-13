@@ -180,14 +180,14 @@ function RoomContent() {
       <motion.img
         src="/images/bronze/christian.png"
         alt="Bronze 1"
-        className="absolute top-24 left-24 w-32 h-32 object-contain"
+        className="absolute top-[8%] left-8 w-40 h-40 object-contain"
         animate={{ rotate: [-15, 15, -15] }}
         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.img
         src="/images/bronze/gerard.png"
         alt="Bronze 2"
-        className="absolute top-1/2 -translate-y-1/2 left-24 w-32 h-32 object-contain"
+        className="absolute top-[42%] left-56 w-40 h-40 object-contain"
         animate={{ rotate: [-15, 15, -15] }}
         transition={{
           duration: 2,
@@ -199,7 +199,7 @@ function RoomContent() {
       <motion.img
         src="/images/bronze/josiane.png"
         alt="Bronze 3"
-        className="absolute bottom-24 left-24 w-32 h-32 object-contain"
+        className="absolute bottom-[18%] left-24 w-40 h-40 object-contain"
         animate={{ rotate: [-15, 15, -15] }}
         transition={{
           duration: 2,
@@ -211,7 +211,7 @@ function RoomContent() {
       <motion.img
         src="/images/bronze/marie.png"
         alt="Bronze 4"
-        className="absolute top-24 right-24 w-32 h-32 object-contain"
+        className="absolute top-[12%] right-64 w-40 h-40 object-contain"
         animate={{ rotate: [-15, 15, -15] }}
         transition={{
           duration: 2,
@@ -223,7 +223,7 @@ function RoomContent() {
       <motion.img
         src="/images/bronze/michel.png"
         alt="Bronze 5"
-        className="absolute top-1/2 -translate-y-1/2 right-24 w-32 h-32 object-contain"
+        className="absolute top-[73%] right-12 w-40 h-40 object-contain"
         animate={{ rotate: [-15, 15, -15] }}
         transition={{
           duration: 2,
@@ -235,7 +235,7 @@ function RoomContent() {
       <motion.img
         src="/images/bronze/thierry.png"
         alt="Bronze 6"
-        className="absolute bottom-24 right-24 w-32 h-32 object-contain"
+        className="absolute bottom-[45%] right-32 w-40 h-40 object-contain"
         animate={{ rotate: [-15, 15, -15] }}
         transition={{
           duration: 2,
