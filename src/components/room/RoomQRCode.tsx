@@ -22,7 +22,7 @@ export default function RoomQRCode({
         <div className="bg-white p-4 rounded-lg">
           <QRCodeSVG value={joinUrl} size={200} />
         </div>
-        <div className="absolute left-[calc(50%+120px)] flex flex-col gap-4">
+        <div className="absolute left-[calc(50%+120px)] flex flex-col gap-4 w-[300px]">
           <p className="text-sm text-white">
             Scannez ce QR code pour rejoindre la partie
           </p>
