@@ -156,11 +156,24 @@ function FinalScoresContent() {
                   </span>
                 </div>
                 <div className="mt-2 grid grid-cols-3 gap-4 text-sm text-white/70">
-                  <div>
-                    Qui veut gagner des millions : {team.millionaireScore} pts
+                  <div className="text-lg font-medium text-white/90 flex flex-col items-center">
+                    <span className="mb-1">Qui veut gagner des millions</span>
+                    <span className="text-xl font-bold text-white">
+                      {team.millionaireScore} pts
+                    </span>
                   </div>
-                  <div>Tu te mets combien ? : {team.evaluationScore} pts</div>
-                  <div>Undercover : {team.undercoverScore} pts</div>
+                  <div className="text-lg font-medium text-white/90 flex flex-col items-center">
+                    <span className="mb-1">Tu te mets combien ?</span>
+                    <span className="text-xl font-bold text-white">
+                      {team.evaluationScore} pts
+                    </span>
+                  </div>
+                  <div className="text-lg font-medium text-white/90 flex flex-col items-center">
+                    <span className="mb-1">Undercover</span>
+                    <span className="text-xl font-bold text-white">
+                      {team.undercoverScore} pts
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}
