@@ -234,7 +234,11 @@ function RoomContent() {
 
       <div className="container mx-auto p-4 min-h-screen flex flex-col">
         <div className="flex-1 w-full">
-          <div className="max-w-2xl mx-auto space-y-8 mb-8">
+          <div
+            className={`mx-auto space-y-8 mb-8 ${
+              getConnectedTeamsCount(room) === 2 ? "max-w-5xl" : "max-w-2xl"
+            }`}
+          >
             {isHost ? (
               <>
                 <div className="relative">

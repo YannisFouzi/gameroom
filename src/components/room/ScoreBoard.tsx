@@ -9,11 +9,11 @@ type ScoreBoardProps = {
 
 export default function ScoreBoard({ room, teamId, isHost }: ScoreBoardProps) {
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-4 grid-cols-2">
       {Object.entries(room.teams).map(([id, team]) => (
         <motion.div
           key={id}
-          className={`p-4 rounded-xl backdrop-blur-sm border ${
+          className={`p-6 rounded-xl backdrop-blur-sm border ${
             id === teamId
               ? "border-purple-500 bg-white/10"
               : "border-white/10 bg-white/5"
