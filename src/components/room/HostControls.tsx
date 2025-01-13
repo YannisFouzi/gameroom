@@ -10,8 +10,12 @@ type HostControlsProps = {
 export default function HostControls({ room }: HostControlsProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const isWaiting = room.status === "waiting";
-  const numberOfTeams = Object.keys(room.teams).length;
+  const numberOfTeams = Object.values(room.teams).filter(
+    (team) => team.members && team.members.length > 0
+  ).length;
   const teamsNeeded = 2 - numberOfTeams;
+
+  if (teamsNeeded > 0) return null;
 
   const handleStartGame = async () => {
     try {
@@ -57,48 +61,8 @@ export default function HostControls({ room }: HostControlsProps) {
       );
     }
 
-    if (teamsNeeded === 2) {
-      return (
-        <motion.div
-          initial={{ opacity: 0.8 }}
-          animate={{ opacity: [0.8, 1, 0.8] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="flex items-center justify-center space-x-4 text-lg"
-        >
-          <span className="text-2xl">⛷️</span>
-          <span className="text-yellow-100">En attente des skieurs...</span>
-          <motion.span
-            animate={{ opacity: [0, 1, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="text-2xl"
-          >
-            🎿
-          </motion.span>
-        </motion.div>
-      );
-    }
-
-    if (teamsNeeded === 1) {
-      return (
-        <motion.div
-          initial={{ opacity: 0.8 }}
-          animate={{ opacity: [0.8, 1, 0.8] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="flex items-center justify-center space-x-4 text-lg"
-        >
-          <span className="text-2xl">🏔️</span>
-          <span className="text-yellow-100">
-            Plus qu'une équipe avant de dévaler les pistes !
-          </span>
-          <motion.span
-            animate={{ opacity: [0, 1, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="text-2xl"
-          >
-            🎿
-          </motion.span>
-        </motion.div>
-      );
+    if (teamsNeeded > 0) {
+      return null;
     }
 
     return (

@@ -71,6 +71,13 @@ function RoomContent() {
     }
   }, [room?.status, roomId, router]);
 
+  const getConnectedTeamsCount = (room: any) => {
+    if (!room || !room.teams) return 0;
+    return Object.values(room.teams).filter(
+      (team: any) => team.members && team.members.length > 0
+    ).length;
+  };
+
   const renderPlayerView = () => {
     if (!room) return null;
     const currentTeam = room.teams[teamId || ""];
@@ -120,30 +127,6 @@ function RoomContent() {
             </motion.div>
           ))}
         </div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="mt-12 text-purple-300/80 text-lg"
-        >
-          En attente du lancement de la partie...
-          <motion.span
-            animate={{ opacity: [0, 1, 0] }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="inline-block ml-1"
-          >
-            🎮
-          </motion.span>
-        </motion.div>
       </motion.div>
     );
   };
@@ -177,77 +160,81 @@ function RoomContent() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black relative">
       <SnowEffect />
-      <motion.img
-        src="/images/bronze/christian.png"
-        alt="Bronze 1"
-        className="absolute top-[8%] left-8 w-40 h-40 object-contain"
-        animate={{ rotate: [-15, 15, -15] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.img
-        src="/images/bronze/gerard.png"
-        alt="Bronze 2"
-        className="absolute top-[42%] left-56 w-40 h-40 object-contain"
-        animate={{ rotate: [-15, 15, -15] }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 0.3,
-        }}
-      />
-      <motion.img
-        src="/images/bronze/josiane.png"
-        alt="Bronze 3"
-        className="absolute bottom-[18%] left-24 w-40 h-40 object-contain"
-        animate={{ rotate: [-15, 15, -15] }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 0.6,
-        }}
-      />
-      <motion.img
-        src="/images/bronze/marie.png"
-        alt="Bronze 4"
-        className="absolute top-[12%] right-64 w-40 h-40 object-contain"
-        animate={{ rotate: [-15, 15, -15] }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 0.9,
-        }}
-      />
-      <motion.img
-        src="/images/bronze/michel.png"
-        alt="Bronze 5"
-        className="absolute top-[73%] right-12 w-40 h-40 object-contain"
-        animate={{ rotate: [-15, 15, -15] }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1.2,
-        }}
-      />
-      <motion.img
-        src="/images/bronze/thierry.png"
-        alt="Bronze 6"
-        className="absolute bottom-[45%] right-32 w-40 h-40 object-contain"
-        animate={{ rotate: [-15, 15, -15] }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1.5,
-        }}
-      />
+      {isHost && (
+        <>
+          <motion.img
+            src="/images/bronze/christian.png"
+            alt="Bronze 1"
+            className="absolute top-[8%] left-8 w-40 h-40 object-contain"
+            animate={{ rotate: [-15, 15, -15] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.img
+            src="/images/bronze/gerard.png"
+            alt="Bronze 2"
+            className="absolute top-[42%] left-56 w-40 h-40 object-contain"
+            animate={{ rotate: [-15, 15, -15] }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.3,
+            }}
+          />
+          <motion.img
+            src="/images/bronze/josiane.png"
+            alt="Bronze 3"
+            className="absolute bottom-[18%] left-24 w-40 h-40 object-contain"
+            animate={{ rotate: [-15, 15, -15] }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.6,
+            }}
+          />
+          <motion.img
+            src="/images/bronze/marie.png"
+            alt="Bronze 4"
+            className="absolute top-[12%] right-64 w-40 h-40 object-contain"
+            animate={{ rotate: [-15, 15, -15] }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.9,
+            }}
+          />
+          <motion.img
+            src="/images/bronze/michel.png"
+            alt="Bronze 5"
+            className="absolute top-[73%] right-12 w-40 h-40 object-contain"
+            animate={{ rotate: [-15, 15, -15] }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1.2,
+            }}
+          />
+          <motion.img
+            src="/images/bronze/thierry.png"
+            alt="Bronze 6"
+            className="absolute bottom-[45%] right-32 w-40 h-40 object-contain"
+            animate={{ rotate: [-15, 15, -15] }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1.5,
+            }}
+          />
+        </>
+      )}
 
-      <div className="container mx-auto p-4 min-h-screen flex flex-col items-center">
-        <div className="flex-1 w-full flex items-center justify-center">
-          <div className="max-w-2xl w-full space-y-8">
+      <div className="container mx-auto p-4 min-h-screen flex flex-col">
+        <div className="flex-1 w-full">
+          <div className="max-w-2xl mx-auto space-y-8 mb-8">
             {isHost ? (
               <>
                 <div className="relative">
@@ -256,15 +243,17 @@ function RoomContent() {
                   </div>
                   <div className="relative z-10">
                     <HostControls room={room} />
-                    <div className="mt-12">
+                    <div className="mt-8">
                       <ScoreBoard room={room} teamId={teamId} isHost={isHost} />
                     </div>
-                    <div className="mt-8">
-                      <RoomQRCode
-                        roomId={roomId as string}
-                        showButton={false}
-                      />
-                    </div>
+                    {getConnectedTeamsCount(room) < 2 && (
+                      <div className="mt-6">
+                        <RoomQRCode
+                          roomId={roomId as string}
+                          showButton={false}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </>
@@ -277,23 +266,17 @@ function RoomContent() {
               </div>
             )}
           </div>
+
+          {isHost && (
+            <div className="w-full max-w-5xl mx-auto mt-4">
+              <img
+                src="/images/bronze_jeu.png"
+                alt="Les Bronzés font du ski"
+                className="w-full h-auto object-contain"
+              />
+            </div>
+          )}
         </div>
-        {isHost && (
-          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-gray-800/80 p-3 rounded-lg">
-            <span className="text-white text-sm font-medium">Volume</span>
-            <span className="text-white">🔈</span>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.01"
-              value={volume}
-              onChange={handleVolumeChange}
-              className="w-48 h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-purple-500 hover:[&::-webkit-slider-thumb]:bg-purple-600"
-            />
-            <span className="text-white">🔊</span>
-          </div>
-        )}
       </div>
     </div>
   );
