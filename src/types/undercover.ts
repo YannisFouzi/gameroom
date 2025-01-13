@@ -1,4 +1,4 @@
-export type UndercoverRole = "civil" | "undercover" | "mrwhite";
+export type UndercoverRole = "Civil" | "Undercover" | "Mrwhite";
 
 export type UndercoverPlayer = {
   memberId: string;
@@ -19,7 +19,7 @@ export type UndercoverGameData = {
   eliminatedPlayers: UndercoverPlayer[];
   lastEliminatedPlayers: UndercoverPlayer[];
   words: {
-    civil: string;
+    Civil: string;
     undercover: string;
   };
   teamsReady: string[];

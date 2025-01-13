@@ -138,7 +138,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
     },
     {
       id: "h14",
-      text: "Quelle civilisation antique est responsable de la construction des Moai sur l'île de Pâques ?",
+      text: "Quelle Civilisation antique est responsable de la construction des Moai sur l'île de Pâques ?",
       answers: [
         "Les Mayas",
         "Les Incas",

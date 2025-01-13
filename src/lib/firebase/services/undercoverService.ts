@@ -9,9 +9,9 @@ import { db } from "../config";
 import { baseRoomService } from "./baseRoomService";
 
 const WORDS_BY_ROUND = [
-  { civil: "asterix", undercover: "obelix" },
-  { civil: "om", undercover: "marseille" },
-  { civil: "linux", undercover: "windows" },
+  { Civil: "asterix", undercover: "obelix" },
+  { Civil: "om", undercover: "marseille" },
+  { Civil: "linux", undercover: "windows" },
 ];
 
 function assignRoles(teams: Record<string, Team>): UndercoverPlayer[] {
@@ -23,11 +23,11 @@ function assignRoles(teams: Record<string, Team>): UndercoverPlayer[] {
 
     // Définir les rôles selon la taille de l'équipe
     if (teamSize === 2) {
-      roles = ["civil", "undercover"];
+      roles = ["Civil", "Undercover"];
     } else if (teamSize === 3) {
-      roles = ["civil", "civil", "undercover"];
+      roles = ["Civil", "Civil", "Undercover"];
     } else if (teamSize === 4) {
-      roles = ["civil", "civil", "undercover", "mrwhite"];
+      roles = ["Civil", "Civil", "Undercover", "Mrwhite"];
     }
 
     // Mélanger les rôles
@@ -176,9 +176,9 @@ export const undercoverService = {
 
     // Assigner le mot selon le rôle
     let word = null;
-    if (currentPlayer.role === "civil") {
-      word = gameData.words.civil;
-    } else if (currentPlayer.role === "undercover") {
+    if (currentPlayer.role === "Civil") {
+      word = gameData.words.Civil;
+    } else if (currentPlayer.role === "Undercover") {
       word = gameData.words.undercover;
     }
 
@@ -260,14 +260,14 @@ export const undercoverService = {
       // Mettre à jour les scores pour chaque joueur éliminé
       const updatedScores = { ...gameData.scores };
       eliminatedPlayers.forEach((player) => {
-        if (player.role === "undercover") {
+        if (player.role === "Undercover") {
           Object.entries(updatedVotes).forEach(([votingTeamId, votedId]) => {
             if (votedId === player.memberId) {
               updatedScores[votingTeamId] =
                 (updatedScores[votingTeamId] || 0) + 5;
             }
           });
-        } else if (player.role === "mrwhite") {
+        } else if (player.role === "Mrwhite") {
           Object.entries(updatedVotes).forEach(([votingTeamId, votedId]) => {
             if (votedId === player.memberId) {
               updatedScores[votingTeamId] =
@@ -335,7 +335,7 @@ export const undercoverService = {
       const teamPlayers = gameData.players.filter((p) => p.teamId === teamId);
       const activeImpostors = teamPlayers.filter(
         (p) =>
-          !p.isEliminated && (p.role === "undercover" || p.role === "mrwhite")
+          !p.isEliminated && (p.role === "Undercover" || p.role === "Mrwhite")
       );
 
       // Si une équipe n'a plus d'imposteurs, l'autre équipe gagne

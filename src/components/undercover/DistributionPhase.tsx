@@ -87,7 +87,7 @@ export default function DistributionPhase({
               ) : (
                 <div className="space-y-6">
                   <div className="text-3xl font-bold text-white">
-                    {currentPlayer.role === "mrwhite"
+                    {currentPlayer.role === "Mrwhite"
                       ? "Tu es Mr White !"
                       : currentPlayer.word || "En attente du mot..."}
                   </div>

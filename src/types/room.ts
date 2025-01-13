@@ -108,7 +108,7 @@ export interface Room {
   isTimerActive: boolean;
 }
 
-export type GameType = "undercover" | "millionaire";
+export type GameType = "Undercover" | "millionaire";
 
 export type GameScores = {
   millionaire?: Record<string, number>;

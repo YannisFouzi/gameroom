@@ -115,9 +115,9 @@ function UndercoverResultsContent() {
                     <div className="flex items-center gap-4">
                       <span
                         className={`text-lg font-bold ${
-                          player.role === "civil"
+                          player.role === "Civil"
                             ? "text-green-400"
-                            : player.role === "undercover"
+                            : player.role === "Undercover"
                             ? "text-red-400"
                             : "text-yellow-400"
                         }`}
@@ -192,9 +192,9 @@ function UndercoverResultsContent() {
                 <div className="flex items-center gap-3">
                   <span
                     className={`${
-                      player.role === "civil"
+                      player.role === "Civil"
                         ? "text-green-400"
-                        : player.role === "undercover"
+                        : player.role === "Undercover"
                         ? "text-red-400"
                         : "text-yellow-400"
                     }`}

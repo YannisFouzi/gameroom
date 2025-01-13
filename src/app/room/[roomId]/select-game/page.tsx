@@ -105,7 +105,7 @@ function SelectGameContent() {
     // Vue de l'hôte
     const games = [
       {
-        id: "undercover" as GameType,
+        id: "Undercover" as GameType,
         title: "Undercover",
         description: "Trouvez l'imposteur parmi les joueurs",
         image: "/games/undercover.jpg",
