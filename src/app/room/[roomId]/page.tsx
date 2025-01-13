@@ -251,12 +251,10 @@ function RoomContent() {
                       <ScoreBoard room={room} teamId={teamId} isHost={isHost} />
                     </div>
                     {getConnectedTeamsCount(room) < 2 && (
-                      <div className="mt-6">
-                        <RoomQRCode
-                          roomId={roomId as string}
-                          showButton={false}
-                        />
-                      </div>
+                      <RoomQRCode
+                        roomId={roomId as string}
+                        showButton={false}
+                      />
                     )}
                   </div>
                 </div>
