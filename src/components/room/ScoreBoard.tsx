@@ -5,12 +5,22 @@ type ScoreBoardProps = {
   room: Room;
   teamId: string | null;
   isHost: boolean;
+  singleTeam?: boolean;
 };
 
-export default function ScoreBoard({ room, teamId, isHost }: ScoreBoardProps) {
+export default function ScoreBoard({
+  room,
+  teamId,
+  isHost,
+  singleTeam,
+}: ScoreBoardProps) {
+  const teams = Object.entries(room.teams).filter(
+    ([_, team]) => team.members && team.members.length > 0
+  );
+
   return (
-    <div className="grid gap-4 grid-cols-2">
-      {Object.entries(room.teams).map(([id, team]) => (
+    <div className={`grid gap-4 ${singleTeam ? "" : "grid-cols-2"}`}>
+      {(singleTeam ? teams.slice(0, 1) : teams).map(([id, team]) => (
         <motion.div
           key={id}
           className={`p-6 rounded-xl backdrop-blur-sm border ${

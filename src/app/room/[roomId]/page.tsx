@@ -235,7 +235,7 @@ function RoomContent() {
       <div className="container mx-auto p-4 min-h-screen flex flex-col">
         <div className="flex-1 w-full">
           <div
-            className={`mx-auto space-y-8 mb-8 ${
+            className={`mx-auto space-y-8 ${
               getConnectedTeamsCount(room) === 2 ? "max-w-5xl" : "max-w-2xl"
             }`}
           >
@@ -247,15 +247,45 @@ function RoomContent() {
                   </div>
                   <div className="relative z-10">
                     <HostControls room={room} />
-                    <div className="mt-8">
-                      <ScoreBoard room={room} teamId={teamId} isHost={isHost} />
+
+                    <div>
+                      {getConnectedTeamsCount(room) === 0 && (
+                        <div className="flex justify-center">
+                          <RoomQRCode
+                            roomId={roomId as string}
+                            showButton={false}
+                          />
+                        </div>
+                      )}
+
+                      {getConnectedTeamsCount(room) === 1 && (
+                        <div className="grid grid-cols-3 gap-8 items-center">
+                          <div className="col-span-1">
+                            <ScoreBoard
+                              room={room}
+                              teamId={teamId}
+                              isHost={isHost}
+                              singleTeam
+                            />
+                          </div>
+                          <div className="col-span-1 flex justify-center">
+                            <RoomQRCode
+                              roomId={roomId as string}
+                              showButton={false}
+                            />
+                          </div>
+                          <div className="col-span-1" />
+                        </div>
+                      )}
+
+                      {getConnectedTeamsCount(room) === 2 && (
+                        <ScoreBoard
+                          room={room}
+                          teamId={teamId}
+                          isHost={isHost}
+                        />
+                      )}
                     </div>
-                    {getConnectedTeamsCount(room) < 2 && (
-                      <RoomQRCode
-                        roomId={roomId as string}
-                        showButton={false}
-                      />
-                    )}
                   </div>
                 </div>
               </>
@@ -270,7 +300,7 @@ function RoomContent() {
           </div>
 
           {isHost && (
-            <div className="w-full max-w-5xl mx-auto mt-4">
+            <div className="w-full max-w-5xl mx-auto">
               <img
                 src="/images/bronze_jeu.png"
                 alt="Les Bronzés font du ski"
