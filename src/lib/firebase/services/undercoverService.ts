@@ -48,6 +48,61 @@ function assignRoles(teams: Record<string, Team>): UndercoverPlayer[] {
   return players;
 }
 
+const generatePlayOrder = (players: UndercoverPlayer[]): string[] => {
+  // 1. Grouper les joueurs par équipe
+  const playersByTeam: Record<string, UndercoverPlayer[]> = {};
+  players.forEach((player) => {
+    if (!playersByTeam[player.teamId]) {
+      playersByTeam[player.teamId] = [];
+    }
+    playersByTeam[player.teamId].push(player);
+  });
+
+  const teamIds = Object.keys(playersByTeam);
+  const finalPlayOrder: string[] = [];
+
+  // 2. Sélectionner les 2 premiers joueurs (non Mr White)
+  for (let i = 0; i < 2; i++) {
+    const teamId = teamIds[i % teamIds.length];
+    const nonMrWhites = playersByTeam[teamId].filter(
+      (p) => p.role !== "Mrwhite"
+    );
+    const randomIndex = Math.floor(Math.random() * nonMrWhites.length);
+    const selectedPlayer = nonMrWhites[randomIndex];
+
+    // Retirer le joueur sélectionné de son équipe
+    playersByTeam[teamId] = playersByTeam[teamId].filter(
+      (p) => p.memberId !== selectedPlayer.memberId
+    );
+    finalPlayOrder.push(selectedPlayer.memberId);
+  }
+
+  // 3. Mélanger les joueurs restants de chaque équipe
+  const remainingPlayers: UndercoverPlayer[] = [];
+  teamIds.forEach((teamId) => {
+    remainingPlayers.push(...playersByTeam[teamId]);
+  });
+  remainingPlayers.sort(() => Math.random() - 0.5);
+
+  // 4. Placer les joueurs restants en alternant les équipes
+  let currentTeamIndex = 0;
+  while (remainingPlayers.length > 0) {
+    const currentTeamId = teamIds[currentTeamIndex % teamIds.length];
+    const playerFromTeam = remainingPlayers.find(
+      (p) => p.teamId === currentTeamId
+    );
+
+    if (playerFromTeam) {
+      finalPlayOrder.push(playerFromTeam.memberId);
+      remainingPlayers.splice(remainingPlayers.indexOf(playerFromTeam), 1);
+    }
+
+    currentTeamIndex++;
+  }
+
+  return finalPlayOrder;
+};
+
 export const undercoverService = {
   async initializeGame(roomId: string, round: number = 1) {
     const room = await baseRoomService.getRoom(roomId);
@@ -87,17 +142,7 @@ export const undercoverService = {
     const maxPlayers = Math.max(
       ...Object.values(playersByTeam).map((p) => p.length)
     );
-    const playOrder: string[] = [];
-
-    // Alterner entre les équipes
-    for (let i = 0; i < maxPlayers; i++) {
-      teamIds.forEach((teamId) => {
-        const player = playersByTeam[teamId][i];
-        if (player) {
-          playOrder.push(player.memberId);
-        }
-      });
-    }
+    const playOrder = generatePlayOrder(players);
 
     // Récupérer les scores existants
     const undercoverScores = room.gameData?.undercover?.scores || {};
