@@ -29,7 +29,7 @@ export default function VideoOverlay({
         <video
           ref={videoRef}
           src={`https://res.cloudinary.com/dcdlryvf3/video/upload/${publicId}`}
-          className="w-[1280px] h-auto object-contain"
+          className="w-[100vw] h-[100vh] object-contain"
           autoPlay
           controls={false}
           onEnded={onComplete}
