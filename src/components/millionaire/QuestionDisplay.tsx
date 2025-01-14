@@ -86,6 +86,7 @@ export default function QuestionDisplay({
   const { play: playSelect, isLoaded } = useAudio(
     "/sound/millionnaire/sounds_play.mp3"
   );
+  const [displayTime, setDisplayTime] = useState(60);
 
   const isBlinking = room.gameData?.isBlinking || false;
 
@@ -115,44 +116,35 @@ export default function QuestionDisplay({
   }, [questionIndex, isHost]);
 
   useEffect(() => {
-    if (!room.gameData?.timer || room.gameData.timer.isPaused) {
-      if (syncInterval) {
-        clearInterval(syncInterval);
-        setSyncInterval(null);
-      }
-      return;
-    }
+    if (!room.gameData?.timer || room.gameData.timer.isPaused) return;
 
-    // Modification ici : on vérifie si c'est l'hôte pour la mise à jour du timer
-    if (isHost) {
-      const interval = setInterval(async () => {
-        const newRemainingTime = Math.max(
-          0,
-          room.gameData.timer.remainingTime - 1
-        );
+    const calculateRemainingTime = () => {
+      const startTime = room.gameData?.timer?.startTime;
+      if (!startTime) return 60;
 
-        // Modification ici : on sort la vérification du son de la condition isHost
-        if (newRemainingTime === 0) {
-          await handleTimeUp();
-          return;
-        }
+      const duration = room.gameData?.timer?.duration || 60;
+      const elapsed = (Date.now() - startTime) / 1000;
+      return Math.max(0, Math.round(duration - elapsed));
+    };
 
-        await timerService.updateRemainingTime(room.id, newRemainingTime);
-      }, 1000);
+    const interval = setInterval(() => {
+      const remainingTime = calculateRemainingTime();
+      setDisplayTime(remainingTime);
 
-      setSyncInterval(interval);
-
-      return () => {
+      if (remainingTime <= 0) {
         clearInterval(interval);
-      };
-    }
-  }, [room.gameData?.timer, isHost]);
+        handleTimeUp();
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [room.gameData?.timer]);
 
   useEffect(() => {
-    if (isCurrentTeam && room.gameData?.timer?.remainingTime === 15) {
+    if (isCurrentTeam && displayTime === 15) {
       playSuspens();
     }
-  }, [room.gameData?.timer?.remainingTime, isCurrentTeam]);
+  }, [displayTime, isCurrentTeam]);
 
   useEffect(() => {
     if (questionIndex === 0 && isLoaded && isCurrentTeam) {
@@ -355,12 +347,10 @@ export default function QuestionDisplay({
       {(isHost || isCurrentTeam) && (
         <div
           className={`text-center mb-2 text-2xl font-bold ${
-            (room.gameData?.timer?.remainingTime || 0) <= 15
-              ? "text-red-500"
-              : "text-white"
+            displayTime <= 15 ? "text-red-500" : "text-white"
           }`}
         >
-          {room.gameData?.timer?.remainingTime || 0}
+          {displayTime}
         </div>
       )}
 

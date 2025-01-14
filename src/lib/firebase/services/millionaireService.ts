@@ -181,18 +181,10 @@ export const timerService = {
     const roomRef = doc(db, "rooms", roomId);
     await updateDoc(roomRef, {
       "gameData.timer": {
-        startedAt: serverTimestamp(),
+        startTime: Date.now(),
         duration: 60,
         isPaused: false,
-        remainingTime: 60,
       },
-    });
-  },
-
-  async updateRemainingTime(roomId: string, remainingTime: number) {
-    const roomRef = doc(db, "rooms", roomId);
-    await updateDoc(roomRef, {
-      "gameData.timer.remainingTime": remainingTime,
     });
   },
 
