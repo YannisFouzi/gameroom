@@ -1,3 +1,4 @@
+import VideoOverlay from "@/components/common/VideoOverlay";
 import { roomService } from "@/lib/firebase/roomService";
 import { Room } from "@/types/room";
 import { motion } from "framer-motion";
@@ -5,10 +6,17 @@ import { useState } from "react";
 
 type HostControlsProps = {
   room: Room;
+  onVideoStart?: () => void;
+  onVideoEnd?: () => void;
 };
 
-export default function HostControls({ room }: HostControlsProps) {
+export default function HostControls({
+  room,
+  onVideoStart,
+  onVideoEnd,
+}: HostControlsProps) {
   const [isUpdating, setIsUpdating] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
   const isWaiting = room.status === "waiting";
   const numberOfTeams = Object.values(room.teams).filter(
     (team) => team.members && team.members.length > 0
@@ -20,11 +28,19 @@ export default function HostControls({ room }: HostControlsProps) {
   const handleStartGame = async () => {
     try {
       setIsUpdating(true);
-      console.log("Démarrage de la partie...");
-      await roomService.startGame(room.id);
-      console.log("Partie démarrée avec succès");
+      setShowVideo(true);
+      onVideoStart?.();
     } catch (error) {
-      console.error("Erreur lors du démarrage de la partie:", error);
+      console.error("Erreur:", error);
+      setIsUpdating(false);
+    }
+  };
+
+  const handleVideoComplete = async () => {
+    try {
+      await roomService.startGame(room.id);
+      setShowVideo(false);
+      onVideoEnd?.();
     } finally {
       setIsUpdating(false);
     }
@@ -93,7 +109,7 @@ export default function HostControls({ room }: HostControlsProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="relative">
       <div className="relative group">
         <div className="absolute -inset-1 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 rounded-xl blur-xl opacity-40 group-hover:opacity-75 transition duration-1000 group-hover:duration-200 animate-pulse" />
         <div className="absolute inset-0.5 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-lg blur-md opacity-20 group-hover:opacity-40 transition duration-1000" />
@@ -132,6 +148,12 @@ export default function HostControls({ room }: HostControlsProps) {
           </div>
         </button>
       </div>
+      {showVideo && (
+        <VideoOverlay
+          publicId="v1710876847/n6kfbtqvlj2ki8sq6ptd.mp4"
+          onComplete={handleVideoComplete}
+        />
+      )}
     </div>
   );
 }

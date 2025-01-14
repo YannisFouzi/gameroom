@@ -139,6 +139,18 @@ function RoomContent() {
     }
   };
 
+  const handleVideoStart = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+  };
+
+  const handleVideoEnd = () => {
+    if (audioRef.current) {
+      audioRef.current.play();
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -246,7 +258,11 @@ function RoomContent() {
                     <SnowEffect />
                   </div>
                   <div className="relative z-10">
-                    <HostControls room={room} />
+                    <HostControls
+                      room={room}
+                      onVideoStart={handleVideoStart}
+                      onVideoEnd={handleVideoEnd}
+                    />
 
                     <div>
                       {getConnectedTeamsCount(room) === 0 && (
