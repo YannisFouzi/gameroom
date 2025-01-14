@@ -152,6 +152,8 @@ function WheelContent() {
           onStopSpinning={handleStopSpinning}
           scores={localScores}
           teams={room?.teams || {}}
+          wheelState={room?.gameData?.wheelState || null}
+          room={room}
         />
       ) : (
         <PlayerWheel
@@ -173,6 +175,7 @@ function WheelContent() {
           onStartTimer={handleStartTimer}
           onHideVraiButton={handleHideVraiButton}
           wheelState={room?.gameData?.wheelState || null}
+          roomId={room?.id || ""}
         />
       )}
     </div>

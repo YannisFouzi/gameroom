@@ -1,5 +1,9 @@
+import VideoOverlay from "@/components/common/VideoOverlay";
 import { wheelData } from "@/data/wheelData";
-import { Team } from "@/types/room";
+import { db } from "@/lib/firebase";
+import { Room, Team } from "@/types/room";
+import { WheelState } from "@/types/wheel";
+import { doc, updateDoc } from "firebase/firestore";
 import { Wheel } from "react-custom-roulette";
 import ScoreGauge from "./ScoreGauge";
 
@@ -9,6 +13,8 @@ type HostWheelProps = {
   onStopSpinning: () => void;
   scores: Record<string, number>;
   teams: Record<string, Team>;
+  wheelState: WheelState | null;
+  room: Room | null;
 };
 
 export default function HostWheel({
@@ -17,6 +23,8 @@ export default function HostWheel({
   onStopSpinning,
   scores,
   teams,
+  wheelState,
+  room,
 }: HostWheelProps) {
   const teamIds = Object.keys(teams).sort();
 
@@ -51,6 +59,18 @@ export default function HostWheel({
           spinDuration={0.8}
         />
       </div>
+
+      {wheelState?.showSpecialVideo && wheelState.specialVideoId && room && (
+        <VideoOverlay
+          publicId={wheelState.specialVideoId}
+          onComplete={async () => {
+            await updateDoc(doc(db, "rooms", room.id), {
+              "gameData.wheelState.showSpecialVideo": false,
+              "gameData.wheelState.waitingForVideo": false,
+            });
+          }}
+        />
+      )}
     </div>
   );
 }

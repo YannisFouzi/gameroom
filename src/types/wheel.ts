@@ -24,4 +24,7 @@ export interface WheelState {
   timerStartedAt: Timestamp | null;
   isTimerActive: boolean;
   isVraiButtonVisible: boolean;
+  showSpecialVideo?: boolean;
+  specialVideoId?: string;
+  waitingForVideo?: boolean;
 }

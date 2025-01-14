@@ -5,6 +5,7 @@ export type Question = {
   text: string;
   answer: string;
   difficulty: 2 | 4 | 7 | 10;
+  specialVideo?: string;
 };
 
 export const questions: Record<Theme, Record<string, Question[]>> = {
@@ -173,6 +174,7 @@ export const questions: Record<Theme, Record<string, Question[]>> = {
         text: 'Quel duo masculin a interprété "Nuit de folie", un tube des années 80 ?',
         answer: "Début de soirée",
         difficulty: 2,
+        specialVideo: "ttmc/j1svbkdllukxr41krnos",
       },
       {
         id: "chan2",
@@ -251,6 +253,7 @@ export const questions: Record<Theme, Record<string, Question[]>> = {
         text: "Complétez ces paroles de « Yeux revolver » de Marc Lavoine par un seul mot : « Un peu spéciale elle est … »",
         answer: "Célibataire",
         difficulty: 2,
+        specialVideo: "ttmc/giwjabzssko8ep62plrj",
       },
       {
         id: "mus2",
@@ -263,12 +266,14 @@ export const questions: Record<Theme, Record<string, Question[]>> = {
         text: "Quelle chanson culte de Queen est illustrée par un clip où les membres du groupe sont grimés en femme au foyer ?",
         answer: "I want to break free",
         difficulty: 7,
+        specialVideo: "ttmc/kaeeeglilwfo4mnijdxg",
       },
       {
         id: "mus4",
         text: 'Quel groupe new-wave a sorti l\'album "Speak and Spell" en 1981, contenant le hit "Just Can\'t Get Enough" ?',
         answer: "Depeche Mode",
         difficulty: 10,
+        specialVideo: "ttmc/fxpgdomczun7a26g9usu",
       },
     ],
     Chanteuses: [
@@ -277,18 +282,21 @@ export const questions: Record<Theme, Record<string, Question[]>> = {
         text: 'Qui chante "T\'as le look coco" ?',
         answer: "laroche valmont",
         difficulty: 2,
+        specialVideo: "ttmc/khpihscztdtrzlxeutil",
       },
       {
         id: "chant2",
         text: 'Qui chante cette musique :"Oh femme unique, péché, désir. Pour un serpent de bible. A brisé son empire. Bleu de l\'enfer, couleur amour."',
         answer: "Julie Piétri (Eve lève toi)",
         difficulty: 4,
+        specialVideo: "ttmc/mvt9rjvcenaftonfqrjh",
       },
       {
         id: "chant3",
         text: 'Qui a remporté l\'Eurovision pour la France en 1983 avec "Si la vie est cadeau" ?',
         answer: "Corinne Hermès",
         difficulty: 7,
+        specialVideo: "ttmc/kvztxvo3xr4vmjahqysh",
       },
       {
         id: "chant4",
@@ -296,6 +304,7 @@ export const questions: Record<Theme, Record<string, Question[]>> = {
         answer:
           '"Sur les clichés trop pâles d\'une love-story" (Mise au point)',
         difficulty: 10,
+        specialVideo: "ttmc/jqt45dwbmakdafsa9vp0",
       },
     ],
     Albums: [
