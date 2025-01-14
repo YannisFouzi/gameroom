@@ -2,6 +2,7 @@ import { questions } from "@/data/questions";
 import { Team } from "@/types/room";
 import { Theme, WheelState } from "@/types/wheel";
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import DifficultyButtons from "./DifficultyButtons";
 import QuestionDisplay from "./QuestionDisplay";
 import Timer from "./Timer";
@@ -47,6 +48,23 @@ export default function PlayerWheel({
   onHideVraiButton,
   wheelState,
 }: PlayerWheelProps) {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (isCurrentTeam && selectedDifficulty) {
+      const audio = new Audio(`/sound/wheel/${selectedDifficulty}.mp3`);
+      audioRef.current = audio;
+      audio.play();
+    }
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, [selectedDifficulty, isCurrentTeam]);
+
   if (!isCurrentTeam && !subCategory) {
     return (
       <div className="flex flex-col items-center space-y-8 p-8">
