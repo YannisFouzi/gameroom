@@ -123,7 +123,7 @@ export default function QuestionDisplay({
       return;
     }
 
-    // Si c'est l'hôte, mettre à jour le temps restant toutes les secondes
+    // Modification ici : on vérifie si c'est l'hôte pour la mise à jour du timer
     if (isHost) {
       const interval = setInterval(async () => {
         const newRemainingTime = Math.max(
@@ -131,10 +131,7 @@ export default function QuestionDisplay({
           room.gameData.timer.remainingTime - 1
         );
 
-        if (newRemainingTime === 15) {
-          playSuspens();
-        }
-
+        // Modification ici : on sort la vérification du son de la condition isHost
         if (newRemainingTime === 0) {
           await handleTimeUp();
           return;
@@ -150,6 +147,12 @@ export default function QuestionDisplay({
       };
     }
   }, [room.gameData?.timer, isHost]);
+
+  useEffect(() => {
+    if (isCurrentTeam && room.gameData?.timer?.remainingTime === 15) {
+      playSuspens();
+    }
+  }, [room.gameData?.timer?.remainingTime, isCurrentTeam]);
 
   useEffect(() => {
     if (questionIndex === 0 && isLoaded && isCurrentTeam) {
