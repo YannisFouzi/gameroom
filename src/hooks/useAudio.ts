@@ -1,60 +1,54 @@
 import { useEffect, useRef, useState } from "react";
 
-export const useAudio = (url: string) => {
+export function useAudio(url: string) {
   const audio = useRef<HTMLAudioElement | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Créer l'élément audio
     audio.current = new Audio(url);
 
-    // Gérer le chargement
-    audio.current.addEventListener("loadeddata", () => {
+    const handleCanPlayThrough = () => {
       setIsLoaded(true);
-    });
+    };
 
-    // Gérer les erreurs
-    audio.current.addEventListener("error", () => {
-      const error = audio.current?.error;
-      if (error) {
-        console.error("Error loading audio:", {
-          code: error.code,
-          message: error.message,
-          url: url,
-        });
-      }
-    });
+    const handleError = (e: ErrorEvent) => {
+      console.warn(`Erreur de chargement audio (${url}):`, e.message);
+      // On évite de bloquer l'application si l'audio ne charge pas
+      setIsLoaded(true);
+    };
 
-    // Charger l'audio
-    audio.current.load();
+    audio.current.addEventListener("canplaythrough", handleCanPlayThrough);
+    audio.current.addEventListener("error", handleError);
 
     return () => {
       if (audio.current) {
-        audio.current.pause();
-        audio.current.currentTime = 0;
-        audio.current.removeEventListener("loadeddata", () => {});
-        audio.current.removeEventListener("error", () => {});
+        audio.current.removeEventListener(
+          "canplaythrough",
+          handleCanPlayThrough
+        );
+        audio.current.removeEventListener("error", handleError);
+        audio.current = null;
       }
     };
   }, [url]);
 
-  const play = async () => {
-    if (!audio.current || !isLoaded) return;
-
-    try {
+  const play = () => {
+    if (audio.current) {
+      // Reset l'audio avant de jouer
       audio.current.currentTime = 0;
-      await audio.current.play();
-    } catch (error) {
-      console.error("Error playing audio:", error);
+      // Catch l'erreur si la lecture échoue
+      audio.current.play().catch((err) => {
+        console.warn(`Erreur de lecture audio (${url}):`, err);
+      });
     }
   };
 
   const stop = () => {
-    if (!audio.current) return;
-
-    audio.current.pause();
-    audio.current.currentTime = 0;
+    if (audio.current) {
+      audio.current.pause();
+      audio.current.currentTime = 0;
+    }
   };
 
   return { play, stop, isLoaded };
-};
+}
