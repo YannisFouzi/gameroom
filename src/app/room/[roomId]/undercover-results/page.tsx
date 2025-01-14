@@ -70,7 +70,7 @@ function UndercoverResultsContent() {
         <h3 className="text-3xl font-extrabold mb-6">
           🏆{" "}
           {gameData.winningTeamId
-            ? `${room.teams[gameData.winningTeamId].name} gagne cette partie !`
+            ? `${room.teams[gameData.winningTeamId].name} gagne cette manche !`
             : "Match nul"}
         </h3>
       </motion.div>

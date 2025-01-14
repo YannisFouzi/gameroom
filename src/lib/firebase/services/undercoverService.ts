@@ -376,6 +376,7 @@ export const undercoverService = {
     }
 
     // Vérifier les imposteurs par équipe
+    let allImpostorsEliminated = true;
     for (const teamId of Object.keys(room.teams)) {
       const teamPlayers = gameData.players.filter((p) => p.teamId === teamId);
       const activeImpostors = teamPlayers.filter(
@@ -383,19 +384,51 @@ export const undercoverService = {
           !p.isEliminated && (p.role === "Undercover" || p.role === "Mrwhite")
       );
 
-      // Si une équipe n'a plus d'imposteurs, l'autre équipe gagne
+      if (activeImpostors.length > 0) {
+        allImpostorsEliminated = false;
+        break;
+      }
+    }
+
+    // Si tous les imposteurs sont éliminés -> match nul
+    if (allImpostorsEliminated) {
+      await updateDoc(doc(db, "rooms", roomId), {
+        gamePhase: "undercover-results",
+        "gameData.undercover.gameOver": true,
+        // Pas de winningTeamId -> match nul
+        updatedAt: serverTimestamp(),
+      });
+      return true;
+    }
+
+    // Vérifier si une équipe n'a plus d'imposteurs pendant que l'autre en a encore
+    for (const teamId of Object.keys(room.teams)) {
+      const teamPlayers = gameData.players.filter((p) => p.teamId === teamId);
+      const activeImpostors = teamPlayers.filter(
+        (p) =>
+          !p.isEliminated && (p.role === "Undercover" || p.role === "Mrwhite")
+      );
+
       if (activeImpostors.length === 0) {
-        const winningTeamId = Object.keys(room.teams).find(
-          (id) => id !== teamId
+        // Vérifier si l'autre équipe a encore des imposteurs
+        const otherTeamId = Object.keys(room.teams).find((id) => id !== teamId);
+        const otherTeamPlayers = gameData.players.filter(
+          (p) => p.teamId === otherTeamId
+        );
+        const otherTeamActiveImpostors = otherTeamPlayers.filter(
+          (p) =>
+            !p.isEliminated && (p.role === "Undercover" || p.role === "Mrwhite")
         );
 
-        await updateDoc(doc(db, "rooms", roomId), {
-          gamePhase: "undercover-results",
-          "gameData.undercover.gameOver": true,
-          "gameData.undercover.winningTeamId": winningTeamId,
-          updatedAt: serverTimestamp(),
-        });
-        return true;
+        if (otherTeamActiveImpostors.length > 0) {
+          await updateDoc(doc(db, "rooms", roomId), {
+            gamePhase: "undercover-results",
+            "gameData.undercover.gameOver": true,
+            "gameData.undercover.winningTeamId": otherTeamId,
+            updatedAt: serverTimestamp(),
+          });
+          return true;
+        }
       }
     }
     return false;
