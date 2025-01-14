@@ -153,14 +153,20 @@ export default function QuestionDisplay({
   }, [questionIndex, isLoaded, isCurrentTeam]);
 
   const handleTimeUp = async () => {
+    // Arrêter le timer immédiatement
     await timerService.pauseTimer(room.id);
 
+    // Jouer le son si c'est l'équipe courante
     if (isCurrentTeam) {
       playWrong();
     }
 
+    // Attendre que le son soit joué
     await new Promise((resolve) => setTimeout(resolve, 700));
+
+    // Mettre à jour l'état et forcer l'affichage des boutons
     onUpdateAnswerState(null, "incorrect", []);
+    setShowPostAnswerButtons(true);
   };
 
   const handleAnswerClick = (index: number) => {
