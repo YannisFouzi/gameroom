@@ -281,7 +281,7 @@ export const questions: Record<Theme, Record<string, Question[]>> = {
       {
         id: "chant2",
         text: 'Qui chante cette musique :"Oh femme unique, péché, désir. Pour un serpent de bible. A brisé son empire. Bleu de l\'enfer, couleur amour."',
-        answer: "Julie Piétri",
+        answer: "Julie Piétri (Eve lève toi)",
         difficulty: 4,
       },
       {
@@ -293,7 +293,8 @@ export const questions: Record<Theme, Record<string, Question[]>> = {
       {
         id: "chant4",
         text: 'Completez les paroles de cette musique de Jackie Quartz : "Juste une mise au point / Sur les plus belles images de ma vie…"',
-        answer: '"Sur les clichés trop pâles d\'une love-story"',
+        answer:
+          '"Sur les clichés trop pâles d\'une love-story" (Mise au point)',
         difficulty: 10,
       },
     ],
