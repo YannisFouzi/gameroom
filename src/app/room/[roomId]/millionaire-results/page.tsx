@@ -1,11 +1,12 @@
 "use client";
 
+import VideoOverlay from "@/components/common/VideoOverlay";
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
 import { gameTransitionService } from "@/lib/firebase/services";
 import { motion } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type TeamWithScore = {
   teamId: string;
@@ -18,6 +19,7 @@ function MillionaireResultsContent() {
   const { room } = useRoom();
   const { isHost, teamId } = usePlayer(room?.id || "");
   const router = useRouter();
+  const [showVideo, setShowVideo] = useState(false);
 
   useEffect(() => {
     if (room?.gamePhase === "evaluation-rules") {
@@ -50,8 +52,17 @@ function MillionaireResultsContent() {
   const handleNextGame = async () => {
     if (!room) return;
     try {
-      await gameTransitionService.startEvaluationGame(room.id);
-      router.push(`/room/${room.id}/evaluation-rules`);
+      setShowVideo(true);
+    } catch (error) {
+      console.error("Erreur lors du passage au jeu suivant:", error);
+    }
+  };
+
+  const handleVideoComplete = async () => {
+    try {
+      await gameTransitionService.startEvaluationGame(room!.id);
+      setShowVideo(false);
+      router.push(`/room/${room!.id}/evaluation-rules`);
     } catch (error) {
       console.error("Erreur lors du passage au jeu suivant:", error);
     }
@@ -115,6 +126,13 @@ function MillionaireResultsContent() {
           Continuer vers "Tu te mets combien ?"
         </button>
       </div>
+
+      {showVideo && (
+        <VideoOverlay
+          publicId="video/b9wuaqtlu4w4zmvwhuu0"
+          onComplete={handleVideoComplete}
+        />
+      )}
     </div>
   );
 
