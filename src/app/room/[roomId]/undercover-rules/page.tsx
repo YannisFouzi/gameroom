@@ -128,96 +128,108 @@ function UndercoverRulesContent() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 }}
-      className="bg-white/5 p-6 rounded-2xl backdrop-blur-sm border border-white/10"
+      className="bg-white/5 p-5 rounded-3xl backdrop-blur-sm border border-white/10"
     >
-      <h3 className="text-2xl font-bold text-white mb-6 text-center">
+      <h3 className="text-5xl font-bold text-white mb-8 text-center">
         Exemple
       </h3>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         {/* Équipe 1 */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-3 mb-4 justify-center">
-            <h4 className="text-xl font-bold text-white">Équipe 1</h4>
+        <div className="space-y-6">
+          <div className="flex items-center gap-3 mb-6 justify-center">
+            <h4 className="text-4xl font-bold text-white">Équipe 1</h4>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-4">
             <motion.div
-              className="flex items-center gap-3 bg-white/10 p-3 rounded-lg"
+              className="flex items-center gap-4 bg-white/10 p-4 rounded-xl"
               whileHover={{ x: 5 }}
             >
-              <span className="text-green-400">👤</span>
-              <p className="text-white/80">Joueur 2 - Mot: "Chat" (Civil)</p>
+              <span className="text-green-400 text-4xl">👤</span>
+              <p className="text-white/80 text-2xl">
+                Joueur 2 - Mot: "Chat" (Civil)
+              </p>
             </motion.div>
             <motion.div
-              className="flex items-center gap-3 bg-white/10 p-3 rounded-lg"
+              className="flex items-center gap-4 bg-white/10 p-4 rounded-xl"
               whileHover={{ x: 5 }}
             >
-              <span className="text-green-400">👤</span>
-              <p className="text-white/80">Joueur 2 - Mot: "Chat" (Civil)</p>
+              <span className="text-green-400 text-4xl">👤</span>
+              <p className="text-white/80 text-2xl">
+                Joueur 2 - Mot: "Chat" (Civil)
+              </p>
             </motion.div>
             <motion.div
-              className="flex items-center gap-3 bg-purple-500/20 p-3 rounded-lg"
+              className="flex items-center gap-4 bg-purple-500/20 p-4 rounded-xl"
               whileHover={{ x: 5 }}
             >
-              <span className="text-purple-400">🕵️</span>
-              <p className="text-white/80">
+              <span className="text-purple-400 text-4xl">🕵️</span>
+              <p className="text-white/80 text-2xl">
                 Joueur 3 - Mot: "Chien" (Undercover)
               </p>
             </motion.div>
             <motion.div
-              className="flex items-center gap-3 bg-blue-500/20 p-3 rounded-lg"
+              className="flex items-center gap-4 bg-blue-500/20 p-4 rounded-xl"
               whileHover={{ x: 5 }}
             >
-              <span className="text-blue-400">👻</span>
-              <p className="text-white/80">Joueur 4 - Pas de mot (Mr White)</p>
+              <span className="text-blue-400 text-4xl">👻</span>
+              <p className="text-white/80 text-2xl">
+                Joueur 4 - Pas de mot (Mr White)
+              </p>
             </motion.div>
           </div>
         </div>
 
         {/* Équipe 2 */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-3 mb-4 justify-center">
-            <h4 className="text-xl font-bold text-white">Équipe 2</h4>
+        <div className="space-y-6">
+          <div className="flex items-center gap-3 mb-6 justify-center">
+            <h4 className="text-4xl font-bold text-white">Équipe 2</h4>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-4">
             <motion.div
-              className="flex items-center gap-3 bg-white/10 p-3 rounded-lg"
+              className="flex items-center gap-4 bg-white/10 p-4 rounded-xl"
               whileHover={{ x: 5 }}
             >
-              <span className="text-green-400">👤</span>
-              <p className="text-white/80">Joueur 2 - Mot: "Chat" (Civil)</p>
+              <span className="text-green-400 text-4xl">👤</span>
+              <p className="text-white/80 text-2xl">
+                Joueur 2 - Mot: "Chat" (Civil)
+              </p>
             </motion.div>
             <motion.div
-              className="flex items-center gap-3 bg-white/10 p-3 rounded-lg"
+              className="flex items-center gap-4 bg-white/10 p-4 rounded-xl"
               whileHover={{ x: 5 }}
             >
-              <span className="text-green-400">👤</span>
-              <p className="text-white/80">Joueur 2 - Mot: "Chat" (Civil)</p>
+              <span className="text-green-400 text-4xl">👤</span>
+              <p className="text-white/80 text-2xl">
+                Joueur 2 - Mot: "Chat" (Civil)
+              </p>
             </motion.div>
             <motion.div
-              className="flex items-center gap-3 bg-purple-500/20 p-3 rounded-lg"
+              className="flex items-center gap-4 bg-purple-500/20 p-4 rounded-xl"
               whileHover={{ x: 5 }}
             >
-              <span className="text-purple-400">🕵️</span>
-              <p className="text-white/80">
+              <span className="text-purple-400 text-4xl">🕵️</span>
+              <p className="text-white/80 text-2xl">
                 Joueur 3 - Mot: "Chien" (Undercover)
               </p>
             </motion.div>
             <motion.div
-              className="flex items-center gap-3 bg-blue-500/20 p-3 rounded-lg"
+              className="flex items-center gap-4 bg-blue-500/20 p-4 rounded-xl"
               whileHover={{ x: 5 }}
             >
-              <span className="text-blue-400">👻</span>
-              <p className="text-white/80">Joueur 4 - Pas de mot (Mr White)</p>
+              <span className="text-blue-400 text-4xl">👻</span>
+              <p className="text-white/80 text-2xl">
+                Joueur 4 - Pas de mot (Mr White)
+              </p>
             </motion.div>
           </div>
         </div>
       </div>
 
-      <div className="mt-6 p-4 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
-        <p className="text-center text-yellow-300 text-sm">
+      <div className="mt-8 p-6 bg-yellow-500/10 rounded-xl border border-yellow-500/20">
+        <p className="text-center text-yellow-300 text-2xl leading-relaxed">
           Dans cet exemple, le mot principal est "Chat". Les Undercover ont
           "Chien" et les Mr White n'ont aucun mot.
           <br />
@@ -229,7 +241,7 @@ function UndercoverRulesContent() {
   );
 
   const MainContent = () => (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="w-[85%] mx-auto space-y-9">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -251,7 +263,7 @@ function UndercoverRulesContent() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="text-center mt-12"
+            className="text-center"
           >
             <button
               onClick={handleStart}
@@ -270,8 +282,8 @@ function UndercoverRulesContent() {
   if (!room) return <div>Chargement...</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black px-12">
+      <div className="w-[85%] mx-auto space-y-6">
         {/* Scores en haut */}
         {isHost && room.teams && gameData?.scores && (
           <div className="w-full">
