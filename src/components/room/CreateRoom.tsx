@@ -26,9 +26,21 @@ export default function CreateRoom() {
     };
   }, [audio]);
 
+  const requestFullScreen = () => {
+    const element = document.documentElement;
+    if (element.requestFullscreen) {
+      element.requestFullscreen();
+    } else if ((element as any).webkitRequestFullscreen) {
+      (element as any).webkitRequestFullscreen();
+    } else if ((element as any).msRequestFullscreen) {
+      (element as any).msRequestFullscreen();
+    }
+  };
+
   const handleCreateRoom = async () => {
     try {
       setIsLoading(true);
+      requestFullScreen();
       const hostId = generateUUID();
       const roomId = await baseRoomService.createRoom(hostId);
       localStorage.setItem(`host_${roomId}`, hostId);
