@@ -22,33 +22,45 @@ export default function DifficultyButtons({
 
   return (
     <div className="flex flex-col gap-4 items-center">
-      <h3 className="text-xl font-semibold mb-2 text-white">
+      <h3 className="text-2xl font-bold mb-4 text-white text-center">
         Dire à l'équipe adverse quelle difficulté elle veut :
       </h3>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-6 w-full max-w-md">
         <button
           onClick={() => handleDifficultySelect(2)}
-          className="bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-600"
+          className="relative overflow-hidden group bg-gradient-to-br from-green-400 to-green-600 
+          text-white text-2xl font-bold py-6 px-8 rounded-xl shadow-lg 
+          transform transition-all duration-200 hover:scale-105 hover:shadow-xl
+          active:scale-95 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50"
         >
-          2
+          <span className="relative z-10">2</span>
         </button>
         <button
           onClick={() => handleDifficultySelect(4)}
-          className="bg-yellow-500 text-white py-3 px-6 rounded-lg hover:bg-yellow-600"
+          className="relative overflow-hidden group bg-gradient-to-br from-yellow-400 to-yellow-600 
+          text-white text-2xl font-bold py-6 px-8 rounded-xl shadow-lg 
+          transform transition-all duration-200 hover:scale-105 hover:shadow-xl
+          active:scale-95 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50"
         >
-          4
+          <span className="relative z-10">4</span>
         </button>
         <button
           onClick={() => handleDifficultySelect(7)}
-          className="bg-orange-500 text-white py-3 px-6 rounded-lg hover:bg-orange-600"
+          className="relative overflow-hidden group bg-gradient-to-br from-orange-400 to-orange-600 
+          text-white text-2xl font-bold py-6 px-8 rounded-xl shadow-lg 
+          transform transition-all duration-200 hover:scale-105 hover:shadow-xl
+          active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-opacity-50"
         >
-          7
+          <span className="relative z-10">7</span>
         </button>
         <button
           onClick={() => handleDifficultySelect(10)}
-          className="bg-red-500 text-white py-3 px-6 rounded-lg hover:bg-red-600"
+          className="relative overflow-hidden group bg-gradient-to-br from-red-400 to-red-600 
+          text-white text-2xl font-bold py-6 px-8 rounded-xl shadow-lg 
+          transform transition-all duration-200 hover:scale-105 hover:shadow-xl
+          active:scale-95 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50"
         >
-          10
+          <span className="relative z-10">10</span>
         </button>
       </div>
     </div>
