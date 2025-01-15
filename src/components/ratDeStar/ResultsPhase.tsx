@@ -1,5 +1,7 @@
+import VideoOverlay from "@/components/common/VideoOverlay";
 import { Celebrity, Team } from "@/types/room";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 type ResultsPhaseProps = {
   celebrities: Record<string, Celebrity>;
@@ -18,7 +20,17 @@ export function ResultsPhase({
   onNextGame,
   teamId,
 }: ResultsPhaseProps) {
+  const [showVideo, setShowVideo] = useState(false);
   const currentTeam = teamId ? teams[teamId] : null;
+
+  const handleNextGame = () => {
+    setShowVideo(true);
+  };
+
+  const handleVideoComplete = () => {
+    setShowVideo(false);
+    onNextGame();
+  };
 
   if (!isHost) {
     return (
@@ -177,7 +189,7 @@ export function ResultsPhase({
 
       <div className="text-center py-2">
         <motion.button
-          onClick={onNextGame}
+          onClick={handleNextGame}
           className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 px-8 rounded-xl font-bold text-lg hover:opacity-90 transition-all"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -187,6 +199,13 @@ export function ResultsPhase({
           Jeu suivant →
         </motion.button>
       </div>
+
+      {showVideo && (
+        <VideoOverlay
+          publicId="video/d8gpvzqezdnj7wxi5deo"
+          onComplete={handleVideoComplete}
+        />
+      )}
     </div>
   );
 }
