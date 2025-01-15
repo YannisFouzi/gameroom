@@ -72,7 +72,7 @@ export default function PlayingPhase({
                   )}
                   <div className="flex-1">
                     <span
-                      className={`text-lg font-medium ${
+                      className={`text-3xl font-medium ${
                         isEliminated ? "text-white/50" : "text-white"
                       }`}
                     >
