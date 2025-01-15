@@ -14,12 +14,11 @@ export default function ScoreGauge({
   teamName,
   avatar,
 }: ScoreGaugeProps) {
-  console.log("ScoreGauge render:", { score, teamName });
   const [currentScore, setCurrentScore] = useState(score);
 
-  const radius = 100;
-  const startColor = "#3B82F6";
-  const endColor = "#EF4444";
+  const radius = 90;
+  const startColor = "#6495ed";
+  const endColor = "#dc143c";
 
   useEffect(() => {
     setCurrentScore(score);
@@ -53,56 +52,43 @@ export default function ScoreGauge({
   ];
 
   return (
-    <div className="flex flex-col items-center">
-      <img
-        src={avatar}
-        alt={`Avatar ${teamName}`}
-        className="w-16 h-16 mb-2 rounded-full"
-      />
-      <h3 className="text-lg font-semibold mb-2 text-white">{teamName}</h3>
-      <LiquidFillGauge
-        key={currentScore}
-        width={radius * 2}
-        height={radius * 2}
-        value={percentage}
-        textRenderer={(props) => {
-          const value = Math.round((props.value * 25) / 100);
-          const radius = Math.min(props.height / 2, props.width / 2);
-          const textPixels = (props.textSize * radius) / 2;
-          const valueStyle = {
-            fontSize: textPixels,
-          };
-
-          return (
-            <tspan>
-              <tspan className="value" style={valueStyle}>
-                {value}
+    <div className="flex flex-col items-center p-4 bg-gray-800/50 rounded-2xl backdrop-blur-sm min-w-[200px]">
+      <div className="relative mb-4">
+        <img
+          src={avatar}
+          alt={`Avatar ${teamName}`}
+          className="w-20 h-20 rounded-full border-4 border-white/20 shadow-lg transform hover:scale-105 transition-transform"
+        />
+      </div>
+      <h3 className="text-xl font-bold mb-4 text-white bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+        {teamName}
+      </h3>
+      <div className="mx-auto">
+        <LiquidFillGauge
+          width={radius * 2}
+          height={radius * 2}
+          value={percentage}
+          textRenderer={(props) => {
+            const value = Math.round((props.value * 25) / 100);
+            const radius = Math.min(props.height / 2, props.width / 2);
+            const textPixels = (props.textSize * radius) / 2;
+            return (
+              <tspan>
+                <tspan style={{ fontSize: textPixels }}>{value}</tspan>
+                <tspan style={{ fontSize: textPixels * 0.4 }}>/25</tspan>
               </tspan>
-              <tspan style={{ fontSize: textPixels * 0.4 }}></tspan>
-            </tspan>
-          );
-        }}
-        riseAnimation
-        waveAnimation
-        waveFrequency={2}
-        waveAmplitude={1}
-        gradient
-        gradientStops={gradientStops}
-        circleStyle={{
-          fill: fillColor,
-        }}
-        waveStyle={{
-          fill: fillColor,
-        }}
-        textStyle={{
-          fill: "#fff",
-          fontFamily: "Arial",
-        }}
-        waveTextStyle={{
-          fill: "#fff",
-          fontFamily: "Arial",
-        }}
-      />
+            );
+          }}
+          riseAnimation
+          waveAnimation
+          gradient
+          gradientStops={gradientStops}
+          circleStyle={{ fill: fillColor }}
+          waveStyle={{ fill: fillColor }}
+          textStyle={{ fill: "#ffffff" }}
+          waveTextStyle={{ fill: "#000000" }}
+        />
+      </div>
     </div>
   );
 }

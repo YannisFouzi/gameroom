@@ -32,12 +32,13 @@ export default function HostWheel({
     <div className="flex flex-col items-center overflow-x-hidden">
       <div className="flex justify-around mb-8">
         {teamIds.map((teamId) => (
-          <ScoreGauge
-            key={teamId}
-            score={scores[teamId] || 0}
-            teamName={teams[teamId]?.name || "Équipe"}
-            avatar={teams[teamId]?.avatar || ""}
-          />
+          <div key={teamId} className="mx-8">
+            <ScoreGauge
+              score={scores[teamId] || 0}
+              teamName={teams[teamId]?.name || "Équipe"}
+              avatar={teams[teamId]?.avatar || ""}
+            />
+          </div>
         ))}
       </div>
 
