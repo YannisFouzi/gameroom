@@ -54,9 +54,13 @@ export default function HostWheel({
           backgroundColors={wheelData.map((d) => d.style.backgroundColor)}
           textColors={wheelData.map((d) => d.style.textColor)}
           fontSize={24}
-          outerBorderWidth={3}
-          radiusLineWidth={2}
+          outerBorderWidth={5}
+          radiusLineWidth={4}
           spinDuration={0.8}
+          innerBorderColor="white"
+          innerBorderWidth={10}
+          outerBorderColor="white"
+          radiusLineColor="white"
         />
       </div>
 
