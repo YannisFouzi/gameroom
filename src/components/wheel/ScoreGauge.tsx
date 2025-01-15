@@ -68,10 +68,12 @@ export default function ScoreGauge({
           width={radius * 2}
           height={radius * 2}
           value={percentage}
+          textOffsetX={0}
+          textOffsetY={8}
           textRenderer={(props) => {
             const value = Math.round((props.value * 25) / 100);
             const radius = Math.min(props.height / 2, props.width / 2);
-            const textPixels = (props.textSize * radius) / 2;
+            const textPixels = (props.textSize * radius) / 1.5;
             return (
               <tspan>
                 <tspan style={{ fontSize: textPixels }}>{value}</tspan>
