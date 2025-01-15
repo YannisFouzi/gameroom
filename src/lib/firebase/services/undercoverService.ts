@@ -9,9 +9,9 @@ import { db } from "../config";
 import { baseRoomService } from "./baseRoomService";
 
 const WORDS_BY_ROUND = [
-  { Civil: "asterix", undercover: "obelix" },
-  { Civil: "om", undercover: "marseille" },
-  { Civil: "linux", undercover: "windows" },
+  { Civil: "Grego", undercover: "Palmiye" },
+  { Civil: "Ski Nautique", undercover: "Wakeboard" },
+  { Civil: "Bain", undercover: "Douche" },
 ];
 
 function assignRoles(teams: Record<string, Team>): UndercoverPlayer[] {

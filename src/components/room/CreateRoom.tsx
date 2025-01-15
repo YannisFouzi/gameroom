@@ -111,7 +111,7 @@ export default function CreateRoom() {
                   ❄️
                 </motion.span>
                 <span className="bg-gradient-to-r from-blue-200 to-white text-transparent bg-clip-text font-extrabold">
-                  Montez le volume !
+                  Montez le volume sur l'ordinateur et sur vos téléphones !
                 </span>
                 <motion.span
                   animate={{

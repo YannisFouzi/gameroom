@@ -329,7 +329,7 @@ export const millionaireQuestions: Record<string, MillionaireQuestion[]> = {
     {
       id: "a1",
       text: 'Qui a interprété la chanson "Voyage, Voyage" en 1986 ?',
-      answers: ["Jeanne Mas", "France Gall", "Sans désir", "Mylène Farmer"],
+      answers: ["Jeanne Mas", "France Gall", "Desireless", "Mylène Farmer"],
       correctAnswer: 2,
       points: 1,
       category: "annees80",
