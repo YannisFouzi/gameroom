@@ -16,16 +16,8 @@ export default function TeamForm({
   isLoading = false,
 }: TeamFormProps) {
   const [teamName, setTeamName] = useState("");
-  const [members, setMembers] = useState<string[]>([""]);
+  const [members, setMembers] = useState<string[]>(["", "", "", ""]);
   const [avatar, setAvatar] = useState("/images/avatar/bruno.jpg");
-
-  const handleAddMember = () => {
-    setMembers([...members, ""]);
-  };
-
-  const handleRemoveMember = (index: number) => {
-    setMembers(members.filter((_, i) => i !== index));
-  };
 
   const handleMemberChange = (index: number, value: string) => {
     const newMembers = [...members];
@@ -64,14 +56,14 @@ export default function TeamForm({
 
       <div>
         <label className="block text-lg font-medium mb-3 text-white">
-          Nom de votre équipe
+          Trouvez un nom d'équipe qui déchire
         </label>
         <input
           type="text"
           value={teamName}
           onChange={(e) => setTeamName(e.target.value)}
           className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-          placeholder="Les Rois de la Glisse..."
+          placeholder="Les rois de la glisse"
           required
           minLength={2}
           maxLength={30}
@@ -80,7 +72,7 @@ export default function TeamForm({
 
       <div className="space-y-4">
         <label className="block text-lg font-medium text-white">
-          Qui participe ?
+          Présentez votre dream team
         </label>
         {members.map((member, index) => (
           <motion.div
@@ -94,39 +86,21 @@ export default function TeamForm({
               value={member}
               onChange={(e) => handleMemberChange(index, e.target.value)}
               className="flex-1 p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-              placeholder={`Participant ${index + 1}`}
+              placeholder={
+                ["Joueur 1", "Joueur 2", "Joueur 3", "Joueur 4"][index]
+              }
               required
               minLength={2}
               maxLength={20}
             />
-            {members.length > 1 && (
-              <motion.button
-                type="button"
-                onClick={() => handleRemoveMember(index)}
-                className="px-4 py-2 text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                ✕
-              </motion.button>
-            )}
           </motion.div>
         ))}
-        <motion.button
-          type="button"
-          onClick={handleAddMember}
-          className="w-full p-3 border border-white/20 rounded-lg text-white hover:bg-white/5 transition-all"
-          whileHover={{ scale: 1.01 }}
-          whileTap={{ scale: 0.99 }}
-        >
-          + Ajouter un participant
-        </motion.button>
       </div>
 
       <motion.button
         type="submit"
         disabled={
-          isLoading || !teamName.trim() || members.every((m) => !m.trim())
+          isLoading || !teamName.trim() || members.some((m) => !m.trim())
         }
         className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-6 rounded-lg font-bold text-lg shadow-lg hover:shadow-xl disabled:opacity-50 transition-all"
         whileHover={{ scale: 1.02 }}
