@@ -77,7 +77,7 @@ export function ExplanationPhase({
           <div className="text-6xl mb-6">👀</div>
           <h3 className="text-3xl font-bold text-white mb-4">1. Observation</h3>
           <p className="text-2xl text-white/80 leading-relaxed">
-            30 secondes pour scanner les stars ! Ouvrez grand les yeux 🔍
+            30 secondes pour retenir les célébrités ! Ouvrez grand les yeux 🔍
           </p>
         </motion.div>
 
