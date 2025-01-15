@@ -1,11 +1,12 @@
 "use client";
 
+import VideoOverlay from "@/components/common/VideoOverlay";
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
 import { gameTransitionService } from "@/lib/firebase/services";
 import { motion } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type TeamWithTotalScore = {
   teamId: string;
@@ -20,6 +21,7 @@ function WheelResultsContent() {
   const { room } = useRoom();
   const { isHost, teamId } = usePlayer(room?.id || "");
   const router = useRouter();
+  const [showVideo, setShowVideo] = useState(false);
 
   useEffect(() => {
     // Rediriger vers les règles d'Undercover si c'est la phase suivante
@@ -123,6 +125,13 @@ function WheelResultsContent() {
           Continuer vers "Undercover" →
         </button>
       </div>
+
+      {showVideo && (
+        <VideoOverlay
+          publicId="video/jg4irxswuvvh6q1ahopr"
+          onComplete={handleVideoComplete}
+        />
+      )}
     </div>
   );
 
@@ -182,8 +191,17 @@ function WheelResultsContent() {
   const handleNextGame = async () => {
     if (!room) return;
     try {
-      await gameTransitionService.startUndercoverGame(room.id);
-      router.push(`/room/${room.id}/undercover-rules`);
+      setShowVideo(true);
+    } catch (error) {
+      console.error("Erreur lors du passage au jeu suivant:", error);
+    }
+  };
+
+  const handleVideoComplete = async () => {
+    try {
+      await gameTransitionService.startUndercoverGame(room!.id);
+      setShowVideo(false);
+      router.push(`/room/${room!.id}/undercover-rules`);
     } catch (error) {
       console.error("Erreur lors du passage au jeu suivant:", error);
     }
