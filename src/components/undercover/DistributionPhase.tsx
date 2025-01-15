@@ -47,15 +47,21 @@ export default function DistributionPhase({
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-8">
-            Distribution des mots
-          </h2>
-          <p className="text-xl text-white/80">
-            Les joueurs découvrent leur mot à tour de rôle...
-          </p>
-          <p className="text-2xl font-bold text-white mt-8">
-            Au tour de : {currentPlayer?.name}
-          </p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-8"
+          >
+            <h2 className="text-3xl font-bold text-white mb-8">
+              Distribution des mots
+            </h2>
+            <p className="text-xl text-white/80">
+              Les joueurs découvrent leur mot à tour de rôle...
+            </p>
+            <p className="text-2xl font-bold text-white mt-8">
+              Au tour de : {currentPlayer?.name}
+            </p>
+          </motion.div>
         </div>
       </div>
     );
@@ -103,7 +109,7 @@ export default function DistributionPhase({
           </>
         ) : (
           <div className="text-xl text-white/80">
-            Au tour de {currentPlayer?.name} de découvrir son mot...
+            En attente de l'autre équipe...
           </div>
         )}
       </div>

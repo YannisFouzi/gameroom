@@ -3,6 +3,7 @@
 import { useRoom } from "@/contexts/RoomContext";
 import { Team } from "@/types/room";
 import { UndercoverGameData } from "@/types/undercover";
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import DistributionPhase from "./DistributionPhase";
@@ -40,10 +41,19 @@ export default function UndercoverGame({
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black">
       <div className="max-w-7xl mx-auto p-4 space-y-6">
-        {/* Scores en haut */}
+        {/* Section du haut avec scores et message */}
         {isHost && room.teams && (
-          <div className="w-full">
+          <div className="w-full space-y-8">
             <ScoreDisplay scores={gameData.scores} teams={room.teams} />
+            {gameData.currentPhase === "distribution" && (
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-6xl font-extrabold text-center bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent"
+              >
+                Découvrez vos mots !
+              </motion.h1>
+            )}
           </div>
         )}
 
