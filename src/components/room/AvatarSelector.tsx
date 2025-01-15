@@ -47,9 +47,9 @@ export default function AvatarSelector({
           key={avatar}
           type="button"
           onClick={() => handleAvatarClick(avatar)}
-          className={`relative aspect-square overflow-hidden rounded-full border-2 transition-all ${
+          className={`relative aspect-square overflow-hidden rounded-full border-4 transition-all ${
             selectedAvatar === avatar
-              ? "border-purple-500 scale-105"
+              ? "border-purple-500 scale-105 shadow-[0_0_15px_rgba(168,85,247,0.5)]"
               : "border-transparent hover:border-purple-300"
           }`}
           whileHover={{ scale: 1.05 }}
