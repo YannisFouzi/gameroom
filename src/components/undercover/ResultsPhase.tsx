@@ -24,6 +24,27 @@ export default function ResultsPhase({
   const isTeamReady = teamId && gameData.teamsReady.includes(teamId);
   const router = useRouter();
 
+  const teamColors: Record<string, string> = {};
+  let colorIndex = 0;
+
+  const getTeamBackgroundColor = (player: any) => {
+    if (teamColors[player.teamId]) {
+      return teamColors[player.teamId];
+    }
+
+    const colors = [
+      "bg-blue-900/30",
+      "bg-red-900/30",
+      "bg-green-900/30",
+      "bg-purple-900/30",
+    ];
+
+    teamColors[player.teamId] = colors[colorIndex % colors.length];
+    colorIndex++;
+
+    return teamColors[player.teamId] || "bg-white/10";
+  };
+
   useEffect(() => {
     const checkGameEnd = async () => {
       const gameOver = await undercoverService.checkGameEnd(roomId);
@@ -75,8 +96,18 @@ export default function ResultsPhase({
             </div>
           </motion.div>
         )}
-
-        {/* Ordre de passage */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center"
+        >
+          <h2 className="text-3xl font-bold text-white mb-4">
+            Ordre de passage
+          </h2>
+          <p className="text-lg text-white/80 mb-8">
+            Chaque joueur doit donner un mot qui décrit son mot secret
+          </p>
+        </motion.div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -98,7 +129,7 @@ export default function ResultsPhase({
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                   className={`flex items-center gap-4 p-3 rounded-lg ${
-                    isEliminated ? "bg-white/5" : "bg-white/10"
+                    isEliminated ? "bg-white/5" : getTeamBackgroundColor(player)
                   }`}
                 >
                   {!isEliminated && (
@@ -108,7 +139,7 @@ export default function ResultsPhase({
                   )}
                   <div className="flex-1">
                     <span
-                      className={`text-lg font-medium ${
+                      className={`text-1xl font-medium ${
                         isEliminated ? "text-white/50" : "text-white"
                       }`}
                     >
@@ -122,7 +153,6 @@ export default function ResultsPhase({
           </div>
         </motion.div>
 
-        {/* Boutons de contrôle uniquement pour les joueurs non-hôtes */}
         {!isHost && !isGameOver && (
           <>
             {!isTeamReady ? (
@@ -156,7 +186,6 @@ export default function ResultsPhase({
           </motion.div>
         )}
 
-        {/* Bouton "Partie suivante" uniquement pour l'hôte */}
         {isHost && isGameOver && (
           <button
             onClick={handleNextGame}

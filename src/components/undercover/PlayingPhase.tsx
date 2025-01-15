@@ -25,6 +25,29 @@ export default function PlayingPhase({
 
   const isTeamReady = teamId && gameData.teamsReady.includes(teamId);
 
+  const teamColors: Record<string, string> = {};
+  let colorIndex = 0;
+
+  const getTeamBackgroundColor = (player: any) => {
+    // Si on a déjà vu ce teamId, on utilise la même couleur
+    if (teamColors[player.teamId]) {
+      return teamColors[player.teamId];
+    }
+
+    // Sinon, on assigne une nouvelle couleur
+    const colors = [
+      "bg-blue-900/30",
+      "bg-red-900/30",
+      "bg-green-900/30",
+      "bg-purple-900/30",
+    ];
+
+    teamColors[player.teamId] = colors[colorIndex % colors.length];
+    colorIndex++;
+
+    return teamColors[player.teamId] || "bg-white/10";
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4">
       <div className="max-w-4xl mx-auto space-y-8">
@@ -62,7 +85,7 @@ export default function PlayingPhase({
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                   className={`flex items-center gap-4 p-3 rounded-lg ${
-                    isEliminated ? "bg-white/5" : "bg-white/10"
+                    isEliminated ? "bg-white/5" : getTeamBackgroundColor(player)
                   }`}
                 >
                   {!isEliminated && (
