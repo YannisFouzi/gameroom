@@ -282,8 +282,8 @@ function UndercoverRulesContent() {
   if (!room) return <div>Chargement...</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black px-12">
-      <div className="w-[85%] mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black px-12 flex items-center">
+      <div className="w-[85%] mx-auto space-y-6 my-auto">
         {/* Scores en haut */}
         {isHost && room.teams && gameData?.scores && (
           <div className="w-full">
@@ -292,7 +292,7 @@ function UndercoverRulesContent() {
         )}
 
         {/* Contenu principal */}
-        <div className="w-full">
+        <div className="w-full flex items-center">
           <MainContent />
         </div>
       </div>
