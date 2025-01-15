@@ -34,134 +34,235 @@ function UndercoverRulesContent() {
     }
   };
 
+  const RulesForPlayers = () => (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Phase 1: Distribution */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="bg-white/5 p-6 rounded-2xl backdrop-blur-sm border border-white/10 relative overflow-hidden group hover:bg-white/10 transition-all"
+      >
+        <div className="absolute -right-4 -top-4 text-6xl opacity-10 group-hover:opacity-20 transition-opacity">
+          🎲
+        </div>
+        <h3 className="text-2xl font-bold text-white mb-3">Phase 1</h3>
+        <div className="space-y-2">
+          <motion.div className="flex items-center gap-2" whileHover={{ x: 5 }}>
+            <span className="text-purple-400">👥</span>
+            <p className="text-white/80">Chaque joueur reçoit un mot secret</p>
+          </motion.div>
+          <motion.div className="flex items-center gap-2" whileHover={{ x: 5 }}>
+            <span className="text-purple-400">🕵️</span>
+            <p className="text-white/80">
+              1 Undercover par équipe : mot différent
+            </p>
+          </motion.div>
+          <motion.div className="flex items-center gap-2" whileHover={{ x: 5 }}>
+            <span className="text-purple-400">👻</span>
+            <p className="text-white/80">1 Mr White par équipe : sans mot</p>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* Phase 2: Jeu */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="bg-white/5 p-6 rounded-2xl backdrop-blur-sm border border-white/10 relative overflow-hidden group hover:bg-white/10 transition-all"
+      >
+        <div className="absolute -right-4 -top-4 text-6xl opacity-10 group-hover:opacity-20 transition-opacity">
+          💭
+        </div>
+        <h3 className="text-2xl font-bold text-white mb-3">Phase 2</h3>
+        <div className="space-y-2">
+          <motion.div className="flex items-center gap-2" whileHover={{ x: 5 }}>
+            <span className="text-purple-400">🎯</span>
+            <p className="text-white/80">Tour par tour : donnez un indice</p>
+          </motion.div>
+          <motion.div className="flex items-center gap-2" whileHover={{ x: 5 }}>
+            <span className="text-purple-400">🤫</span>
+            <p className="text-white/80">Soyez subtils !</p>
+          </motion.div>
+          <motion.div className="flex items-center gap-2" whileHover={{ x: 5 }}>
+            <span className="text-purple-400">🔍</span>
+            <p className="text-white/80">Repérez les suspects</p>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* Phase 3: Vote */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="bg-white/5 p-6 rounded-2xl backdrop-blur-sm border border-white/10 relative overflow-hidden group hover:bg-white/10 transition-all"
+      >
+        <div className="absolute -right-4 -top-4 text-6xl opacity-10 group-hover:opacity-20 transition-opacity">
+          🏆
+        </div>
+        <h3 className="text-2xl font-bold text-white mb-3">Phase 3</h3>
+        <div className="space-y-2">
+          <motion.div className="flex items-center gap-2" whileHover={{ x: 5 }}>
+            <span className="text-purple-400">🗳️</span>
+            <p className="text-white/80">Votez pour éliminer un suspect</p>
+          </motion.div>
+          <motion.div className="flex items-center gap-2" whileHover={{ x: 5 }}>
+            <span className="text-purple-400">💰</span>
+            <p className="text-white/80">
+              5 pts par Undercover, 3 pts par Mr White
+            </p>
+          </motion.div>
+          <motion.div className="flex items-center gap-2" whileHover={{ x: 5 }}>
+            <span className="text-purple-400">🏆</span>
+            <p className="text-white/80">3 parties pour la victoire finale</p>
+          </motion.div>
+        </div>
+      </motion.div>
+    </div>
+  );
+
+  const ExampleForHost = () => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1 }}
+      className="bg-white/5 p-6 rounded-2xl backdrop-blur-sm border border-white/10"
+    >
+      <h3 className="text-2xl font-bold text-white mb-6 text-center">
+        Exemple
+      </h3>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Équipe 1 */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-3 mb-4 justify-center">
+            <h4 className="text-xl font-bold text-white">Équipe 1</h4>
+          </div>
+
+          <div className="space-y-2">
+            <motion.div
+              className="flex items-center gap-3 bg-white/10 p-3 rounded-lg"
+              whileHover={{ x: 5 }}
+            >
+              <span className="text-green-400">👤</span>
+              <p className="text-white/80">Joueur 2 - Mot: "Chat" (Civil)</p>
+            </motion.div>
+            <motion.div
+              className="flex items-center gap-3 bg-white/10 p-3 rounded-lg"
+              whileHover={{ x: 5 }}
+            >
+              <span className="text-green-400">👤</span>
+              <p className="text-white/80">Joueur 2 - Mot: "Chat" (Civil)</p>
+            </motion.div>
+            <motion.div
+              className="flex items-center gap-3 bg-purple-500/20 p-3 rounded-lg"
+              whileHover={{ x: 5 }}
+            >
+              <span className="text-purple-400">🕵️</span>
+              <p className="text-white/80">
+                Joueur 3 - Mot: "Chien" (Undercover)
+              </p>
+            </motion.div>
+            <motion.div
+              className="flex items-center gap-3 bg-blue-500/20 p-3 rounded-lg"
+              whileHover={{ x: 5 }}
+            >
+              <span className="text-blue-400">👻</span>
+              <p className="text-white/80">Joueur 4 - Pas de mot (Mr White)</p>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Équipe 2 */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-3 mb-4 justify-center">
+            <h4 className="text-xl font-bold text-white">Équipe 2</h4>
+          </div>
+
+          <div className="space-y-2">
+            <motion.div
+              className="flex items-center gap-3 bg-white/10 p-3 rounded-lg"
+              whileHover={{ x: 5 }}
+            >
+              <span className="text-green-400">👤</span>
+              <p className="text-white/80">Joueur 2 - Mot: "Chat" (Civil)</p>
+            </motion.div>
+            <motion.div
+              className="flex items-center gap-3 bg-white/10 p-3 rounded-lg"
+              whileHover={{ x: 5 }}
+            >
+              <span className="text-green-400">👤</span>
+              <p className="text-white/80">Joueur 2 - Mot: "Chat" (Civil)</p>
+            </motion.div>
+            <motion.div
+              className="flex items-center gap-3 bg-purple-500/20 p-3 rounded-lg"
+              whileHover={{ x: 5 }}
+            >
+              <span className="text-purple-400">🕵️</span>
+              <p className="text-white/80">
+                Joueur 3 - Mot: "Chien" (Undercover)
+              </p>
+            </motion.div>
+            <motion.div
+              className="flex items-center gap-3 bg-blue-500/20 p-3 rounded-lg"
+              whileHover={{ x: 5 }}
+            >
+              <span className="text-blue-400">👻</span>
+              <p className="text-white/80">Joueur 4 - Pas de mot (Mr White)</p>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 p-4 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
+        <p className="text-center text-yellow-300 text-sm">
+          Dans cet exemple, le mot principal est "Chat". Les Undercover ont
+          "Chien" et les Mr White n'ont aucun mot.
+          <br />
+          Les joueurs doivent donner des indices à tour de rôle pour trouver qui
+          a un mot différent !
+        </p>
+      </div>
+    </motion.div>
+  );
+
   const MainContent = () => (
-    <div className="max-w-1xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-8">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="text-center mb-4"
+        className="text-center"
       >
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent">
+        <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent mb-2">
           Undercover
-        </h2>
-        <p className="text-lg text-white/80">Trouvez l'imposteur !</p>
+        </h1>
+        <p className="text-xl text-white/80">
+          Infiltrez-vous et démasquez les imposteurs !
+        </p>
       </motion.div>
 
-      {!isHost && currentTeam && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center space-y-8 mb-12"
-        >
-          <motion.div
-            animate={{
-              scale: [1, 1.02, 1],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            <img
-              src={currentTeam.avatar}
-              alt={currentTeam.name}
-              className="w-24 h-24 mx-auto"
-            />
-          </motion.div>
-        </motion.div>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white/5 p-4 rounded-xl backdrop-blur-sm border border-white/10"
-        >
-          <div className="text-3xl mb-2">🕵️</div>
-          <h3 className="text-xl font-bold text-white mb-1">Concept du jeu</h3>
-          <p className="text-lg text-white/80">
-            Chaque joueur reçoit un mot secret sur le télépone de l'équipe.
-            <br />
-            Par équipe :<br />• Un joueur reçoit un mot différent : c'est
-            l'Undercover <br />• Un autre n'aura pas de mot attribué : c'est le
-            Mr White
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white/5 p-4 rounded-xl backdrop-blur-sm border border-white/10"
-        >
-          <div className="text-3xl mb-2">🎯</div>
-          <h3 className="text-xl font-bold text-white mb-1">Tour par tour</h3>
-          <p className="text-lg text-white/80">
-            À tour de rôle, chaque joueur doit donner un mot qui décrit son mot
-            secret, sans le révéler directement. Soyez subtils pour ne pas vous
-            faire démasquer !
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-white/5 p-4 rounded-xl backdrop-blur-sm border border-white/10"
-        >
-          <div className="text-3xl mb-2">🗳️</div>
-          <h3 className="text-xl font-bold text-white mb-1">Phase de vote</h3>
-          <p className="text-lg text-white/80">
-            Après chaque tour, chaque équipe votent pour éliminer celui qu'ils
-            soupçonnent dans l'autre équipe.
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="bg-white/5 p-4 rounded-xl backdrop-blur-sm border border-white/10"
-        >
-          <div className="text-3xl mb-2">👑</div>
-          <h3 className="text-xl font-bold text-white mb-1">Victoire</h3>
-          <p className="text-lg text-white/80">
-            La première équipe à éliminer l'Undercover et le Mr White adverse
-            gagne !
-          </p>
-        </motion.div>
-      </div>
-
-      {isHost && (
+      {/* Afficher le contenu approprié selon le rôle */}
+      {isHost ? (
         <>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="bg-white/5 p-4 rounded-xl backdrop-blur-sm border border-white/10 text-center w-full"
-          >
-            <p className="text-lg text-white/80">
-              Undercover éliminé = 5 points, Mr White = 3 points.
-              <br />
-              Ce jeu possède 3 parties.
-            </p>
-          </motion.div>
-
+          <ExampleForHost />
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center mt-8"
+            transition={{ delay: 0.4 }}
+            className="text-center mt-12"
           >
             <button
               onClick={handleStart}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-bold text-lg shadow-lg hover:opacity-90 transition-all"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-8 rounded-xl font-bold text-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
             >
-              Commencer le jeu →
+              Lancer la partie →
             </button>
           </motion.div>
         </>
+      ) : (
+        <RulesForPlayers />
       )}
     </div>
   );
