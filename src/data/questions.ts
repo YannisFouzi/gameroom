@@ -279,10 +279,10 @@ export const questions: Record<Theme, Record<string, Question[]>> = {
     Chanteuses: [
       {
         id: "chant1",
-        text: 'Qui chante "T\'as le look coco" ?',
-        answer: "laroche valmont",
+        text: 'Qui chante "Johnny, Johnny" ?',
+        answer: "Jeanne Mas",
         difficulty: 2,
-        specialVideo: "ttmc/khpihscztdtrzlxeutil",
+        specialVideo: "ttmc/p0vwac0d5oguxefwqqn0",
       },
       {
         id: "chant2",
@@ -548,8 +548,8 @@ export const questions: Record<Theme, Record<string, Question[]>> = {
     "Les Rois Français au Moyen Âge": [
       {
         id: "ma1",
-        text: "Qui était le dernier roi de la dynastie des Mérovingiens ?",
-        answer: "Clovis II",
+        text: "Je suis considéré comme le premier roi de France. Qui suis-je ?",
+        answer: "Clovis Ier",
         difficulty: 2,
       },
       {
