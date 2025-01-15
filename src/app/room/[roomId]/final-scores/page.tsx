@@ -3,6 +3,7 @@
 import { RoomProvider, useRoom } from "@/contexts/RoomContext";
 import { usePlayer } from "@/hooks/usePlayer";
 import { GameScores } from "@/types/room";
+import confetti from "canvas-confetti";
 import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -13,6 +14,102 @@ function FinalScoresContent() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [volume, setVolume] = useState(0.2);
   const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    const colors = [
+      "#FFD700",
+      "#FF1493",
+      "#00FF00",
+      "#00BFFF",
+      "#FF4500",
+      "#9400D3",
+    ];
+
+    const firework = (x: number) => {
+      const duration = 3000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+      const interval: any = setInterval(() => {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        const particleCount = 50 * (timeLeft / duration);
+        confetti({
+          ...defaults,
+          particleCount,
+          origin: { x, y: 0.6 },
+          colors,
+          shapes: ["star", "circle"],
+          scalar: 2,
+        });
+      }, 250);
+    };
+
+    const bigExplosion = () => {
+      confetti({
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors,
+        shapes: ["star"],
+        scalar: 2,
+        ticks: 300,
+        gravity: 1.2,
+        drift: 0,
+        startVelocity: 35,
+      });
+    };
+
+    const sideCannons = () => {
+      confetti({
+        particleCount: 80,
+        angle: 60,
+        spread: 70,
+        origin: { x: 0, y: 0.6 },
+        colors,
+      });
+      confetti({
+        particleCount: 80,
+        angle: 120,
+        spread: 70,
+        origin: { x: 1, y: 0.6 },
+        colors,
+      });
+    };
+
+    // Séquence d'animations
+    const runAnimation = () => {
+      // Explosion initiale
+      bigExplosion();
+
+      // Canons latéraux après 500ms
+      setTimeout(sideCannons, 500);
+
+      // Feux d'artifice après 1s
+      setTimeout(() => {
+        firework(0.25);
+        setTimeout(() => firework(0.75), 200);
+      }, 1000);
+    };
+
+    // Lancer la première séquence
+    runAnimation();
+
+    // Répéter la séquence toutes les 2 secondes pendant 5 secondes
+    const interval = setInterval(runAnimation, 2000);
+    const timeout = setTimeout(() => {
+      clearInterval(interval);
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, []);
 
   useEffect(() => {
     if (!isHost || isInitialized) return;
