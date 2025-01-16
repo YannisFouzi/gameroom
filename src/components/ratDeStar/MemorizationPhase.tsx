@@ -34,7 +34,7 @@ export function MemorizationPhase({
     const interval = setInterval(() => {
       const now = Date.now();
       const elapsed = Math.floor((now - start) / 1000);
-      const remaining = Math.max(0, 30 - elapsed);
+      const remaining = Math.max(0, 3 - elapsed);
       setTimeLeft(remaining);
     }, 100);
 

@@ -11,6 +11,7 @@ import {
   gameTransitionService,
   jokerService,
   millionaireService,
+  timerService,
 } from "@/lib/firebase/services";
 import {
   AnswerState,
@@ -57,6 +58,10 @@ function MillionaireContent() {
     hiddenAnswers: room?.gameData?.hiddenAnswers || [],
     doubleAnswerActive: room?.gameData?.doubleAnswerActive || false,
     isBlinking: room?.gameData?.isBlinking || false,
+    timer: room?.gameData?.timer || {
+      currentTime: 60,
+      isRunning: false,
+    },
   };
 
   const currentTeam = gameData.remainingTeams[gameData.currentTeamIndex];
@@ -196,6 +201,20 @@ function MillionaireContent() {
         fiftyFifty: false,
         doubleAnswer: false,
       };
+
+  useEffect(() => {
+    if (
+      !room ||
+      !isHost ||
+      gameData.currentQuestionIndex < 0 ||
+      room.gameData?.timer?.isRunning ||
+      room.gameData?.answerState === "correct" ||
+      room.gameData?.answerState === "incorrect"
+    )
+      return;
+
+    timerService.startTimer(room.id);
+  }, [gameData.currentQuestionIndex, isHost, room]);
 
   if (!room || !gameData) return <div>Chargement...</div>;
 

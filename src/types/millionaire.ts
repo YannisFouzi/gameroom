@@ -1,5 +1,3 @@
-import { Timestamp } from "firebase/firestore";
-
 export type MillionaireCategory =
   | "histoire"
   | "sport"
@@ -43,9 +41,8 @@ export interface MillionaireGameData {
   hiddenAnswers: number[]; // Ajouter ce champ pour les réponses masquées par le 50:50
   doubleAnswerActive: boolean;
   isBlinking: boolean;
-  timer?: {
-    startTime: Timestamp;
-    duration: number;
-    isPaused: boolean;
+  timer: {
+    currentTime: number; // temps actuel en secondes (60 à 0)
+    isRunning: boolean; // si le timer tourne ou est en pause
   };
 }

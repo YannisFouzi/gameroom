@@ -1,6 +1,6 @@
 import { useAudio } from "@/hooks/useAudio";
 import { db } from "@/lib/firebase";
-import { timerService } from "@/lib/firebase/services/millionaireService";
+import { timerService } from "@/lib/firebase/services";
 import { MillionaireQuestion } from "@/types/millionaire";
 import { doc, updateDoc } from "firebase/firestore";
 import { motion } from "framer-motion";
@@ -111,35 +111,40 @@ export default function QuestionDisplay({
   }, [questionIndex, isHost]);
 
   useEffect(() => {
-    if (!room.gameData?.timer || room.gameData.timer.isPaused) return;
+    if (!isHost || !room?.gameData?.timer?.isRunning || !room) return;
 
-    const calculateRemainingTime = () => {
-      const startTime = room.gameData?.timer?.startTime;
-      if (!startTime) return 60;
+    const interval = setInterval(async () => {
+      const currentTime = room.gameData.timer.currentTime;
 
-      const duration = room.gameData?.timer?.duration || 60;
-      const elapsed = (Date.now() - startTime) / 1000;
-      return Math.max(0, Math.round(duration - elapsed));
-    };
-
-    const interval = setInterval(() => {
-      const remainingTime = calculateRemainingTime();
-      setDisplayTime(remainingTime);
-
-      if (remainingTime <= 0) {
+      if (currentTime > 0) {
+        await timerService.updateTimer(room.id, currentTime - 1);
+      } else {
         clearInterval(interval);
-        handleTimeUp();
       }
-    }, 100);
+    }, 1000);
 
     return () => clearInterval(interval);
-  }, [room.gameData?.timer]);
+  }, [
+    isHost,
+    room?.id,
+    room?.gameData?.timer?.isRunning,
+    room?.gameData?.timer?.currentTime,
+  ]);
 
   useEffect(() => {
-    if (isCurrentTeam && displayTime === 15) {
+    const currentTime = room?.gameData?.timer?.currentTime ?? 60;
+    setDisplayTime(currentTime);
+
+    // Jouer le son de suspense à 15 secondes
+    if (currentTime === 15 && isCurrentTeam) {
       playSuspens();
     }
-  }, [displayTime, isCurrentTeam]);
+
+    // Gérer la fin du timer
+    if (currentTime === 0 && room?.gameData?.timer?.isRunning === false) {
+      handleTimeUp();
+    }
+  }, [room?.gameData?.timer]);
 
   useEffect(() => {
     if (questionIndex === 0 && isLoaded && isCurrentTeam) {
@@ -201,15 +206,21 @@ export default function QuestionDisplay({
   };
 
   const handleValidate = async () => {
-    const roomRef = doc(db, "rooms", room.id);
     setShowValidateButton(false);
     setShowPostAnswerButtons(false);
 
-    // Arrêter le timer immédiatement
-    await timerService.pauseTimer(room.id);
+    // Stocker le temps actuel
+    const currentTime = room.gameData.timer.currentTime;
 
+    const roomRef = doc(db, "rooms", room.id);
+
+    // Mettre à jour plusieurs champs en une seule opération
     await updateDoc(roomRef, {
       "gameData.isBlinking": true,
+      "gameData.timer": {
+        currentTime: currentTime,
+        isRunning: false,
+      },
     });
 
     stopSuspens();
@@ -232,24 +243,30 @@ export default function QuestionDisplay({
     // Attendre la fin du clignotement
     await new Promise((resolve) => setTimeout(resolve, 1300));
 
-    // Mettre à jour l'état de la réponse APRÈS le clignotement
+    // Mettre à jour l'état de la réponse en conservant le timer gelé
     if (!doubleAnswerActive) {
-      onUpdateAnswerState(
-        selectedAnswer,
-        isCorrect ? "correct" : "incorrect",
-        selectedAnswers
-      );
+      await updateDoc(roomRef, {
+        "gameData.isBlinking": false,
+        "gameData.selectedAnswer": selectedAnswer?.toString() || null,
+        "gameData.answerState": isCorrect ? "correct" : "incorrect",
+        "gameData.selectedAnswers": selectedAnswers,
+        "gameData.timer": {
+          currentTime: currentTime,
+          isRunning: false,
+        },
+      });
     } else {
-      onUpdateAnswerState(
-        null,
-        isCorrect ? "correct" : "incorrect",
-        selectedAnswers
-      );
+      await updateDoc(roomRef, {
+        "gameData.isBlinking": false,
+        "gameData.selectedAnswer": null,
+        "gameData.answerState": isCorrect ? "correct" : "incorrect",
+        "gameData.selectedAnswers": selectedAnswers,
+        "gameData.timer": {
+          currentTime: currentTime,
+          isRunning: false,
+        },
+      });
     }
-
-    await updateDoc(roomRef, {
-      "gameData.isBlinking": false,
-    });
 
     setShowPostAnswerButtons(true);
   };
