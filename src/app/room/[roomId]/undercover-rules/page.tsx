@@ -79,7 +79,9 @@ function UndercoverRulesContent() {
         <div className="space-y-2">
           <motion.div className="flex items-center gap-2" whileHover={{ x: 5 }}>
             <span className="text-purple-400">🎯</span>
-            <p className="text-white/80">Tour par tour : donnez un indice</p>
+            <p className="text-white/80">
+              Tour par tour : chaque joueur donne un mot pour décrire son mot
+            </p>
           </motion.div>
           <motion.div className="flex items-center gap-2" whileHover={{ x: 5 }}>
             <span className="text-purple-400">🤫</span>
