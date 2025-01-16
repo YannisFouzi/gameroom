@@ -68,14 +68,14 @@ export default function DistributionPhase({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4">
-      <div className="max-w-md mx-auto space-y-8 text-center">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black relative">
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
         {isCurrentPlayer ? (
           <>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white/10 backdrop-blur-sm p-8 rounded-xl border border-white/20"
+              className="bg-white/10 backdrop-blur-sm p-8 rounded-xl border border-white/20 text-center mx-4"
             >
               <h2 className="text-2xl font-bold text-white/80 mb-2">
                 {currentPlayer.name}
@@ -108,7 +108,7 @@ export default function DistributionPhase({
             </motion.div>
           </>
         ) : (
-          <div className="text-xl text-white/80">
+          <div className="text-xl text-white/80 text-center">
             En attente de l'autre équipe...
           </div>
         )}
