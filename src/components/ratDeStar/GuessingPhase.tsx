@@ -333,7 +333,7 @@ export function GuessingPhase({
             <>
               <h2 className="text-3xl font-bold mb-4 text-white">En attente</h2>
               <p className="text-xl text-white/80">
-                L'équipe active est en train de jouer...
+                L'équipe active est en train de jouer ...
               </p>
             </>
           )}
