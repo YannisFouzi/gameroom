@@ -268,7 +268,7 @@ function MillionaireContent() {
                 <h1 className="text-4xl font-bold text-white">
                   {playerTeam.name}
                 </h1>
-                <div className="space-y-2">
+                <div className="flex justify-center gap-x-4">
                   {playerTeam.members.map((member, index) => (
                     <motion.div
                       key={index}
