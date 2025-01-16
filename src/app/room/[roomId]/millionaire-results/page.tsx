@@ -77,12 +77,12 @@ function MillionaireResultsContent() {
         animate={{ scale: 1, opacity: 1 }}
         className="bg-gradient-to-br from-yellow-400 to-amber-500 rounded-xl p-8 text-center shadow-[0_0_30px_rgba(251,191,36,0.3)]"
       >
-        <h3 className="text-3xl font-extrabold mb-6">🏆 Gagnant 🏆</h3>
+        <h3 className="text-4xl font-extrabold mb-6">🏆 Gagnant 🏆</h3>
         <div className="flex items-center justify-center gap-6 mb-4">
-          <img src={winner.avatar} alt={winner.name} className="w-24 h-24" />
+          <img src={winner.avatar} alt={winner.name} className="w-32 h-32" />
           <div>
-            <div className="text-4xl font-bold">{winner.name}</div>
-            <div className="text-2xl font-semibold">
+            <div className="text-5xl font-bold">{winner.name}</div>
+            <div className="text-3xl font-semibold">
               {winner.finalScore} points
             </div>
           </div>
@@ -96,16 +96,16 @@ function MillionaireResultsContent() {
           initial={{ x: -50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: index * 0.1 }}
-          className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20"
+          className="flex items-center justify-between p-6 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20"
         >
           <div className="flex items-center gap-4">
-            <span className="text-2xl font-bold text-white/80">
+            <span className="text-3xl font-bold text-white/80">
               #{index + 2}
             </span>
-            <img src={team.avatar} alt={team.name} className="w-12 h-12" />
-            <span className="text-xl font-medium text-white">{team.name}</span>
+            <img src={team.avatar} alt={team.name} className="w-16 h-16" />
+            <span className="text-2xl font-medium text-white">{team.name}</span>
           </div>
-          <span className="text-xl font-bold text-white">
+          <span className="text-2xl font-bold text-white">
             {team.finalScore} points
           </span>
         </motion.div>
@@ -114,14 +114,14 @@ function MillionaireResultsContent() {
       {/* Section suivant */}
       <div className="mt-12 space-y-4">
         <div className="bg-blue-900/50 backdrop-blur-sm p-6 rounded-xl border border-blue-400">
-          <p className="text-xl text-white">
+          <p className="text-2xl text-white">
             Félicitations à {winner.name} ! Vous commencerez la prochaine manche
             de "Tu te mets combien ?"
           </p>
         </div>
         <button
           onClick={handleNextGame}
-          className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 px-8 rounded-xl font-bold text-xl hover:from-blue-500 hover:to-blue-600 transition-all"
+          className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-6 px-8 rounded-xl font-bold text-2xl hover:from-blue-500 hover:to-blue-600 transition-all"
         >
           Continuer vers "Tu te mets combien ?"
         </button>
@@ -150,24 +150,24 @@ function MillionaireResultsContent() {
           animate={{ scale: 1, opacity: 1 }}
           className="bg-blue-900/50 backdrop-blur-sm p-8 rounded-xl border border-blue-400"
         >
-          <h2 className="text-3xl font-bold text-white mb-6">
+          <h2 className="text-4xl font-bold text-white mb-6">
             {playerTeam?.name}
           </h2>
           <div className="space-y-6">
             <img
               src={playerTeam?.avatar}
               alt={playerTeam?.name}
-              className="w-20 h-20 mx-auto"
+              className="w-32 h-32 mx-auto"
             />
-            <div className="text-2xl font-bold text-white">
+            <div className="text-3xl font-bold text-white">
               {playerTeam?.finalScore} points
             </div>
-            <div className="text-xl text-white/80">
+            <div className="text-2xl text-white/80">
               #{playerRank} au classement
             </div>
-            <div className="space-y-2 pt-4 border-t border-white/20">
+            <div className="space-y-3 pt-4 border-t border-white/20">
               {teamMembers.map((member, index) => (
-                <div key={index} className="text-lg text-white/80">
+                <div key={index} className="text-xl text-white/80">
                   {member.name}
                 </div>
               ))}
