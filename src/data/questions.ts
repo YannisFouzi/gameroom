@@ -57,7 +57,7 @@ export const questions: Record<Theme, Record<string, Question[]>> = {
       },
       {
         id: "foot4",
-        text: "Queles étaient l'affiche et le score de la finale du championnat d'Europe des nations 1996 ?",
+        text: "Quelles étaient l'affiche et le score de la finale du championnat d'Europe des nations 1996 ?",
         answer: "Dannemark 2 - 0 Allemagne",
         difficulty: 10,
       },
