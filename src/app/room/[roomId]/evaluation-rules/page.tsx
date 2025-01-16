@@ -187,7 +187,7 @@ function EvaluationRulesContent() {
                 isHost ? "text-xl" : "text-base"
               } text-white/80 leading-relaxed`}
             >
-              Vous avancez au rythme des paliers choisit.
+              Vous avancez au rythme des paliers choisis.
             </p>
             <p
               className={`${
