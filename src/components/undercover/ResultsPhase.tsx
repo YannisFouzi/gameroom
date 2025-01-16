@@ -185,15 +185,6 @@ export default function ResultsPhase({
             Partie terminée ! Les résultats s'afficheront dans un instant...
           </motion.div>
         )}
-
-        {isHost && isGameOver && (
-          <button
-            onClick={handleNextGame}
-            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-bold text-lg"
-          >
-            {gameData.isLastGame ? "Voir les scores finaux" : "Partie suivante"}
-          </button>
-        )}
       </div>
     </div>
   );
