@@ -243,7 +243,11 @@ function UndercoverRulesContent() {
   );
 
   const MainContent = () => (
-    <div className="w-[85%] mx-auto space-y-9">
+    <div
+      className={`mx-auto ${
+        isHost ? "w-[85%] space-y-9" : "w-[95%] space-y-4"
+      }`}
+    >
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -284,8 +288,16 @@ function UndercoverRulesContent() {
   if (!room) return <div>Chargement...</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black px-12 flex items-center">
-      <div className="w-[85%] mx-auto space-y-6 my-auto">
+    <div
+      className={`min-h-screen bg-gradient-to-br from-gray-900 to-black ${
+        isHost ? "px-12" : "px-2"
+      } flex items-center`}
+    >
+      <div
+        className={`mx-auto my-auto ${
+          isHost ? "w-[85%] space-y-6" : "w-full space-y-3"
+        }`}
+      >
         {/* Scores en haut */}
         {isHost && room.teams && gameData?.scores && (
           <div className="w-full">
