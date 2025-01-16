@@ -205,7 +205,9 @@ function FinalScoresContent() {
         <motion.h1
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="text-4xl font-bold text-center text-white mt-8"
+          className={`text-center text-white mt-8 ${
+            isHost ? "text-6xl" : "text-4xl"
+          } font-bold`}
         >
           🏆 Scores Finaux 🏆
         </motion.h1>
@@ -216,12 +218,26 @@ function FinalScoresContent() {
           animate={{ scale: 1, opacity: 1 }}
           className="bg-gradient-to-br from-yellow-400 to-amber-500 rounded-xl p-8 text-center shadow-[0_0_30px_rgba(251,191,36,0.3)]"
         >
-          <h3 className="text-3xl font-extrabold mb-6">🎉 Grand Gagnant 🎉</h3>
+          <h3
+            className={`${
+              isHost ? "text-5xl" : "text-3xl"
+            } font-extrabold mb-6`}
+          >
+            🎉 Grand Gagnant 🎉
+          </h3>
           <div className="flex items-center justify-center gap-6 mb-4">
-            <img src={winner.avatar} alt={winner.name} className="w-24 h-24" />
+            <img
+              src={winner.avatar}
+              alt={winner.name}
+              className={`${isHost ? "w-32 h-32" : "w-24 h-24"}`}
+            />
             <div>
-              <div className="text-4xl font-bold">{winner.name}</div>
-              <div className="text-2xl font-semibold">
+              <div className={`${isHost ? "text-6xl" : "text-4xl"} font-bold`}>
+                {winner.name}
+              </div>
+              <div
+                className={`${isHost ? "text-4xl" : "text-2xl"} font-semibold`}
+              >
                 {winner.totalScore} points
               </div>
             </div>
@@ -242,32 +258,74 @@ function FinalScoresContent() {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <span className="text-2xl text-white/80">#{index + 1}</span>
-                    <img src={team.avatar} alt="" className="w-12 h-12" />
-                    <span className="text-xl font-bold text-white">
+                    <span
+                      className={`${
+                        isHost ? "text-4xl" : "text-2xl"
+                      } text-white/80`}
+                    >
+                      #{index + 1}
+                    </span>
+                    <img
+                      src={team.avatar}
+                      alt=""
+                      className={`${isHost ? "w-16 h-16" : "w-12 h-12"}`}
+                    />
+                    <span
+                      className={`${
+                        isHost ? "text-3xl" : "text-xl"
+                      } font-bold text-white`}
+                    >
                       {team.name}
                     </span>
                   </div>
-                  <span className="text-2xl font-bold text-white">
+                  <span
+                    className={`${
+                      isHost ? "text-4xl" : "text-2xl"
+                    } font-bold text-white`}
+                  >
                     {team.totalScore} pts
                   </span>
                 </div>
-                <div className="mt-2 grid grid-cols-3 gap-4 text-sm text-white/70">
-                  <div className="text-lg font-medium text-white/90 flex flex-col items-center">
+                <div className="mt-2 grid grid-cols-3 gap-4 text-white/70">
+                  <div
+                    className={`${
+                      isHost ? "text-2xl" : "text-lg"
+                    } font-medium text-white/90 flex flex-col items-center`}
+                  >
                     <span className="mb-1">Qui veut gagner des millions</span>
-                    <span className="text-xl font-bold text-white">
+                    <span
+                      className={`${
+                        isHost ? "text-3xl" : "text-xl"
+                      } font-bold text-white`}
+                    >
                       {team.millionaireScore} pts
                     </span>
                   </div>
-                  <div className="text-lg font-medium text-white/90 flex flex-col items-center">
+                  <div
+                    className={`${
+                      isHost ? "text-2xl" : "text-lg"
+                    } font-medium text-white/90 flex flex-col items-center`}
+                  >
                     <span className="mb-1">Tu te mets combien ?</span>
-                    <span className="text-xl font-bold text-white">
+                    <span
+                      className={`${
+                        isHost ? "text-3xl" : "text-xl"
+                      } font-bold text-white`}
+                    >
                       {team.evaluationScore} pts
                     </span>
                   </div>
-                  <div className="text-lg font-medium text-white/90 flex flex-col items-center">
+                  <div
+                    className={`${
+                      isHost ? "text-2xl" : "text-lg"
+                    } font-medium text-white/90 flex flex-col items-center`}
+                  >
                     <span className="mb-1">Undercover</span>
-                    <span className="text-xl font-bold text-white">
+                    <span
+                      className={`${
+                        isHost ? "text-3xl" : "text-xl"
+                      } font-bold text-white`}
+                    >
                       {team.undercoverScore} pts
                     </span>
                   </div>
