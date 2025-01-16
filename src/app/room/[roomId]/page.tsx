@@ -67,7 +67,7 @@ function RoomContent() {
   useEffect(() => {
     if (room?.status === "playing") {
       console.log("Redirection vers la page de jeu...");
-      router.push(`/room/${roomId}/game`);
+      router.push(`/room/${roomId}/rat-de-star-rules`);
     }
   }, [room?.status, roomId, router]);
 

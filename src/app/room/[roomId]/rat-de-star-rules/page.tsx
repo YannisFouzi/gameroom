@@ -13,7 +13,7 @@ function RatDeStarRulesContent() {
   const { isHost, teamId } = usePlayer(room?.id || "");
 
   useEffect(() => {
-    if (room?.gamePhase === "rat-de-star") {
+    if (room?.gamePhase === "memorization") {
       router.push(`/room/${room.id}/rat-de-star`);
     }
   }, [room?.gamePhase, room?.id, router]);
