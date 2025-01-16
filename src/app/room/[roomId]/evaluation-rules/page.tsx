@@ -117,7 +117,7 @@ function EvaluationRulesContent() {
                 isHost ? "text-2xl mb-3" : "text-base mb-2"
               } font-bold text-white`}
             >
-              Le plateau
+              Le score
             </h3>
             <p
               className={`${
