@@ -31,7 +31,7 @@ export default function ResultsPhase({
 
     const colors = [
       "bg-blue-900/30",
-      "bg-red-900/30",
+      "bg-orange-700/40",
       "bg-green-900/30",
       "bg-purple-900/30",
     ];
