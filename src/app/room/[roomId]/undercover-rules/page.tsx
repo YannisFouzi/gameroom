@@ -149,9 +149,7 @@ function UndercoverRulesContent() {
               whileHover={{ x: 5 }}
             >
               <span className="text-green-400 text-4xl">👤</span>
-              <p className="text-white/80 text-2xl">
-                Joueur 2 - Mot: "Chat" (Civil)
-              </p>
+              <p className="text-white/80 text-2xl">1 - Mot: "Chat" (Civil)</p>
             </motion.div>
             <motion.div
               className="flex items-center gap-4 bg-white/10 p-4 rounded-xl"
@@ -195,9 +193,7 @@ function UndercoverRulesContent() {
               whileHover={{ x: 5 }}
             >
               <span className="text-green-400 text-4xl">👤</span>
-              <p className="text-white/80 text-2xl">
-                Joueur 2 - Mot: "Chat" (Civil)
-              </p>
+              <p className="text-white/80 text-2xl">1 - Mot: "Chat" (Civil)</p>
             </motion.div>
             <motion.div
               className="flex items-center gap-4 bg-white/10 p-4 rounded-xl"
