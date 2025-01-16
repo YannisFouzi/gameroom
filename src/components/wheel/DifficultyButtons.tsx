@@ -9,7 +9,6 @@ type DifficultyButtonsProps = {
 
 export default function DifficultyButtons({
   onSelectDifficulty,
-  questions,
   isVisible,
   onStartTimer,
 }: DifficultyButtonsProps) {

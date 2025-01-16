@@ -14,11 +14,9 @@ type HostControlsProps = {
 export default function HostControls({
   room,
   onVideoStart,
-  onVideoEnd,
 }: HostControlsProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
-  const isWaiting = room.status === "waiting";
   const numberOfTeams = Object.values(room.teams).filter(
     (team) => team.members && team.members.length > 0
   ).length;

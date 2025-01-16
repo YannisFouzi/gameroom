@@ -580,6 +580,4 @@ export const undercoverService = {
       },
     });
   },
-
-  // Autres méthodes à venir...
 };

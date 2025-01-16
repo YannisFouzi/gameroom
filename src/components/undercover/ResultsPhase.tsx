@@ -2,7 +2,6 @@ import { undercoverService } from "@/lib/firebase/services/undercoverService";
 import { Team } from "@/types/room";
 import { UndercoverGameData } from "@/types/undercover";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type ResultsPhaseProps = {
@@ -16,13 +15,11 @@ type ResultsPhaseProps = {
 export default function ResultsPhase({
   gameData,
   isHost,
-  currentTeam,
   teamId,
   roomId,
 }: ResultsPhaseProps) {
   const [isGameOver, setIsGameOver] = useState(false);
   const isTeamReady = teamId && gameData.teamsReady.includes(teamId);
-  const router = useRouter();
 
   const teamColors: Record<string, string> = {};
   let colorIndex = 0;
@@ -56,16 +53,6 @@ export default function ResultsPhase({
   const handleTeamReady = async () => {
     if (!teamId) return;
     await undercoverService.teamReady(roomId, teamId);
-  };
-
-  const lastEliminated = gameData.lastEliminatedPlayers?.[0];
-
-  const handleNextGame = async () => {
-    if (gameData.isLastGame) {
-      router.push(`/room/${roomId}/final-scores`);
-    } else {
-      await undercoverService.startNextRound(roomId);
-    }
   };
 
   return (

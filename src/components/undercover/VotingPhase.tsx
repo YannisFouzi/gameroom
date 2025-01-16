@@ -16,7 +16,6 @@ type VotingPhaseProps = {
 export default function VotingPhase({
   gameData,
   isHost,
-  currentTeam,
   teamId,
   teams,
   roomId,

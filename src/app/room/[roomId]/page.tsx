@@ -131,14 +131,6 @@ function RoomContent() {
     );
   };
 
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVolume = parseFloat(e.target.value);
-    setVolume(newVolume);
-    if (audioRef.current) {
-      audioRef.current.volume = newVolume;
-    }
-  };
-
   const handleVideoStart = () => {
     if (audioRef.current) {
       audioRef.current.pause();

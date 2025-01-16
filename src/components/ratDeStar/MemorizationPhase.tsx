@@ -13,7 +13,6 @@ type MemorizationPhaseProps = {
 
 export function MemorizationPhase({
   celebrities,
-  startTime,
   isHost,
   room,
   teamId,

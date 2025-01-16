@@ -14,7 +14,6 @@ type PlayingPhaseProps = {
 export default function PlayingPhase({
   gameData,
   isHost,
-  currentTeam,
   teamId,
   roomId,
 }: PlayingPhaseProps) {

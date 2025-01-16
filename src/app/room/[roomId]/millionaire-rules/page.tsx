@@ -21,7 +21,6 @@ function MillionaireRulesContent() {
   if (!room) return null;
 
   const startingTeamName = room?.gameData?.winningTeamName || "";
-  const currentTeam = teamId ? room.teams[teamId] : null;
 
   const handleStart = async () => {
     if (!room?.id) return;

@@ -1,7 +1,7 @@
 import { useAudio } from "@/hooks/useAudio";
 import { db } from "@/lib/firebase";
 import { timerService } from "@/lib/firebase/services/millionaireService";
-import { JokerType, MillionaireQuestion } from "@/types/millionaire";
+import { MillionaireQuestion } from "@/types/millionaire";
 import { doc, updateDoc } from "firebase/firestore";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -42,8 +42,6 @@ type QuestionDisplayProps = {
   room: any;
 };
 
-type AnswerState = "selected" | "correct" | "incorrect" | null;
-
 export default function QuestionDisplay({
   question,
   onAnswer,
@@ -72,9 +70,7 @@ export default function QuestionDisplay({
 }: QuestionDisplayProps) {
   const [showValidateButton, setShowValidateButton] = useState(false);
   const [showPostAnswerButtons, setShowPostAnswerButtons] = useState(false);
-  const [usedJokersForQuestion, setUsedJokersForQuestion] = useState<
-    JokerType[]
-  >([]);
+
   const { play: playCorrect } = useAudio(
     "/sound/millionnaire/sounds_correct.mp3"
   );
@@ -82,7 +78,6 @@ export default function QuestionDisplay({
   const { play: playSuspens, stop: stopSuspens } = useAudio(
     "/sound/millionnaire/sounds_suspens.mp3"
   );
-  const [syncInterval, setSyncInterval] = useState<NodeJS.Timeout | null>(null);
   const { play: playSelect, isLoaded } = useAudio(
     "/sound/millionnaire/sounds_play.mp3"
   );

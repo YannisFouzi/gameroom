@@ -16,8 +16,8 @@ function WheelContent() {
   const { isHost, teamId } = usePlayer(room?.id || "");
   const [mustSpin, setMustSpin] = useState(false);
   const [prizeNumber, setPrizeNumber] = useState(0);
-  const [selectedTheme, setSelectedTheme] = useState<Theme | null>(null);
-  const [subCategory, setSubCategory] = useState<string | null>(null);
+  const [, setSelectedTheme] = useState<Theme | null>(null);
+  const [, setSubCategory] = useState<string | null>(null);
   const currentTeam = teamId && room ? room.teams[teamId] : null;
   const [localScores, setLocalScores] = useState<Record<string, number>>({});
 

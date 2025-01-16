@@ -8,10 +8,7 @@ type TeamManagerProps = {
   showCreateTeam?: boolean;
 };
 
-export default function TeamManager({
-  room,
-  showCreateTeam = true,
-}: TeamManagerProps) {
+export default function TeamManager({ room }: TeamManagerProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const { teamId, isHost } = usePlayer(room.id);
 
