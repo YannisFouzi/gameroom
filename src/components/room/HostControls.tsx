@@ -2,6 +2,7 @@ import VideoOverlay from "@/components/common/VideoOverlay";
 import { roomService } from "@/lib/firebase/roomService";
 import { Room } from "@/types/room";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type HostControlsProps = {
@@ -22,6 +23,7 @@ export default function HostControls({
     (team) => team.members && team.members.length > 0
   ).length;
   const teamsNeeded = 2 - numberOfTeams;
+  const router = useRouter();
 
   if (teamsNeeded > 0) return null;
 
@@ -40,7 +42,7 @@ export default function HostControls({
     try {
       await roomService.startGame(room.id);
       setShowVideo(false);
-      onVideoEnd?.();
+      router.push(`/room/${room.id}/rat-de-star-rules`);
     } finally {
       setIsUpdating(false);
     }

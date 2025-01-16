@@ -49,6 +49,8 @@ export type GamePhase =
   | "undercover-playing"
   | "undercover-results"
   | "final-scores"
+  | "rat-de-star"
+  | "rat-de-star-rules"
   | null;
 
 export type GameData = {
