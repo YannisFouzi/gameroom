@@ -38,7 +38,11 @@ function EvaluationRulesContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black">
-      <div className="max-w-[1440px] mx-auto p-4 space-y-12 flex flex-col items-center justify-center min-h-screen">
+      <div
+        className={`max-w-[1440px] mx-auto p-4 ${
+          isHost ? "space-y-12" : "space-y-6"
+        } flex flex-col items-center justify-center min-h-screen`}
+      >
         {!isHost && currentTeam && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -58,7 +62,7 @@ function EvaluationRulesContent() {
               <img
                 src={currentTeam.avatar}
                 alt={currentTeam.name}
-                className="w-32 h-32 mx-auto"
+                className="w-20 h-20 mx-auto"
               />
             </motion.div>
           </motion.div>
@@ -69,10 +73,16 @@ function EvaluationRulesContent() {
           animate={{ opacity: 1 }}
           className="text-center mb-8"
         >
-          <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent">
+          <h2
+            className={`font-bold mb-4 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent ${
+              isHost ? "text-5xl" : "text-2xl"
+            }`}
+          >
             Tu te mets combien ?
           </h2>
-          <p className="text-2xl text-white/80">Testez vos connaissances !</p>
+          <p className={`${isHost ? "text-2xl" : "text-base"} text-white/80`}>
+            Testez vos connaissances !
+          </p>
         </motion.div>
 
         {isHost && (
@@ -95,11 +105,25 @@ function EvaluationRulesContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white/5 p-8 rounded-2xl backdrop-blur-sm border border-white/10"
+            className={`bg-white/5 ${
+              isHost ? "p-8" : "p-4"
+            } rounded-2xl backdrop-blur-sm border border-white/10`}
           >
-            <div className="text-5xl mb-4">🎲</div>
-            <h3 className="text-2xl font-bold text-white mb-3">Le plateau</h3>
-            <p className="text-xl text-white/80 leading-relaxed">
+            <div className={`${isHost ? "text-5xl mb-4" : "text-4xl mb-2"}`}>
+              🎲
+            </div>
+            <h3
+              className={`${
+                isHost ? "text-2xl mb-3" : "text-base mb-2"
+              } font-bold text-white`}
+            >
+              Le plateau
+            </h3>
+            <p
+              className={`${
+                isHost ? "text-xl" : "text-sm"
+              } text-white/80 leading-relaxed`}
+            >
               Chaque équipe commence à 0 point et le premier à 25 gagne !
             </p>
           </motion.div>
@@ -108,17 +132,33 @@ function EvaluationRulesContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white/5 p-8 rounded-2xl backdrop-blur-sm border border-white/10"
+            className={`bg-white/5 ${
+              isHost ? "p-8" : "p-4"
+            } rounded-2xl backdrop-blur-sm border border-white/10`}
           >
-            <div className="text-5xl mb-4">🎯</div>
-            <h3 className="text-2xl font-bold text-white mb-3">
+            <div className={`${isHost ? "text-5xl mb-4" : "text-4xl mb-2"}`}>
+              🎯
+            </div>
+            <h3
+              className={`${
+                isHost ? "text-2xl mb-3" : "text-base mb-2"
+              } font-bold text-white`}
+            >
               Comment jouer ?
             </h3>
-            <p className="text-xl text-white/80 leading-relaxed">
+            <p
+              className={`${
+                isHost ? "text-xl" : "text-base"
+              } text-white/80 leading-relaxed`}
+            >
               Tourner la roue, et choisissez un palier de difficulté suivant le
               thème affiché.
             </p>
-            <p className="text-xl text-white/80 leading-relaxed mt-2">
+            <p
+              className={`${
+                isHost ? "text-xl" : "text-base"
+              } text-white/80 leading-relaxed mt-2`}
+            >
               L'équipe adverse pose ensuite les questions et valide ou non les
               réponses.
             </p>
@@ -128,14 +168,32 @@ function EvaluationRulesContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-white/5 p-8 rounded-2xl backdrop-blur-sm border border-white/10"
+            className={`bg-white/5 ${
+              isHost ? "p-8" : "p-4"
+            } rounded-2xl backdrop-blur-sm border border-white/10`}
           >
-            <div className="text-5xl mb-4">🔄</div>
-            <h3 className="text-2xl font-bold text-white mb-3">Progression</h3>
-            <p className="text-xl text-white/80 leading-relaxed">
+            <div className={`${isHost ? "text-5xl mb-4" : "text-4xl mb-2"}`}>
+              🔄
+            </div>
+            <h3
+              className={`${
+                isHost ? "text-2xl mb-3" : "text-base mb-2"
+              } font-bold text-white`}
+            >
+              Progression
+            </h3>
+            <p
+              className={`${
+                isHost ? "text-xl" : "text-base"
+              } text-white/80 leading-relaxed`}
+            >
               Vous avancez au rythme des paliers choisit.
             </p>
-            <p className="text-xl text-white/80 leading-relaxed mt-2">
+            <p
+              className={`${
+                isHost ? "text-xl" : "text-base"
+              } text-white/80 leading-relaxed mt-2`}
+            >
               ⚠️ Attention si vous répondez faux vous ne gagnez pas de points.
             </p>
           </motion.div>
