@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import DistributionPhase from "./DistributionPhase";
-import PlayingPhase from "./PlayingPhase";
 import ResultsPhase from "./ResultsPhase";
 import ScoreDisplay from "./ScoreDisplay";
 import VotingPhase from "./VotingPhase";
@@ -73,7 +72,7 @@ export default function UndercoverGame({
                 );
               case "playing":
                 return (
-                  <PlayingPhase
+                  <ResultsPhase
                     gameData={gameData}
                     isHost={isHost}
                     currentTeam={currentTeam}
