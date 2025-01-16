@@ -109,6 +109,13 @@ export default function ResultsPhase({
 
               const isEliminated = player.isEliminated;
 
+              // On compte le nombre de joueurs non éliminés qui précèdent ce joueur
+              const activePlayerNumber =
+                gameData.playOrder.slice(0, index).filter((pid) => {
+                  const p = gameData.players.find((p) => p.memberId === pid);
+                  return p && !p.isEliminated;
+                }).length + 1;
+
               return (
                 <motion.div
                   key={playerId}
@@ -121,7 +128,7 @@ export default function ResultsPhase({
                 >
                   {!isEliminated && (
                     <span className="text-xl font-bold text-white/80">
-                      {index + 1}
+                      {activePlayerNumber}
                     </span>
                   )}
                   <div className="flex-1">
