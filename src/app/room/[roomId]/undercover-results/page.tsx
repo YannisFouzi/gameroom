@@ -67,7 +67,7 @@ function UndercoverResultsContent() {
         animate={{ scale: 1, opacity: 1 }}
         className="bg-gradient-to-br from-yellow-400 to-amber-500 rounded-xl p-8 text-center shadow-[0_0_30px_rgba(251,191,36,0.3)]"
       >
-        <h3 className="text-3xl font-extrabold mb-6">
+        <h3 className="text-4xl font-extrabold mb-6">
           🏆{" "}
           {gameData.winningTeamId
             ? `${room.teams[gameData.winningTeamId].name} gagne cette manche !`
@@ -87,7 +87,7 @@ function UndercoverResultsContent() {
           >
             <div className="flex items-center gap-4 mb-4">
               <img src={team.avatar} alt="" className="w-12 h-12" />
-              <h3 className="text-2xl font-bold text-white">{team.name}</h3>
+              <h3 className="text-3xl font-bold text-white">{team.name}</h3>
             </div>
 
             <div className="space-y-3">
@@ -106,13 +106,13 @@ function UndercoverResultsContent() {
                     }`}
                   >
                     <div className="flex items-center gap-4">
-                      <span className="text-xl font-bold text-white/80">
+                      <span className="text-2xl font-bold text-white/80">
                         {player.name}
                       </span>
                     </div>
                     <div className="flex items-center gap-4">
                       <span
-                        className={`text-lg font-bold ${
+                        className={`text-xl font-bold ${
                           player.role === "Civil"
                             ? "text-green-400"
                             : player.role === "Undercover"
@@ -123,7 +123,7 @@ function UndercoverResultsContent() {
                         {player.role}
                       </span>
                       {player.isEliminated && (
-                        <span className="text-red-400 font-medium">
+                        <span className="text-xl text-red-400 font-medium">
                           Éliminé
                         </span>
                       )}
