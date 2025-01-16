@@ -245,7 +245,7 @@ function MillionaireContent() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-center space-y-8 mb-1"
+              className="flex items-center justify-center gap-x-6 mb-1"
             >
               <motion.div
                 animate={{
@@ -260,22 +260,22 @@ function MillionaireContent() {
                 <img
                   src={playerTeam.avatar}
                   alt={playerTeam.name}
-                  className="w-24 h-24 mx-auto rounded-full"
+                  className="w-24 h-24 rounded-full"
                 />
               </motion.div>
 
-              <div className="space-y-4">
-                <h1 className="text-4xl font-bold text-white">
+              <div className="text-left space-y-2">
+                <h1 className="text-2xl font-bold text-white">
                   {playerTeam.name}
                 </h1>
-                <div className="flex justify-center gap-x-4">
+                <div className="flex gap-x-4">
                   {playerTeam.members.map((member, index) => (
                     <motion.div
                       key={index}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className="text-xl text-white/80"
+                      className="text-lg text-white/80"
                     >
                       {member.name}
                     </motion.div>

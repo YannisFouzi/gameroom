@@ -419,7 +419,9 @@ export default function QuestionDisplay({
 
         {/* Contenu de la question */}
         <div className="relative text-center w-full">
-          <p className="text-2xl text-white/90">{question.text}</p>
+          <p className={`${isHost ? "text-2xl" : "text-xl"} text-white/90`}>
+            {question.text}
+          </p>
         </div>
       </motion.div>
 
@@ -475,7 +477,9 @@ export default function QuestionDisplay({
                   : ""
               }`}
             >
-              <span className="font-medium text-lg">
+              <span
+                className={`font-medium ${isHost ? "text-lg" : "text-base"}`}
+              >
                 {String.fromCharCode(65 + index)}. {answer}
               </span>
             </motion.button>
