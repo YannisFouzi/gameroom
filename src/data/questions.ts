@@ -508,8 +508,8 @@ export const questions: Record<Theme, Record<string, Question[]>> = {
       },
       {
         id: "afr3",
-        text: "Quel est nom de l'espèce de manchots présente dans le sud de l'Afrique ?",
-        answer: "Manchot du Cap",
+        text: "Quel lac africain est le deuxième plus grand lac d'eau douce au monde par sa superficie et abrite la source du Nil Blanc ?",
+        answer: "Le lac Victoria",
         difficulty: 7,
       },
       {
