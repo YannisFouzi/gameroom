@@ -89,10 +89,12 @@ export function ResultsPhase({
             {teamId === remainingTeams[0] ? (
               <>
                 <h2 className="text-3xl font-bold text-white mb-4">
-                  🏆 Félicitations ! Vous avez gagné ! 🏆
+                  🏆 Félicitations 🏆
+                  <br />
+                  Vous avez gagné !
                 </h2>
                 <p className="text-2xl font-bold text-white/90">
-                  Vous commencerez le prochain jeu en premier ! 🎮
+                  Vous commencerez le prochain jeu en premier.
                 </p>
               </>
             ) : (

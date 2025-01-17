@@ -57,9 +57,9 @@ export default function RoomQRCode({
               <p className="mt-4 text-lg text-center text-white">
                 Scannez pour rejoindre la partie !
               </p>
-              <p className="mt-2 text-xs text-white/50 break-all max-w-[200px]">
+              {/* <p className="mt-2 text-xs text-white/50 break-all max-w-[200px]">
                 {joinUrlPopUp}
-              </p>
+              </p> */}
             </div>
           </motion.div>
         )}
