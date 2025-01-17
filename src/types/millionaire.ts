@@ -25,6 +25,12 @@ export type TeamJokers = {
 
 export type AnswerState = "selected" | "correct" | "incorrect" | null;
 
+export type MillionaireWinner = {
+  teamId: string;
+  score: number;
+  tiebreaker: boolean;
+};
+
 export interface MillionaireGameData {
   currentTeamIndex: number;
   remainingTeams: string[];
@@ -45,4 +51,5 @@ export interface MillionaireGameData {
     currentTime: number; // temps actuel en secondes (60 à 0)
     isRunning: boolean; // si le timer tourne ou est en pause
   };
+  winner?: MillionaireWinner;
 }
