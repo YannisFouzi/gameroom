@@ -54,11 +54,11 @@ export default function RoomQRCode({
                 <QRCodeSVG value={joinUrl} size={160} />
               </div>
               <p className="mt-4 text-lg text-center text-white">
-                Scannez ce QR code pour rejoindre la partie
+                Scannez pour rejoindre la partie !
               </p>
-              <p className="mt-2 text-xs text-white/50 break-all max-w-[200px]">
+              {/* <p className="mt-2 text-xs text-white/50 break-all max-w-[200px]">
                 {joinUrl}
-              </p>
+              </p>*/}
             </div>
           </motion.div>
         )}
