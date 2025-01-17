@@ -180,7 +180,7 @@ export function ExplanationPhase({
             onClick={onStart}
             className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-8 rounded-xl font-bold text-2xl shadow-lg hover:shadow-xl transition-all hover:opacity-90"
           >
-            Lancer le jeu 🎮
+            Lancer le jeu
           </motion.button>
           <RoomQRCode roomId={room.id} fullUrl={currentUrl} showButton={true} />
         </div>

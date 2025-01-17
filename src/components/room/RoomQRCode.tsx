@@ -15,6 +15,7 @@ export default function RoomQRCode({
 }: RoomQRCodeProps) {
   const [isVisible, setIsVisible] = useState(!showButton);
   const joinUrl = fullUrl || `${window.location.origin}/room/join/${roomId}`;
+  const joinUrlPopUp = fullUrl || window.location.href;
 
   if (!showButton) {
     return (
@@ -51,14 +52,14 @@ export default function RoomQRCode({
           >
             <div className="flex flex-col items-center p-4">
               <div className="bg-white p-3 rounded-lg">
-                <QRCodeSVG value={joinUrl} size={160} />
+                <QRCodeSVG value={joinUrlPopUp} size={160} />
               </div>
               <p className="mt-4 text-lg text-center text-white">
                 Scannez pour rejoindre la partie !
               </p>
-              {/* <p className="mt-2 text-xs text-white/50 break-all max-w-[200px]">
-                {joinUrl}
-              </p>*/}
+              <p className="mt-2 text-xs text-white/50 break-all max-w-[200px]">
+                {joinUrlPopUp}
+              </p>
             </div>
           </motion.div>
         )}
