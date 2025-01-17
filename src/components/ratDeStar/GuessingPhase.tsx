@@ -106,8 +106,8 @@ export function GuessingPhase({
 
   if (isHost) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4">
-        <div className="max-w-md mx-auto text-center space-y-12">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4 flex items-center justify-center">
+        <div className="max-w-md mx-auto text-center">
           {room.gameData.lastFoundCelebrity && (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -139,56 +139,30 @@ export function GuessingPhase({
           )}
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-8"
-          >
-            <div className="space-y-4">
-              <motion.div
-                animate={{
-                  scale: [1, 1.02, 1],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                <img
-                  src={activeTeam.avatar}
-                  alt={activeTeam.name}
-                  className="w-24 h-24 mx-auto"
-                />
-              </motion.div>
-
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent">
-                {activeTeam.name}
-              </h1>
-            </div>
-
-            <div className="space-y-3">
-              {activeTeam.members.map((member, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="text-xl text-white/80"
-                >
-                  {member.name}
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="p-8 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10"
           >
             <h2 className="text-3xl font-bold mb-4 text-white">
-              En attente de la réponse...
+              En attente de la réponse de {activeTeam.name} ...
             </h2>
+            <motion.div
+              animate={{
+                scale: [1, 1.02, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="mt-4"
+            >
+              <img
+                src={activeTeam.avatar}
+                alt={activeTeam.name}
+                className="w-24 h-24 mx-auto rounded-full"
+              />
+            </motion.div>
           </motion.div>
         </div>
       </div>
@@ -196,8 +170,8 @@ export function GuessingPhase({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4">
-      <div className="max-w-md mx-auto text-center space-y-12">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4 flex items-center justify-center">
+      <div className="max-w-md mx-auto text-center">
         {room.gameData.lastFoundCelebrity && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
