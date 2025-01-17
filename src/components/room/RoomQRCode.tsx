@@ -18,16 +18,14 @@ export default function RoomQRCode({
 
   if (!showButton) {
     return (
-      <div className="relative flex justify-center items-center p-4">
-        <div className="bg-white p-4 rounded-lg">
-          <QRCodeSVG value={joinUrl} size={200} />
+      <div className="relative flex flex-col justify-center items-center p-4">
+        <div className="bg-white p-3 rounded-lg">
+          <QRCodeSVG value={joinUrl} size={160} />
         </div>
-        <div className="absolute left-[calc(50%+120px)] flex flex-col gap-4 w-[300px]">
-          <p className="text-lg text-white">
-            Scannez ce QR code pour rejoindre la partie
-          </p>
-          {/* <p className="text-xs text-white/50 break-all">{joinUrl}</p> */}
-        </div>
+        <p className="mt-4 text-lg text-white">
+          Scannez pour rejoindre la partie !
+        </p>
+        {/* <p className="text-xs text-white/50 break-all">{joinUrl}</p> */}
       </div>
     );
   }
@@ -52,8 +50,8 @@ export default function RoomQRCode({
             className="fixed bottom-20 right-4 bg-gray-900/95 backdrop-blur-sm rounded-xl border border-white/10 shadow-xl"
           >
             <div className="flex flex-col items-center p-4">
-              <div className="bg-white p-4 rounded-lg">
-                <QRCodeSVG value={joinUrl} size={200} />
+              <div className="bg-white p-3 rounded-lg">
+                <QRCodeSVG value={joinUrl} size={160} />
               </div>
               <p className="mt-4 text-lg text-center text-white">
                 Scannez ce QR code pour rejoindre la partie
