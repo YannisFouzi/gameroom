@@ -42,9 +42,13 @@ function MillionaireRulesContent() {
           >
             Qui veut gagner des millions
           </h2>
-          <p className={`${isHost ? "text-3xl" : "text-xl"} text-white/80`}>
-            Testez vos connaissances !
-          </p>
+          {isHost && (
+            <>
+              <p className={`${isHost ? "text-3xl" : "text-xl"} text-white/80`}>
+                Testez vos connaissances !
+              </p>
+            </>
+          )}
         </motion.div>
 
         {isHost && (
