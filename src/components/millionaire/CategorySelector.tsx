@@ -106,7 +106,7 @@ export default function CategorySelector({
             bg-[size:200%_100%]
             ${
               usedCategories.includes(category.id)
-                ? "bg-gray-800/80 border-gray-700 cursor-not-allowed opacity-60"
+                ? "bg-gray-900/90 border-gray-700 cursor-not-allowed saturate-[0.2]"
                 : `${category.gradient} hover:shadow-xl hover:border-opacity-50`
             }
           `}
@@ -114,7 +114,9 @@ export default function CategorySelector({
           <motion.span
             className="text-5xl mb-2 filter drop-shadow-md"
             whileHover={{
-              rotate: [0, -10, 10, -10, 0],
+              rotate: usedCategories.includes(category.id)
+                ? 0
+                : [0, -10, 10, -10, 0],
               transition: { duration: 0.5 },
             }}
           >
@@ -123,6 +125,11 @@ export default function CategorySelector({
           <span className="text-xl font-bold text-white tracking-wide drop-shadow-md">
             {category.name}
           </span>
+          {usedCategories.includes(category.id) && (
+            <span className="text-sm text-gray-500 mt-1 font-medium">
+              Déjà jouée
+            </span>
+          )}
         </motion.button>
       ))}
     </div>

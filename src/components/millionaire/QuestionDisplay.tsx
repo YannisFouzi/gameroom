@@ -362,6 +362,10 @@ export default function QuestionDisplay({
 
   return (
     <div className="max-w-2xl mx-auto p-6">
+      <div className="text-center mb-4">
+        <span className="text-xl font-bold">Question {questionIndex + 1}</span>
+      </div>
+
       {(isHost || isCurrentTeam) && (
         <div
           className={`text-center mb-2 text-2xl font-bold ${
