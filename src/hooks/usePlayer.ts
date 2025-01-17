@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 export function usePlayer(roomId: string) {
   const [teamId, setTeamId] = useState<string | null>(null);
   const [isHost, setIsHost] = useState(false);
+  const [playerId, setPlayerId] = useState<string | null>(null);
 
   useEffect(() => {
     const checkPlayerStatus = async () => {
@@ -36,6 +37,10 @@ export function usePlayer(roomId: string) {
     checkPlayerStatus();
   }, [roomId]);
 
+  useEffect(() => {
+    setPlayerId(localStorage.getItem(`player_${roomId}`));
+  }, [roomId]);
+
   const clearPlayer = () => {
     localStorage.removeItem(`team_${roomId}`);
     localStorage.removeItem(`device_${roomId}`);
@@ -47,7 +52,7 @@ export function usePlayer(roomId: string) {
   return {
     teamId,
     isHost,
-    playerId: localStorage.getItem(`player_${roomId}`),
+    playerId,
     clearPlayer,
   };
 }
