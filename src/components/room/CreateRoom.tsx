@@ -44,10 +44,9 @@ export default function CreateRoom() {
       const hostId = generateUUID();
       const roomId = await baseRoomService.createRoom(hostId);
       localStorage.setItem(`host_${roomId}`, hostId);
-      router.push(`/room/${roomId}`);
+      await router.push(`/room/${roomId}`);
     } catch (error) {
       console.error("Erreur lors de la création de la room:", error);
-    } finally {
       setIsLoading(false);
     }
   };
