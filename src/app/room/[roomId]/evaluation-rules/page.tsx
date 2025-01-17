@@ -12,6 +12,7 @@ function EvaluationRulesContent() {
   const router = useRouter();
   const { room } = useRoom();
   const { isHost, teamId } = usePlayer(room?.id || "");
+  const winningTeamName = room?.gameData?.winningTeamName || "";
   const currentTeam = teamId && room ? room.teams[teamId] : null;
 
   useEffect(() => {
@@ -34,12 +35,6 @@ function EvaluationRulesContent() {
   };
 
   if (!room) return null;
-
-  const winner = room.gameData?.winner;
-  if (!winner) return null;
-
-  const winningTeam = room.teams[winner.teamId];
-  if (!winningTeam) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black">
@@ -99,7 +94,7 @@ function EvaluationRulesContent() {
             <div className="text-center">
               <div className="text-5xl mb-4">👑</div>
               <div className="text-3xl font-bold text-white">
-                L&apos;équipe &quot;{winningTeam.name}&quot; commence !
+                L&apos;équipe &quot;{winningTeamName}&quot; commence !
               </div>
             </div>
           </motion.div>

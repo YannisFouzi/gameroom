@@ -3,7 +3,6 @@ import { Room } from "@/types/room";
 import {
   arrayUnion,
   doc,
-  getDoc,
   runTransaction,
   serverTimestamp,
   updateDoc,
@@ -174,39 +173,6 @@ export const millionaireService = {
         "gameData.selectedAnswers": [],
       });
     });
-  },
-
-  determineAndSetWinner: async (roomId: string) => {
-    const roomRef = doc(db, "rooms", roomId);
-    const roomSnap = await getDoc(roomRef);
-    const room = roomSnap.data();
-
-    if (!room?.gameData?.scores?.millionaire) return;
-
-    const scores = room.gameData.scores.millionaire;
-    const maxScore = Math.max(
-      ...Object.values(scores as Record<string, number>)
-    );
-
-    const topTeams = Object.entries(scores)
-      .filter(([_, score]) => score === maxScore)
-      .map(([teamId]) => teamId);
-
-    const winningTeamId = topTeams[Math.floor(Math.random() * topTeams.length)];
-
-    const winner = {
-      teamId: winningTeamId,
-      score: maxScore,
-      tiebreaker: topTeams.length > 1,
-    };
-
-    // Stocker le gagnant
-    await updateDoc(roomRef, {
-      "gameData.winner": winner,
-      "gameData.startingTeam": winningTeamId, // Important pour le jeu suivant
-    });
-
-    return winner;
   },
 };
 

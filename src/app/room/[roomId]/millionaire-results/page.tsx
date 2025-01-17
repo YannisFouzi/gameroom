@@ -13,7 +13,6 @@ type TeamWithScore = {
   name: string;
   avatar: string;
   finalScore: number;
-  isWinner: boolean;
 };
 
 function MillionaireResultsContent() {
@@ -28,33 +27,27 @@ function MillionaireResultsContent() {
     }
   }, [room?.gamePhase, room?.id, router]);
 
-  if (!room) return <div>Chargement...</div>;
+  if (!room?.gameData?.scores) return <div>Chargement...</div>;
 
-  const winner = room.gameData?.winner;
-  if (!winner) return <div>Chargement...</div>;
+  // Ajouter ces logs avant le tri des équipes
+  console.log("Room data:", room);
+  console.log("Scores:", room.gameData?.scores);
 
-  const scores = room.gameData?.scores?.millionaire || {};
-
+  // Trier les équipes par score
   const sortedTeams: TeamWithScore[] = Object.entries(room.teams)
     .map(([teamId, team]) => {
       const score = room.gameData?.scores?.millionaire?.[teamId] || 0;
+      console.log(`Score for team ${team.name}:`, score);
       return {
         teamId,
         name: team.name,
         avatar: team.avatar,
         finalScore: score,
-        isWinner: winner.teamId === teamId,
       };
     })
-    .sort((a, b) => {
-      if (a.teamId === winner.teamId) return -1;
-      if (b.teamId === winner.teamId) return 1;
-      return b.finalScore - a.finalScore;
-    });
+    .sort((a, b) => b.finalScore - a.finalScore);
 
-  const winningTeam = room.teams[winner.teamId];
-
-  const winnerByTiebreaker = winner?.tiebreaker;
+  const winner = sortedTeams[0];
 
   const handleNextGame = async () => {
     if (!room) return;
@@ -75,8 +68,10 @@ function MillionaireResultsContent() {
     }
   };
 
+  // Vue pour l'hôte
   const HostView = () => (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
+      {/* Section gagnant avec plus d'animations et de style */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -84,25 +79,17 @@ function MillionaireResultsContent() {
       >
         <h3 className="text-4xl font-extrabold mb-6">🏆 Gagnant 🏆</h3>
         <div className="flex items-center justify-center gap-6 mb-4">
-          <img
-            src={winningTeam.avatar}
-            alt={winningTeam.name}
-            className="w-32 h-32"
-          />
+          <img src={winner.avatar} alt={winner.name} className="w-32 h-32" />
           <div>
-            <div className="text-5xl font-bold">{winningTeam.name}</div>
+            <div className="text-5xl font-bold">{winner.name}</div>
             <div className="text-3xl font-semibold">
-              {room?.gameData?.scores?.millionaire?.[winner.teamId] || 0} points
+              {winner.finalScore} points
             </div>
           </div>
         </div>
-        {winnerByTiebreaker && (
-          <div className="text-sm text-yellow-900/80 mt-2 font-medium">
-            *Gagnant déterminé par tirage au sort suite à une égalité
-          </div>
-        )}
       </motion.div>
 
+      {/* Autres équipes directement, sans container supplémentaire */}
       {sortedTeams.slice(1).map((team, index) => (
         <motion.div
           key={team.teamId}
@@ -124,11 +111,12 @@ function MillionaireResultsContent() {
         </motion.div>
       ))}
 
+      {/* Section suivant */}
       <div className="mt-12 space-y-4">
         <div className="bg-blue-900/50 backdrop-blur-sm p-6 rounded-xl border border-blue-400">
           <p className="text-2xl text-white">
-            Félicitations à {winningTeam.name} ! Vous commencerez la prochaine
-            manche de "Tu te mets combien ?"
+            Félicitations à {winner.name} ! Vous commencerez la prochaine manche
+            de "Tu te mets combien ?"
           </p>
         </div>
         <button
@@ -148,6 +136,7 @@ function MillionaireResultsContent() {
     </div>
   );
 
+  // Vue pour les joueurs
   const PlayerView = () => {
     const playerTeam = sortedTeams.find((team) => team.teamId === teamId);
     const playerRank =
@@ -185,11 +174,6 @@ function MillionaireResultsContent() {
             </div>
           </div>
         </motion.div>
-        {winnerByTiebreaker && (
-          <div className="text-sm text-yellow-400/90 mt-2 font-medium">
-            *Gagnant déterminé par tirage au sort suite à une égalité
-          </div>
-        )}
       </div>
     );
   };

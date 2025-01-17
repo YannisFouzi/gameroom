@@ -143,14 +143,6 @@ function MillionaireContent() {
       ];
 
     await millionaireService.quitWithPoints(room.id, currentQuestion.points);
-
-    // Si c'est la dernière équipe à jouer
-    const nextTeamIndex =
-      (gameData.currentTeamIndex + 1) % gameData.remainingTeams.length;
-    if (nextTeamIndex === 0) {
-      // Si on revient au début, c'est qu'on a fait le tour
-      await millionaireService.determineAndSetWinner(room.id);
-    }
   };
 
   const handleUsePhoneCall = async () => {

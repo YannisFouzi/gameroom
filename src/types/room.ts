@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-import { MillionaireGameData, MillionaireWinner } from "./millionaire";
+import { MillionaireGameData } from "./millionaire";
 import { UndercoverGameData } from "./undercover";
 import { WheelState } from "./wheel";
 
@@ -77,7 +77,6 @@ export type GameData = {
     isPaused: boolean;
     remainingTime: number;
   };
-  winner?: MillionaireWinner;
 } & {
   [K in keyof MillionaireGameData]?: MillionaireGameData[K];
 };
